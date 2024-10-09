@@ -66,7 +66,7 @@ GenerateClassCluster=0
 DocumentUniqueId=JICPSVNT
 
 [Document2]
-DocumentPath=Capstone-2025.PcbLib
+DocumentPath=PuttPilot.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -83,7 +83,7 @@ GenerateClassCluster=0
 DocumentUniqueId=MBEOXXPL
 
 [Document3]
-DocumentPath=Capstone-2025.SchLib
+DocumentPath=PuttPilot.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
