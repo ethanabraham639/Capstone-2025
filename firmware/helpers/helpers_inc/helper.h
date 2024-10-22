@@ -1,0 +1,1 @@
+#define HELPER_MACRO 4
