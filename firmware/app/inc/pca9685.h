@@ -1,6 +1,9 @@
 #ifndef PCA9685_H
 #define PCA9685_H
 
+#include <stdint.h>
+#include "driver/i2c.h"
+
 // REGISTER ADDRESSES
 #define PCA9685_MODE1               0x00        // Mode Register 1
 #define PCA9685_MODE2               0x01`       // Mode Register 2
@@ -45,7 +48,31 @@
 #define PCA9685_PRESCALE_MIN        3           // minimum prescale value
 #define PCA9685_PRESCALE_MAX        255         // maximum prescale value
 
+typedef struct{
+    uint8_t addr;
+    i2c_port_t i2c_num;
+    uint32_t osc_freq;
+}PCA9685_t;
 
+
+////// STATIC HELPER FUNCTIONS
+// set the prescaler (for setting frequency)
+
+// get the prescaler
+
+// get pwm on or off value
+
+// set pwm on and off value
+
+
+
+// init
+
+// set frequency
+
+// set one servo position
+
+// set all servo position to the same
 
 
 
