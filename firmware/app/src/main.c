@@ -11,12 +11,14 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
-#include "test.h"
-#include "helper.h"
+#include "pca9685.h"
+#include "i2c.h"
 
 void app_main()
 {
-    printf("Hello world %d%d!\n", TEST_MACRO, HELPER_MACRO);
+
+    i2c_master_init();
+    
 
     /* Print chip information */
     esp_chip_info_t chip_info;
