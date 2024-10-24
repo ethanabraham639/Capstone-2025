@@ -54,26 +54,17 @@ typedef struct{
     uint32_t osc_freq;
 }PCA9685_t;
 
-
-////// STATIC HELPER FUNCTIONS
-// set the prescaler (for setting frequency)
-
-// get the prescaler
-
-// get pwm on or off value
-
-// set pwm on and off value
-
-
-
 // init
+void PCA9685_init(void);
 
 // set frequency
+void PCA9685_setFreq(uint16_t freq);
 
 // set one servo position
+void PCA9685_setServoPos(uint8_t pos);
 
 // set all servo position to the same
-
+void PCA9685_setAllServoPos(uint8_t pos);
 
 
 #endif
