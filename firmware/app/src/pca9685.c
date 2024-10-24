@@ -63,3 +63,32 @@ uint16_t pca9685_getPWM(PCA9685_t* pca9685, uint8_t outputPin, bool getOff)
 
     return (uint16_t)(data[0]) | ((uint16_t)(data[1]) << 8);
 }
+
+
+
+
+
+
+// init
+void PCA9685_init(void)
+{
+
+}
+
+// set frequency
+void PCA9685_setFreq(uint16_t freq)
+{
+
+}
+
+// set one servo position
+void PCA9685_setServoPos(uint8_t pos)
+{
+
+}
+
+// set all servo position to the same
+void PCA9685_setAllServoPos(uint8_t pos)
+{
+    
+}
