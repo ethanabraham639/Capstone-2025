@@ -51,20 +51,20 @@
 typedef struct{
     uint8_t addr;
     i2c_port_t i2c_num;
-    uint32_t osc_freq;
+    float osc_freq;
 }PCA9685_t;
 
 // init
-void PCA9685_init(void);
+void PCA9685_init(PCA9685_t* pca9685);
 
 // set frequency
-void PCA9685_setFreq(uint16_t freq);
+void PCA9685_setFreq(PCA9685_t* pca9685, float freq);
 
 // set one servo position
-void PCA9685_setServoPos(uint8_t pos);
+void PCA9685_setServoPos(PCA9685_t* pca9685, uint8_t outputPin, uint8_t servoPos);
 
 // set all servo position to the same
-void PCA9685_setAllServoPos(uint8_t pos);
+void PCA9685_setAllServoPos(PCA9685_t* pca9685, uint8_t servoPos);
 
 
 #endif
