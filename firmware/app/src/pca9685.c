@@ -84,11 +84,15 @@ uint16_t pca9685_getPWM(PCA9685_t* pca9685, uint8_t outputPin, bool getOff)
 // init
 void PCA9685_init(PCA9685_t* pca9685)
 {
-    //configure the mode 1
+    //configure the mode 1 and 2
+    const uint8_t ADDR = pca9685->addr;
+    uint8_t mode1 = MODE1_AI;
+    uint8_t mode2 = 0x00;
 
-    //configure mode 2
+    i2c_writeReg8(ADDR, PCA9685_MODE1, &mode1);
+    i2c_writeReg8(ADDR, PCA9685_MODE2, &mode2);
 
-    //set the frequency 
+    PCA9685_setFreq(pca9685, DEFAULT_SERVO_FREQ);
 }
 
 // set frequency between 24Hz and 1526Hz
