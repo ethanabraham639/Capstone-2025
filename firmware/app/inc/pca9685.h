@@ -6,7 +6,7 @@
 
 // REGISTER ADDRESSES
 #define PCA9685_MODE1               0x00        // Mode Register 1
-#define PCA9685_MODE2               0x01`       // Mode Register 2
+#define PCA9685_MODE2               0x01        // Mode Register 2
 #define PCA9685_SUBADR1             0x02        // I2C-bus subaddress 1
 #define PCA9685_SUBADR2             0x03        // I2C-bus subaddress 2
 #define PCA9685_SUBADR3             0x04        // I2C-bus subaddress 3
@@ -45,26 +45,40 @@
 
 #define FREQUENCY_OSCILLATOR        25000000    //Int. osc. frequency in datasheet
 
-#define PCA9685_PRESCALE_MIN        3           // minimum prescale value
-#define PCA9685_PRESCALE_MAX        255         // maximum prescale value
+#define DEFAULT_SERVO_FREQ          50.0F
 
 typedef struct{
-    uint8_t addr;
-    i2c_port_t i2c_num;
-    float osc_freq;
+    uint8_t addr;       // I2C slave address
+    i2c_port_t i2c_num; // I2C number
+    float osc_freq;     // Tested true osc_freq of the chip
 }PCA9685_t;
 
-// init
+/**
+ * @brief Initializes the PCA9685 pwm driver
+ * @param pca9685 PCA9685 handle
+ */
 void PCA9685_init(PCA9685_t* pca9685);
 
-// set frequency
+/**
+ * @brief Sets the frequency for the entire chip (24Hz - 1526Hz)
+ * @param pca9685 PCA9685 handle
+ * @param freq Frequency to set
+ */
 void PCA9685_setFreq(PCA9685_t* pca9685, float freq);
 
-// set one servo position
+/**
+ * @brief Sets the relative position of a servo via PWM duty cycle manipulation
+ * @param pca9685 PCA9685 handle
+ * @param outputPin Which servo position to set (0 - 15)
+ * @param servoPos The position to set (0-255) linearized to full scale range
+ */
 void PCA9685_setServoPos(PCA9685_t* pca9685, uint8_t outputPin, uint8_t servoPos);
 
-// set all servo position to the same
+/**
+ * @brief Sets the servo position controlled by the entire chip via PWM duty cycle manipulation
+ * @param pca9685 PCA9685 handle
+ * @param servoPos The position to set (0-255) linearized to full scale range
+ */
 void PCA9685_setAllServoPos(PCA9685_t* pca9685, uint8_t servoPos);
-
 
 #endif
