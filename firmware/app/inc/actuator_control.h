@@ -1,4 +1,6 @@
 #ifndef ACTUATOR_CONTROL_H
 #define ACTUATOR_CONTROL_H
 
+#define NUM_ACTUATORS 45
+
 #endif
