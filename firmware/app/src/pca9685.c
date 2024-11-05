@@ -77,10 +77,6 @@ uint16_t pca9685_getPWM(PCA9685_t* pca9685, uint8_t outputPin, bool getOff)
 }
 
 
-
-
-
-
 // init
 void PCA9685_init(PCA9685_t* pca9685)
 {
