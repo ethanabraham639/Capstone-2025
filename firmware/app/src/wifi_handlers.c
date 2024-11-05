@@ -1,5 +1,6 @@
 #include "wifi_handlers.h"
 #include "actuator_control.h"
+#include "common.h"
 
 #include <string.h>
 #include "esp_wifi.h"
@@ -7,39 +8,72 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "esp_http_server.h"
+#include "esp_httpd_priv.h"
 
+#define TAG "WIFI_SERVER"
 
-/**
- * 
- * -this file will house the definitions for all the POST and GET handlers
- * -it will include any other files that provide an interface to update or get data for these handlers
- *      -so that means this file should not store any specific data
- * 
- * -in the case of the POST request with the motor positions
- *      - a post request handler will be defined that will call a setter fuction from actuator_control
- *        which will update the array holding the servo positions
- */
-
-/* Handler for the /servo_motor_positions endpoint */
-esp_err_t servo_motor_positions_handler(httpd_req_t *req) {
-    // Buffer to hold the 45-byte data
-    char buffer[NUM_ACTUATORS];
+esp_err_t POST_actuatorPositionHandler(httpd_req_t *req)
+{
+    char buffer[NUM_ACTUATORS] = {0};
     
-    size_t total_len = req->content_len;
+    // Make sure the data length is what we expect
+    int total_len = req->content_len;
     if (total_len != NUM_ACTUATORS) {
-        ESP_LOGE(TAG, "Invalid data length: %d bytes (expected 45)", total_len);
-        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST, "Invalid data length");
+        ESP_LOGE(TAG, "Invalid data length: %d bytes (expected %d)", total_len, NUM_ACTUATORS);
+        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST);
+        return ESP_FAIL;
+    }
+
+    // Populate the buffer with the payload
+    int received = httpd_req_recv(req, buffer, sizeof(buffer));
+
+    // Make sure the received data is the size we expect
+    if (received <= 0) {
+        ESP_LOGE(TAG, "Failed to receive data");
+        httpd_resp_send_err(req, HTTPD_500_SERVER_ERROR);
         return ESP_FAIL;
     }
 
     ESP_LOGI(TAG, "Received 45 bytes of servo data");
 
-    // Process the servo data (example: logging it)
-    for (int i = 0; i < 45; i++) {
-        ESP_LOGI(TAG, "Byte %d: %d", i, buffer[i]);
+    // Update the motor positions
+    updateActuatorPositions(buffer);
+
+    return ESP_OK;
+}
+
+esp_err_t POST_actuatorResetHandler(httpd_req_t *req)
+{    
+    // Confirm no data is attached to this get request, send error otherwise
+    if (req->content_len == 0)
+    {
+        ESP_LOGI(TAG, "Received POST request with no payload data");
+        httpd_resp_send(req, NULL, 0);
+    } 
+    else 
+    {
+        ESP_LOGI(TAG, "Received POST request with data");
+        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST);
     }
 
-    // Send a response to the client
-    httpd_resp_send(req, "Data received successfully", HTTPD_RESP_USE_STRLEN);
+    // Update the motor positions
+    resetAcuatorPositions();
+
+    return ESP_OK;
+}
+
+esp_err_t GET_debugMsgHandler(httpd_req_t *req)
+{
+    // For now send a todo message
+    // This should call a getter function to fetch the current debug message payload
+    const char* resp_str = "TODO: Send real debug message";
+    httpd_resp_send(req, resp_str, strlen(resp_str));
+
+    /* After sending the HTTP response the old HTTP request
+     * headers are lost. Check if HTTP request headers can be read now. */
+    if (httpd_req_get_hdr_value_len(req, "Host") == 0) {
+        ESP_LOGI(TAG, "GET_debugMsgHandler headers lost");
+    }
+
     return ESP_OK;
 }

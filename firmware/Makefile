@@ -6,7 +6,7 @@
 PROJECT_NAME := putt-pilot
 
 # Instead of using default "main" directory, I just want to call it "src", so compile that too
-EXTRA_COMPONENT_DIRS = $(PROJECT_PATH)/app/src $(PROJECT_PATH)/helpers/helpers_src
+EXTRA_COMPONENT_DIRS = $(PROJECT_PATH)/app/src $(PROJECT_PATH)/helpers/helpers_src ${IDF_PATH}/examples/common_components/protocol_examples_common
 
 include $(IDF_PATH)/make/project.mk
 
