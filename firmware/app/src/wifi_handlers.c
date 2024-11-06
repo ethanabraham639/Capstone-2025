@@ -1,14 +1,14 @@
 #include "wifi_handlers.h"
 #include "actuator_control.h"
-#include "common.h"
 
+#include <sys/param.h>
 #include <string.h>
 #include "esp_wifi.h"
 #include "esp_event.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "esp_http_server.h"
-#include "esp_httpd_priv.h"
+// #include "esp_httpd_priv.h"
 
 #define TAG "WIFI_SERVER"
 
@@ -20,7 +20,7 @@ esp_err_t POST_actuatorPositionHandler(httpd_req_t *req)
     int total_len = req->content_len;
     if (total_len != NUM_ACTUATORS) {
         ESP_LOGE(TAG, "Invalid data length: %d bytes (expected %d)", total_len, NUM_ACTUATORS);
-        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST);
+        // httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST);
         return ESP_FAIL;
     }
 
@@ -30,14 +30,14 @@ esp_err_t POST_actuatorPositionHandler(httpd_req_t *req)
     // Make sure the received data is the size we expect
     if (received <= 0) {
         ESP_LOGE(TAG, "Failed to receive data");
-        httpd_resp_send_err(req, HTTPD_500_SERVER_ERROR);
+        // httpd_resp_send_err(req, HTTPD_500_SERVER_ERROR);
         return ESP_FAIL;
     }
 
     ESP_LOGI(TAG, "Received 45 bytes of servo data");
 
     // Update the motor positions
-    updateActuatorPositions(buffer);
+    // updateActuatorPositions(buffer);
 
     return ESP_OK;
 }
@@ -53,11 +53,11 @@ esp_err_t POST_actuatorResetHandler(httpd_req_t *req)
     else 
     {
         ESP_LOGI(TAG, "Received POST request with data");
-        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST);
+        // httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST);
     }
 
     // Update the motor positions
-    resetAcuatorPositions();
+    // resetAcuatorPositions();
 
     return ESP_OK;
 }
@@ -75,5 +75,41 @@ esp_err_t GET_debugMsgHandler(httpd_req_t *req)
         ESP_LOGI(TAG, "GET_debugMsgHandler headers lost");
     }
 
+    return ESP_OK;
+}
+
+
+
+
+
+/* An HTTP POST handler */
+esp_err_t echo_post_handler(httpd_req_t *req)
+{
+    char buf[1000];
+    int ret, remaining = req->content_len;
+
+    while (remaining > 0) {
+        /* Read the data for the request */
+        if ((ret = httpd_req_recv(req, buf,
+                        MIN(remaining, sizeof(buf)))) <= 0) {
+            if (ret == HTTPD_SOCK_ERR_TIMEOUT) {
+                /* Retry receiving if timeout occurred */
+                continue;
+            }
+            return ESP_FAIL;
+        }
+
+        /* Send back the same data */
+        httpd_resp_send_chunk(req, buf, ret);
+        remaining -= ret;
+
+        /* Log data received */
+        ESP_LOGI(TAG, "=========== RECEIVED DATA ==========");
+        ESP_LOGI(TAG, "%.*s", ret, buf);
+        ESP_LOGI(TAG, "====================================");
+    }
+
+    // End response
+    httpd_resp_send_chunk(req, NULL, 0);
     return ESP_OK;
 }
