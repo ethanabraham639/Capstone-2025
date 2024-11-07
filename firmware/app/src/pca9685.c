@@ -32,18 +32,18 @@ void pca9685_setPrescaler(PCA9685_t* pca9685, uint8_t prescaler)
     const uint8_t ADDR = pca9685->addr;
 
     uint8_t oldMode = 0;
-    i2c_readReg8(ADDR, PCA9685_MODE1, &oldMode);
+    I2C_readReg8(ADDR, PCA9685_MODE1, &oldMode);
 
     uint8_t newMode = (oldMode & ~MODE1_RESTART) | MODE1_SLEEP; // sleep
-    i2c_writeReg8(ADDR, PCA9685_MODE1, &newMode);
-    i2c_writeReg8(ADDR, PCA9685_PRESCALE, &prescaler);
-    i2c_writeReg8(ADDR, PCA9685_MODE1, &oldMode);
+    I2C_writeReg8(ADDR, PCA9685_MODE1, &newMode);
+    I2C_writeReg8(ADDR, PCA9685_PRESCALE, &prescaler);
+    I2C_writeReg8(ADDR, PCA9685_MODE1, &oldMode);
 }
 
 uint8_t pca9685_getPrescaler(PCA9685_t* pca9685)
 {
     uint8_t prescaler = 0;
-    i2c_writeReg8(pca9685->addr, PCA9685_PRESCALE, &prescaler);
+    I2C_writeReg8(pca9685->addr, PCA9685_PRESCALE, &prescaler);
 
     return prescaler;
 }
@@ -62,7 +62,7 @@ esp_err_t pca9685_setPWM(PCA9685_t* pca9685, uint8_t outputPin, uint16_t onPos, 
     data[OFF_L_OFFSET] = (uint8_t)( offPos & ON_OFF_L_MASK);
     data[OFF_H_OFFSET] = (uint8_t)((offPos & ON_OFF_H_MASK) >> 8);
 
-    return i2c_writeReg(pca9685->addr, regAddr, data, SET_PWM_SIZE);
+    return I2C_writeReg(pca9685->addr, regAddr, data, SET_PWM_SIZE);
 }
 
 uint16_t pca9685_getPWM(PCA9685_t* pca9685, uint8_t outputPin, bool getOff)
@@ -71,7 +71,7 @@ uint16_t pca9685_getPWM(PCA9685_t* pca9685, uint8_t outputPin, bool getOff)
 
     uint8_t data[GET_PWM_SIZE] = {0};
 
-    i2c_readReg(pca9685->addr, regAddr, data, GET_PWM_SIZE);
+    I2C_readReg(pca9685->addr, regAddr, data, GET_PWM_SIZE);
 
     return (uint16_t)(data[0]) | ((uint16_t)(data[1]) << 8);
 }
@@ -85,8 +85,8 @@ void PCA9685_init(PCA9685_t* pca9685)
     uint8_t mode1 = MODE1_AI;
     uint8_t mode2 = 0x00;
 
-    i2c_writeReg8(ADDR, PCA9685_MODE1, &mode1);
-    i2c_writeReg8(ADDR, PCA9685_MODE2, &mode2);
+    I2C_writeReg8(ADDR, PCA9685_MODE1, &mode1);
+    I2C_writeReg8(ADDR, PCA9685_MODE2, &mode2);
 
     PCA9685_setFreq(pca9685, DEFAULT_SERVO_FREQ);
 }

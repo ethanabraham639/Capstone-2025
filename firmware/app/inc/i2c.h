@@ -7,7 +7,7 @@
  * @brief i2c master initialization
  * @return ESP error code
  */
-esp_err_t i2c_master_init(void);
+esp_err_t I2C_master_init(void);
 
 /**
  * @brief Read multiple bytes
@@ -17,7 +17,7 @@ esp_err_t i2c_master_init(void);
  * @param dataLen Length of data to read
  * @return ESP error code
  */
-esp_err_t i2c_readReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataLen);
+esp_err_t I2C_readReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataLen);
 
 /**
  * @brief Write multiple bytes
@@ -27,7 +27,7 @@ esp_err_t i2c_readReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataL
  * @param dataLen Length of data to transmit
  * @return ESP error code
  */
-esp_err_t i2c_writeReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataLen);
+esp_err_t I2C_writeReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataLen);
 
 /**
  * @brief Read one byte
@@ -36,7 +36,7 @@ esp_err_t i2c_writeReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t data
  * @param data Pointer to data variable to put read data in
  * @return ESP error code
  */
-esp_err_t i2c_readReg8(uint8_t addr, uint8_t regAddr, uint8_t* data);
+esp_err_t I2C_readReg8(uint8_t addr, uint8_t regAddr, uint8_t* data);
 
 /**
  * @brief Write one byte
@@ -45,6 +45,6 @@ esp_err_t i2c_readReg8(uint8_t addr, uint8_t regAddr, uint8_t* data);
  * @param data Pointer to data variable to transmit out of
  * @return ESP error code
  */
-esp_err_t i2c_writeReg8(uint8_t addr, uint8_t regAddr, uint8_t* data);
+esp_err_t I2C_writeReg8(uint8_t addr, uint8_t regAddr, uint8_t* data);
 
 #endif

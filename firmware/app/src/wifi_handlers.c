@@ -8,9 +8,8 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "esp_http_server.h"
-// #include "esp_httpd_priv.h"
 
-#define TAG "WIFI_SERVER"
+#define TAG "WIFI_HANDLERS.C"
 
 esp_err_t POST_actuatorPositionHandler(httpd_req_t *req)
 {
@@ -20,7 +19,6 @@ esp_err_t POST_actuatorPositionHandler(httpd_req_t *req)
     int total_len = req->content_len;
     if (total_len != NUM_ACTUATORS) {
         ESP_LOGE(TAG, "Invalid data length: %d bytes (expected %d)", total_len, NUM_ACTUATORS);
-        // httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST);
         return ESP_FAIL;
     }
 
@@ -30,7 +28,6 @@ esp_err_t POST_actuatorPositionHandler(httpd_req_t *req)
     // Make sure the received data is the size we expect
     if (received <= 0) {
         ESP_LOGE(TAG, "Failed to receive data");
-        // httpd_resp_send_err(req, HTTPD_500_SERVER_ERROR);
         return ESP_FAIL;
     }
 
@@ -53,7 +50,6 @@ esp_err_t POST_actuatorResetHandler(httpd_req_t *req)
     else 
     {
         ESP_LOGI(TAG, "Received POST request with data");
-        // httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST);
     }
 
     // Update the motor positions
@@ -80,9 +76,7 @@ esp_err_t GET_debugMsgHandler(httpd_req_t *req)
 
 
 
-
-
-/* An HTTP POST handler */
+// Temp handler for testing purposes
 esp_err_t echo_post_handler(httpd_req_t *req)
 {
     char buf[1000];

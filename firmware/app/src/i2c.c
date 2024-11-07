@@ -14,7 +14,7 @@
 #define LAST_NACK_VAL               0x2
 #define I2C_CLK_STRETCH_TICK        300 // 300 ticks, Clock stretch is about 210us, you can make changes according to the actual situation.
 
-esp_err_t i2c_master_init(void)
+esp_err_t I2C_master_init(void)
 {
     int i2c_master_port = I2C_MASTER_NUM;
     i2c_config_t conf;
@@ -29,7 +29,7 @@ esp_err_t i2c_master_init(void)
     return ESP_OK;
 }
 
-esp_err_t i2c_readReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataLen)
+esp_err_t I2C_readReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataLen)
 {
     int ret;
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
@@ -55,7 +55,7 @@ esp_err_t i2c_readReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataL
     return ret;
 }
 
-esp_err_t i2c_writeReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataLen)
+esp_err_t I2C_writeReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t dataLen)
 {
     int ret;
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
@@ -70,13 +70,13 @@ esp_err_t i2c_writeReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t data
     return ret;
 }
 
-esp_err_t i2c_readReg8(uint8_t addr, uint8_t regAddr, uint8_t* data)
+esp_err_t I2C_readReg8(uint8_t addr, uint8_t regAddr, uint8_t* data)
 {
-    return i2c_readReg(addr, regAddr, data, 1);
+    return I2C_readReg(addr, regAddr, data, 1);
 }
 
 
-esp_err_t i2c_writeReg8(uint8_t addr, uint8_t regAddr, uint8_t* data)
+esp_err_t I2C_writeReg8(uint8_t addr, uint8_t regAddr, uint8_t* data)
 {
-    return i2c_writeReg(addr, regAddr, data, 1);
+    return I2C_writeReg(addr, regAddr, data, 1);
 }

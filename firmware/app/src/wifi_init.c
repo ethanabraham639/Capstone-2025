@@ -23,7 +23,7 @@
 
 #include <esp_http_server.h>
 
-static const char *TAG="APP";
+static const char *TAG="WIFI_INIT.C";
 
 httpd_uri_t actuator_position_uri = {
     .uri      = "/actuator_position",
@@ -52,8 +52,6 @@ httpd_uri_t echo = {
     .handler   = echo_post_handler,
     .user_ctx  = NULL
 };
-
-
 
 
 httpd_handle_t start_webserver(void)
@@ -106,7 +104,7 @@ static void connect_handler(void* arg, esp_event_base_t event_base,
     }
 }
 
-void init_and_start_wifi_server(void)
+void WIFI_init_and_start_server(void)
 {
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(esp_netif_init());
