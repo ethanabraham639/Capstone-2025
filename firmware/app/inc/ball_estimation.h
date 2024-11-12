@@ -1,7 +1,7 @@
 #ifndef BALL_ESTIMATION_H
 #define BALL_ESTIMATION_H
 
-typedef enum BallEstimationState_e{
+typedef enum {
     IDLE = 0,
     READY_TO_HIT,
     IN_TRANSIT,
@@ -9,6 +9,6 @@ typedef enum BallEstimationState_e{
     STUCK,
     IN_GUTTER,
     FEED_ERROR
-};
+} BallEstimationState_e;
 
 #endif

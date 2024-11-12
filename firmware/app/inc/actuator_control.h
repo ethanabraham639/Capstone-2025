@@ -5,6 +5,6 @@
 
 #define NUM_ACTUATORS 45
 
-void updateActuatorPositions(uint8_t* positionArray);
-void resetAcuatorPositions(void);
+void updateActPositions(uint8_t* positionArray);
+void resetActPositions(void);
 #endif
