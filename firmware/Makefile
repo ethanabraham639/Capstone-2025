@@ -3,10 +3,10 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := hello-world
+PROJECT_NAME := putt-pilot
 
 # Instead of using default "main" directory, I just want to call it "src", so compile that too
-EXTRA_COMPONENT_DIRS = $(PROJECT_PATH)/src
+EXTRA_COMPONENT_DIRS = $(PROJECT_PATH)/app/src $(PROJECT_PATH)/helpers/helpers_src
 
 include $(IDF_PATH)/make/project.mk
 

@@ -12,11 +12,11 @@
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 #include "test.h"
-
+#include "helper.h"
 
 void app_main()
 {
-    printf("Hello world %d!\n", TEST_MACRO);
+    printf("Hello world %d%d!\n", TEST_MACRO, HELPER_MACRO);
 
     /* Print chip information */
     esp_chip_info_t chip_info;
