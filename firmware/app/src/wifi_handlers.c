@@ -11,7 +11,7 @@
 
 #define TAG "WIFI_HANDLERS.C"
 
-esp_err_t POST_actuatorPositionHandler(httpd_req_t *req)
+esp_err_t POST_courseState_handler(httpd_req_t *req)
 {
     char buffer[NUM_ACTUATORS] = {0};
     
@@ -39,26 +39,8 @@ esp_err_t POST_actuatorPositionHandler(httpd_req_t *req)
     return ESP_OK;
 }
 
-esp_err_t POST_actuatorResetHandler(httpd_req_t *req)
-{    
-    // Confirm no data is attached to this get request, send error otherwise
-    if (req->content_len == 0)
-    {
-        ESP_LOGI(TAG, "Received POST request with no payload data");
-        httpd_resp_send(req, NULL, 0);
-    } 
-    else 
-    {
-        ESP_LOGI(TAG, "Received POST request with data");
-    }
 
-    // Update the motor positions
-    // resetAcuatorPositions();
-
-    return ESP_OK;
-}
-
-esp_err_t GET_debugMsgHandler(httpd_req_t *req)
+esp_err_t GET_debugMsg_handler(httpd_req_t *req)
 {
     // For now send a todo message
     // This should call a getter function to fetch the current debug message payload
