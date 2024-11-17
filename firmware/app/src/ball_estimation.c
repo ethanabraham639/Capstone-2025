@@ -7,9 +7,17 @@ void run_ball_estimation_task(void)
     switch(state)
     {
         case IDLE:
-            // Do nothing, go in to next state
+            // only if auto dispense is on, run this state machine.
             state = READY_TO_HIT;
+
+            // else 
+            state = NO_ESTIMATION_TRACKING;
             break;
+
+        case NO_ESTIMATION_TRACKING:
+            
+            //if auto dispense changes
+            state = IDLE;
         
         case READY_TO_HIT:
             //if sensor detects ball broke
@@ -23,7 +31,7 @@ void run_ball_estimation_task(void)
             //if ball goes in the gutter
             state = IN_GUTTER;
 
-            //if ball is stuck (10 second timer of inactivity)
+            //if stuck after timeout
             state = STUCK;
 
             break;
@@ -34,22 +42,6 @@ void run_ball_estimation_task(void)
             //if the ball goes into the gutter (it should)
             state = IN_GUTTER;
 
-            //if the ball does not make it to the gutter (10 second timer of inactivity)
-            state = FEED_ERROR;
-            
-            break;
-
-        case STUCK:
-            //notify app
-
-            //signal for the ball return sequence
-
-            //if the ball goes into the gutter (it should)
-            state = IN_GUTTER;
-
-            //if the ball does not make it to the gutter (10 second timer of inactivity)
-            state = FEED_ERROR;
-
             break;
 
         case IN_GUTTER:
@@ -59,8 +51,9 @@ void run_ball_estimation_task(void)
 
             break;
 
-        case FEED_ERROR:
-            //do something... not sure what
+        case STUCK:
+            // ball is stuck, ready to hit
+            state = READY_TO_HIT;
             break;
     }
 }
