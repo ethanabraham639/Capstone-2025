@@ -3,7 +3,8 @@
 
 #include "stdint.h"
 
-#define NUM_ACTUATORS 45
+#define NUM_ACTUATORS   45
+#define MODES_SIZE      1
 
 void updateActPositions(uint8_t* positionArray);
 void resetActPositions(void);
