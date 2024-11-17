@@ -8,7 +8,7 @@ typedef enum {
     IN_HOLE,
     STUCK,
     IN_GUTTER,
-    FEED_ERROR
+    NO_ESTIMATION_TRACKING,
 } BallEstimationState_e;
 
 #endif

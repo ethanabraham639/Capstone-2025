@@ -20,11 +20,16 @@ void run_ball_queue_task(void)
         
         case WAITING:
 
-            //if prox sensor activated
+            //if prox sensor activated or ready to hit and auto dispense is on
+            //or manual dispense is activated
             state = DISPENSING;
             break;
         
         case DISPENSING:
+
+            //dispense multiple balls if it is a manual dispense
+            state = DISPENSING;
+
             //dispensing sensor activated
             state = WAITING;
 
