@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" version="24.8.6">
+  <diagram name="Page-1" id="gAS8q_FBTUJKZxbPJjKo">
+    <mxGraphModel dx="1247" dy="683" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="2000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="UayXlqCAlgJvMUclcxfE-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="720" y="600" width="760" height="610" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" vertex="1" parent="1">
+          <mxGeometry x="770" y="1120" width="660" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="770" y="980" width="660" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="770" y="650" width="660" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-5" value="ESP8266" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=30;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="610" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-6" value="Application" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="660" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-7" value="User Drivers" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="980" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-8" value="ESP8266 RTOS SDK" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1135" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-12" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;WIFI&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="950" y="1020" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-13" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;GPIO&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="1020" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-14" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;ADC/MUX&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="1020" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-16" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="790" y="1020" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-9" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;I2C Interface&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="UayXlqCAlgJvMUclcxfE-16">
+          <mxGeometry y="40" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-10" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;PCA9685&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="UayXlqCAlgJvMUclcxfE-16">
+          <mxGeometry width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-18" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;Actuator Control&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="790" y="700" width="140" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-19" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;Ball Estimation&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="950" y="700" width="140" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-20" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;Ball Queue&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="700" width="140" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="UayXlqCAlgJvMUclcxfE-21" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;Debug/Logging&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="700" width="140" height="240" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
