@@ -1,5 +1,4 @@
 #include "gpio.h"
-#include "driver/gpio.h"
 
 #define PIN_MASK(PIN_NUM) (1 << (PIN_NUM))
 
