@@ -18,6 +18,9 @@
 #define GUTTER1_GPIO        GPIO_NUM_7
 #define GUTTER2_GPIO        GPIO_NUM_10
 
+#define GPIO_ON             0
+#define GPIO_OFF            1
+
 void GPIO_init(void);
 
 #endif
