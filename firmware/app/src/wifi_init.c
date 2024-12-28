@@ -24,6 +24,35 @@
 
 static const char *TAG="WIFI_INIT.C";
 
+
+httpd_uri_t course_state = {
+    .uri       = "/course_state",
+    .method    = HTTP_POST,
+    .handler   = POST_courseState_handler,
+    .user_ctx  = NULL
+};
+
+httpd_uri_t reset_stats = {
+    .uri       = "/reset_stats",
+    .method    = HTTP_POST,
+    .handler   = POST_resetStats_handler,
+    .user_ctx  = NULL
+};
+
+httpd_uri_t settings = {
+    .uri       = "/settings",
+    .method    = HTTP_POST,
+    .handler   = POST_settings_handler,
+    .user_ctx  = NULL
+};
+
+httpd_uri_t dispense_ball = {
+    .uri       = "/dispense_ball",
+    .method    = HTTP_POST,
+    .handler   = POST_dispenseBall_handler,
+    .user_ctx  = NULL
+};
+
 httpd_uri_t echo = {
     .uri       = "/echo",
     .method    = HTTP_POST,
@@ -31,6 +60,27 @@ httpd_uri_t echo = {
     .user_ctx  = NULL
 };
 
+
+httpd_uri_t error_codes = {
+    .uri       = "/error_codes",
+    .method    = HTTP_GET,
+    .handler   = GET_errorCodes_handler,
+    .user_ctx  = NULL
+};
+
+httpd_uri_t debug_msg = {
+    .uri       = "/debug_msg",
+    .method    = HTTP_GET,
+    .handler   = GET_debugMsg_handler,
+    .user_ctx  = NULL
+};
+
+httpd_uri_t stats = {
+    .uri       = "/stats",
+    .method    = HTTP_GET,
+    .handler   = GET_stats_handler,
+    .user_ctx  = NULL
+};
 
 httpd_handle_t start_webserver(void)
 {
@@ -42,6 +92,14 @@ httpd_handle_t start_webserver(void)
     if (httpd_start(&server, &config) == ESP_OK) {
         // Set URI handlers
         ESP_LOGI(TAG, "Registering URI handlers");
+        httpd_register_uri_handler(server, &course_state);
+        httpd_register_uri_handler(server, &reset_stats);
+        httpd_register_uri_handler(server, &settings);
+        httpd_register_uri_handler(server, &dispense_ball);
+        httpd_register_uri_handler(server, &error_codes);
+        httpd_register_uri_handler(server, &debug_msg);
+        httpd_register_uri_handler(server, &stats);
+
         httpd_register_uri_handler(server, &echo);
         return server;
     }
