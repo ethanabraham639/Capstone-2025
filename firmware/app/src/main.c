@@ -59,7 +59,7 @@ void app_main()
     while(1) {
         gpio_set_level(BLINKY_GPIO, isOn);
         isOn = !isOn;
-        printf("Val: %u\n", isOn);
+        // printf("Val: %u\n", isOn);
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 
