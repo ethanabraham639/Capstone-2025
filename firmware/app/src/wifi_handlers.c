@@ -127,8 +127,8 @@ esp_err_t GET_debugMsg_handler(httpd_req_t *req)
 
 esp_err_t GET_stats_handler(httpd_req_t *req)
 {
-    uint8_t ballsHit = BE_get_balls_hit();
-    uint8_t ballsInHole = BE_get_balls_in_hole();
+    uint8_t ballsHit = 0; //=BE_get_balls_hit();
+    uint8_t ballsInHole = 0; //=BE_get_balls_in_hole();
 
     const char resp_str[2] = {ballsHit, ballsInHole};
     httpd_resp_send(req, resp_str, strlen(resp_str));

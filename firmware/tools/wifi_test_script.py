@@ -20,4 +20,4 @@ def debug_msg_get():
 
 if __name__ == "__main__":
     echo_post()  # Call the POST handler
-    debug_msg_get()
+    # debug_msg_get()
