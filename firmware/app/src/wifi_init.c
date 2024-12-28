@@ -24,27 +24,6 @@
 
 static const char *TAG="WIFI_INIT.C";
 
-httpd_uri_t actuator_position_uri = {
-    .uri      = "/actuator_position",
-    .method   = HTTP_POST,
-    .handler  = POST_actuatorPositionHandler,
-    .user_ctx = NULL
-};
-
-httpd_uri_t actuator_reset_uri = {
-    .uri      = "/actuator_reset",
-    .method   = HTTP_POST,
-    .handler  = POST_actuatorResetHandler,
-    .user_ctx = NULL
-};
-
-httpd_uri_t debug_msg_uri = {
-    .uri      = "/debug_msg",
-    .method   = HTTP_GET,
-    .handler  = GET_debugMsgHandler,
-    .user_ctx = NULL
-};
-
 httpd_uri_t echo = {
     .uri       = "/echo",
     .method    = HTTP_POST,
@@ -63,9 +42,6 @@ httpd_handle_t start_webserver(void)
     if (httpd_start(&server, &config) == ESP_OK) {
         // Set URI handlers
         ESP_LOGI(TAG, "Registering URI handlers");
-        httpd_register_uri_handler(server, &actuator_position_uri);
-        httpd_register_uri_handler(server, &actuator_reset_uri);
-        httpd_register_uri_handler(server, &debug_msg_uri);
         httpd_register_uri_handler(server, &echo);
         return server;
     }

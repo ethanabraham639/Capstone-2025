@@ -49,7 +49,6 @@
 
 typedef struct{
     uint8_t addr;       // I2C slave address
-    i2c_port_t i2c_num; // I2C number
     float osc_freq;     // Tested true osc_freq of the chip
 }PCA9685_t;
 

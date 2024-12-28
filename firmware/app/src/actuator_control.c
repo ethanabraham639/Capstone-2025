@@ -4,6 +4,7 @@
 #include "stdbool.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include <string.h>
 
 
 #define MAX_POSITION            255.0
@@ -16,10 +17,6 @@
 typedef enum {
     RESET = 0,
     STATIC,
-    DYNAMIC_PRESET_1,
-    DYNAMIC_PRESET_2,
-    DYNAMIC_PRESET_3,
-    RANDOM
 } ActControlScheme_e;
 
 typedef struct {
