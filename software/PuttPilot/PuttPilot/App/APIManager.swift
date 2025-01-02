@@ -8,32 +8,32 @@
 import Foundation
 import Combine
 
-enum Mode: String {
-    case staticMode = "1"
-    case wave = "2"
-    case tsunami = "3"
-    case ballReturn = "4"
+enum Mode: Int {
+    case staticMode = 0
+    case ballReturn = 1
+    case wave = 2
+    case tsunami = 3
 
     var asciiCharacter: Character? {
-        guard let asciiValue = rawValue.first?.asciiValue else { return nil }
-        return Character(UnicodeScalar(asciiValue))
+        guard let scalar = UnicodeScalar(rawValue) else { return nil }
+        return Character(scalar)
     }
 }
 
-enum BallDispensingMode: String {
-    case automatic = "1"
-    case manual = "0"
+enum BallDispensingMode: Int {
+    case automatic = 1
+    case manual = 0
 
     var asciiCharacter: Character? {
-        guard let asciiValue = rawValue.first?.asciiValue else { return nil }
-        return Character(UnicodeScalar(asciiValue))
+        guard let scalar = UnicodeScalar(rawValue) else { return nil }
+        return Character(scalar)
     }
 }
 
 class APIManager {
     static let shared = APIManager()
     
-    private var esp8266IP: String = "10.0.0.31" // Default value
+    private var esp8266IP: String = "172.20.10.2" // Default value
     private var cancellables: Set<AnyCancellable> = []
 
     private var baseURL: URL {
@@ -113,8 +113,7 @@ class APIManager {
             .map(\.data)
             .tryMap { data in
                 data.compactMap { byte -> Int? in
-                    guard let intValue = Int(String(UnicodeScalar(byte))) else { return nil }
-                    return intValue
+                    return Int(byte)
                 }
             }
 //            .filter { $0.count == 2 && $0[0] >= $0[1] } // Validate balls_hit >= balls_in_hole
@@ -131,8 +130,7 @@ class APIManager {
             .map(\.data)
             .tryMap { data in
                 data.compactMap { byte -> Int? in
-                    guard let intValue = Int(String(UnicodeScalar(byte))) else { return nil }
-                    return intValue
+                    return Int(byte)
                 }
             }
             .eraseToAnyPublisher()

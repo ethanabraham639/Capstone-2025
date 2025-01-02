@@ -23,6 +23,11 @@ class DeveloperTestingViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     
     func startPolling() {
+        
+        apiManager.startPollingStats(interval: 1)
+        apiManager.startPollingErrorCodes(interval: 1)
+        apiManager.startPollingDebugMessage(interval: 0.5)
+        
         apiManager.$stats
             .receive(on: DispatchQueue.main)
             .map { $0.map(String.init).joined(separator: ",")}
@@ -44,7 +49,7 @@ class DeveloperTestingViewModel: ObservableObject {
         apiManager.dispenseBallsPublisher(numberBalls: count)
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
-                    print("Errro dispensing balls: \(error)")
+                    print("Error dispensing balls: \(error)")
                 }
             }, receiveValue: { success in
                 print("Balls dispensed successfully: \(success)")

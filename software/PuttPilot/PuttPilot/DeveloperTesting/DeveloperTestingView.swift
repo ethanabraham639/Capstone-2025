@@ -40,6 +40,7 @@ struct DeveloperTestingView: View {
                 }
                 
                 // Fetch Debug Message
+                // TODO: put this on its own page
                 VStack(alignment: .leading) {
                     Text("Fetch Debug Message")
                         .font(.headline)
