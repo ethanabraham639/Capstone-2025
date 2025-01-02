@@ -2,7 +2,7 @@ import requests
 import time
 
 # Define the base URL of the server
-BASE_URL = "http://192.168.68.139"
+BASE_URL = "http://172.20.10.2"
 
 def course_state_post():
     """Function to perform a POST request to /course_state."""
@@ -46,21 +46,21 @@ def dispense_ball_post():
 def error_codes_get():
     """Function to perform a GET request to /error_codes."""
     response = requests.get(f"{BASE_URL}/error_codes")
-    print("POST /echo response:")
+    print("GET /error_codes response:")
     print("Status Code:", response.status_code)
     print("Response Body:", response.text)
 
 def debug_msg_get():
     """Function to perform a GET request to /debug_msg."""
     response = requests.get(f"{BASE_URL}/debug_msg")
-    print("POST /echo response:")
+    print("GET /debug_message response:")
     print("Status Code:", response.status_code)
     print("Debug Msg:", response.text)
 
 def stats_get():
     """Function to perform a GET request to /stats."""
     response = requests.get(f"{BASE_URL}/stats")
-    print("POST /echo response:")
+    print("GET /stats response:")
     print("Status Code:", response.status_code)
     print(f"Balls hit: {ord(response.text[0])}, Balls in hole: {ord(response.text[1])}")
 
