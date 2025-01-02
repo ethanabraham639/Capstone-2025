@@ -18,6 +18,8 @@
 		DA0C23472D1F6710009D0E4E /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C23462D1F6710009D0E4E /* APIManager.swift */; };
 		DA0C234A2D26683F009D0E4E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA0C23492D26683F009D0E4E /* LaunchScreen.storyboard */; };
 		DA0C23552D266CF6009D0E4E /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C23542D266CF5009D0E4E /* SplashScreenView.swift */; };
+		DA0C23592D26709C009D0E4E /* DeveloperTestingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C23582D26709C009D0E4E /* DeveloperTestingView.swift */; };
+		DA0C235B2D267221009D0E4E /* DeveloperTestingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C235A2D267221009D0E4E /* DeveloperTestingViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		DA0C23482D2667BD009D0E4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DA0C23492D26683F009D0E4E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DA0C23542D266CF5009D0E4E /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
+		DA0C23582D26709C009D0E4E /* DeveloperTestingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperTestingView.swift; sourceTree = "<group>"; };
+		DA0C235A2D267221009D0E4E /* DeveloperTestingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperTestingViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +107,7 @@
 		DA0C23192D1F6269009D0E4E /* PuttPilot */ = {
 			isa = PBXGroup;
 			children = (
+				DA0C23572D267064009D0E4E /* DeveloperTesting */,
 				DA0C23532D266CE6009D0E4E /* App */,
 				DA0C23482D2667BD009D0E4E /* Info.plist */,
 				DA0C231C2D1F6269009D0E4E /* ContentView.swift */,
@@ -147,6 +152,15 @@
 				DA0C23462D1F6710009D0E4E /* APIManager.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		DA0C23572D267064009D0E4E /* DeveloperTesting */ = {
+			isa = PBXGroup;
+			children = (
+				DA0C23582D26709C009D0E4E /* DeveloperTestingView.swift */,
+				DA0C235A2D267221009D0E4E /* DeveloperTestingViewModel.swift */,
+			);
+			path = DeveloperTesting;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,8 +294,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA0C235B2D267221009D0E4E /* DeveloperTestingViewModel.swift in Sources */,
 				DA0C23472D1F6710009D0E4E /* APIManager.swift in Sources */,
 				DA0C231D2D1F6269009D0E4E /* ContentView.swift in Sources */,
+				DA0C23592D26709C009D0E4E /* DeveloperTestingView.swift in Sources */,
 				DA0C23552D266CF6009D0E4E /* SplashScreenView.swift in Sources */,
 				DA0C231F2D1F6269009D0E4E /* Item.swift in Sources */,
 				DA0C231B2D1F6269009D0E4E /* PuttPilotApp.swift in Sources */,
