@@ -130,9 +130,8 @@ esp_err_t POST_dispenseBall_handler(httpd_req_t *req)
 
 esp_err_t GET_errorCodes_handler(httpd_req_t *req)
 {
-    // For now send a todo message
-    // This should call a getter function to fetch the current error codes payload
-    const char* resp_str = "TODO: Send real error codes";
+    uint8_t errorCode = 18;
+    const char resp_str[1] = {errorCode};
     httpd_resp_send(req, resp_str, strlen(resp_str));
 
     /* After sending the HTTP response the old HTTP request
