@@ -103,14 +103,12 @@
 		DA0C23192D1F6269009D0E4E /* PuttPilot */ = {
 			isa = PBXGroup;
 			children = (
-				DA0C23532D266CE6009D0E4E /* LaunchScreens */,
+				DA0C23532D266CE6009D0E4E /* App */,
 				DA0C23482D2667BD009D0E4E /* Info.plist */,
-				DA0C231A2D1F6269009D0E4E /* PuttPilotApp.swift */,
 				DA0C231C2D1F6269009D0E4E /* ContentView.swift */,
 				DA0C231E2D1F6269009D0E4E /* Item.swift */,
 				DA0C23202D1F626A009D0E4E /* Assets.xcassets */,
 				DA0C23222D1F626A009D0E4E /* Preview Content */,
-				DA0C23462D1F6710009D0E4E /* APIManager.swift */,
 			);
 			path = PuttPilot;
 			sourceTree = "<group>";
@@ -140,13 +138,15 @@
 			path = PuttPilotUITests;
 			sourceTree = "<group>";
 		};
-		DA0C23532D266CE6009D0E4E /* LaunchScreens */ = {
+		DA0C23532D266CE6009D0E4E /* App */ = {
 			isa = PBXGroup;
 			children = (
+				DA0C231A2D1F6269009D0E4E /* PuttPilotApp.swift */,
 				DA0C23492D26683F009D0E4E /* LaunchScreen.storyboard */,
 				DA0C23542D266CF5009D0E4E /* SplashScreenView.swift */,
+				DA0C23462D1F6710009D0E4E /* APIManager.swift */,
 			);
-			path = LaunchScreens;
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
