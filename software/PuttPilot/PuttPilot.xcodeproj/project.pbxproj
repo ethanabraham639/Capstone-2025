@@ -15,6 +15,9 @@
 		DA0C232E2D1F626A009D0E4E /* PuttPilotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C232D2D1F626A009D0E4E /* PuttPilotTests.swift */; };
 		DA0C23382D1F626A009D0E4E /* PuttPilotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C23372D1F626A009D0E4E /* PuttPilotUITests.swift */; };
 		DA0C233A2D1F626A009D0E4E /* PuttPilotUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C23392D1F626A009D0E4E /* PuttPilotUITestsLaunchTests.swift */; };
+		DA0C23472D1F6710009D0E4E /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C23462D1F6710009D0E4E /* APIManager.swift */; };
+		DA0C234A2D26683F009D0E4E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA0C23492D26683F009D0E4E /* LaunchScreen.storyboard */; };
+		DA0C23552D266CF6009D0E4E /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0C23542D266CF5009D0E4E /* SplashScreenView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +49,10 @@
 		DA0C23332D1F626A009D0E4E /* PuttPilotUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PuttPilotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA0C23372D1F626A009D0E4E /* PuttPilotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttPilotUITests.swift; sourceTree = "<group>"; };
 		DA0C23392D1F626A009D0E4E /* PuttPilotUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuttPilotUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		DA0C23462D1F6710009D0E4E /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		DA0C23482D2667BD009D0E4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		DA0C23492D26683F009D0E4E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		DA0C23542D266CF5009D0E4E /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,7 +103,8 @@
 		DA0C23192D1F6269009D0E4E /* PuttPilot */ = {
 			isa = PBXGroup;
 			children = (
-				DA0C231A2D1F6269009D0E4E /* PuttPilotApp.swift */,
+				DA0C23532D266CE6009D0E4E /* App */,
+				DA0C23482D2667BD009D0E4E /* Info.plist */,
 				DA0C231C2D1F6269009D0E4E /* ContentView.swift */,
 				DA0C231E2D1F6269009D0E4E /* Item.swift */,
 				DA0C23202D1F626A009D0E4E /* Assets.xcassets */,
@@ -128,6 +136,17 @@
 				DA0C23392D1F626A009D0E4E /* PuttPilotUITestsLaunchTests.swift */,
 			);
 			path = PuttPilotUITests;
+			sourceTree = "<group>";
+		};
+		DA0C23532D266CE6009D0E4E /* App */ = {
+			isa = PBXGroup;
+			children = (
+				DA0C231A2D1F6269009D0E4E /* PuttPilotApp.swift */,
+				DA0C23492D26683F009D0E4E /* LaunchScreen.storyboard */,
+				DA0C23542D266CF5009D0E4E /* SplashScreenView.swift */,
+				DA0C23462D1F6710009D0E4E /* APIManager.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,6 +253,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA0C234A2D26683F009D0E4E /* LaunchScreen.storyboard in Resources */,
 				DA0C23242D1F626A009D0E4E /* Preview Assets.xcassets in Resources */,
 				DA0C23212D1F626A009D0E4E /* Assets.xcassets in Resources */,
 			);
@@ -260,7 +280,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA0C23472D1F6710009D0E4E /* APIManager.swift in Sources */,
 				DA0C231D2D1F6269009D0E4E /* ContentView.swift in Sources */,
+				DA0C23552D266CF6009D0E4E /* SplashScreenView.swift in Sources */,
 				DA0C231F2D1F6269009D0E4E /* Item.swift in Sources */,
 				DA0C231B2D1F6269009D0E4E /* PuttPilotApp.swift in Sources */,
 			);
@@ -428,9 +450,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"PuttPilot/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PuttPilot/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -456,9 +479,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"PuttPilot/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PuttPilot/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

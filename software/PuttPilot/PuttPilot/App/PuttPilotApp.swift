@@ -25,7 +25,7 @@ struct PuttPilotApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreenView() // Start with the splash screen
         }
         .modelContainer(sharedModelContainer)
     }
