@@ -2,23 +2,28 @@
 #include "i2c.h"
 #include "math.h"
 
-#define ON_L_OFFSET     0
-#define ON_H_OFFSET     1
-#define OFF_L_OFFSET    2
-#define OFF_H_OFFSET    3
-#define ON_OFF_L_MASK   0x00FF
-#define ON_OFF_H_MASK   0x0F00
-#define SET_PWM_SIZE    4
-#define GET_PWM_SIZE    2
+#define ON_L_OFFSET             0
+#define ON_H_OFFSET             1
+#define OFF_L_OFFSET            2
+#define OFF_H_OFFSET            3
+#define ON_OFF_L_MASK           0x00FF
+#define ON_OFF_H_MASK           0x0F00
+#define SET_PWM_SIZE            4
+#define GET_PWM_SIZE            2
 
-#define MIN_FREQ        24.0F
-#define MAX_FREQ        1526.0F
+#define MIN_FREQ                24.0F
+#define MAX_FREQ                1526.0F
 
-#define MIN_POS         0.0F   // 0% duty
-#define MAX_POS         255.0F // 100% duty
-#define MIN_OFF_POS     203.8F // 5% duty
-#define MAX_OFF_POS     409.0F // 10% duty
-#define GAIN            ((MAX_OFF_POS - MIN_OFF_POS)/(MAX_POS - MIN_POS))
+#define MIN_POS                 0.0F   // 0% duty
+#define MAX_POS                 255.0F // 100% duty
+
+#define MIN_OFF_POS_SERVO       203.8F // 5% duty
+#define MAX_OFF_POS_SERVO       409.0F // 10% duty
+#define GAIN_SERVO              ((MIN_OFF_POS_SERVO - MAX_OFF_POS_SERVO)/(MAX_POS - MIN_POS))
+
+#define MIN_OFF_POS_LED         0.0F        // 5% duty
+#define MAX_OFF_POS_LED         4095.0F     // 100% duty
+#define GAIN_LED                ((MIN_OFF_POS_LED - MAX_OFF_POS_LED)/(MAX_POS - MIN_POS))
 
 #define TOTAL_NUM_SERVO 15
 
@@ -81,7 +86,13 @@ void PCA9685_init(PCA9685_t* pca9685)
     //configure the mode 1 and 2
     const uint8_t ADDR = pca9685->addr;
     uint8_t mode1 = MODE1_AI;
-    uint8_t mode2 = MODE2_INVRT; // may have to change between LED and Servos
+
+    uint8_t mode2 = 0x00;
+    if (pca9685->isLed)
+    {
+        mode2 = MODE2_INVRT; // may have to change between LED and Servos
+    }
+    
     uint8_t prescale = 0x79; // 50hz
 
     I2C_writeReg8(ADDR, PCA9685_MODE1, mode1);
@@ -104,7 +115,12 @@ void PCA9685_setFreq(PCA9685_t* pca9685, float freq)
 void PCA9685_setServoPos(PCA9685_t* pca9685, uint8_t outputPin, uint8_t servoPos)
 {
     const uint16_t ON_POS = 0;
-    const uint16_t OFF_POS = (uint16_t)round(GAIN * servoPos + MIN_OFF_POS);
+    uint16_t OFF_POS = (uint16_t)round(GAIN_SERVO * servoPos + MIN_OFF_POS_SERVO);
+
+    if (pca9685->isLed)
+    {
+        OFF_POS = (uint16_t)round(GAIN_LED * servoPos + MIN_OFF_POS_LED);
+    } 
 
     pca9685_setPWM(pca9685, outputPin, ON_POS, OFF_POS);
 }
@@ -113,7 +129,12 @@ void PCA9685_setServoPos(PCA9685_t* pca9685, uint8_t outputPin, uint8_t servoPos
 void PCA9685_setAllServoPos(PCA9685_t* pca9685, uint8_t servoPos)
 {
     const uint16_t ON_POS = 0;
-    const uint16_t OFF_POS = (uint16_t)round(GAIN * servoPos + MIN_OFF_POS);
+    uint16_t OFF_POS = (uint16_t)round(GAIN_SERVO * servoPos + MIN_OFF_POS_SERVO);
+
+    if (pca9685->isLed)
+    {
+        OFF_POS = (uint16_t)round(GAIN_LED * servoPos + MIN_OFF_POS_LED);
+    } 
     
     for (uint8_t i = 0; i < TOTAL_NUM_SERVO; i++)
     {
