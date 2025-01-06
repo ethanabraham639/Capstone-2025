@@ -2,7 +2,7 @@ import requests
 import time
 
 # Define the base URL of the server
-BASE_URL = "http://172.20.10.2"
+BASE_URL = "http://192.168.4.1"
 
 def course_state_post():
     """Function to perform a POST request to /course_state."""
