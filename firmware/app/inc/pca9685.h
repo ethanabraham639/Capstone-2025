@@ -49,6 +49,7 @@
 
 typedef struct{
     uint8_t addr;       // I2C slave address
+    uint8_t isLed;      // Is this chip being used to control LEDs (true = LED, false = Servos)
     float osc_freq;     // Tested true osc_freq of the chip
 }PCA9685_t;
 
