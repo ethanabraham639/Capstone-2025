@@ -42,9 +42,9 @@ esp_err_t I2C_readReg8(uint8_t addr, uint8_t regAddr, uint8_t* data);
  * @brief Write one byte
  * @param addr Slave address
  * @param regAddr Register address
- * @param data Pointer to data variable to transmit out of
+ * @param data Data byte to transmit
  * @return ESP error code
  */
-esp_err_t I2C_writeReg8(uint8_t addr, uint8_t regAddr, uint8_t* data);
+esp_err_t I2C_writeReg8(uint8_t addr, uint8_t regAddr, uint8_t data);
 
 #endif

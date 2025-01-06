@@ -2,8 +2,8 @@
 #include "esp_err.h"
 #include "freertos/FreeRTOS.h"
 
-#define I2C_MASTER_SCL_IO           2
-#define I2C_MASTER_SDA_IO           14
+#define I2C_MASTER_SCL_IO           14
+#define I2C_MASTER_SDA_IO           2
 #define I2C_MASTER_NUM              I2C_NUM_0
 #define I2C_ENABLE_SDA_PULLUP       0
 #define I2C_ENABLE_SCL_PULLUP       0
@@ -60,7 +60,7 @@ esp_err_t I2C_writeReg(uint8_t addr, uint8_t regAddr, uint8_t* data, size_t data
     int ret;
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
-    i2c_master_write_byte(cmd, addr << 1 | WRITE_BIT, ACK_CHECK_EN);
+    i2c_master_write_byte(cmd, (addr << 1) | WRITE_BIT, ACK_CHECK_EN);
     i2c_master_write_byte(cmd, regAddr, ACK_CHECK_EN);
     i2c_master_write(cmd, data, dataLen, ACK_CHECK_EN);
     i2c_master_stop(cmd);
@@ -76,7 +76,8 @@ esp_err_t I2C_readReg8(uint8_t addr, uint8_t regAddr, uint8_t* data)
 }
 
 
-esp_err_t I2C_writeReg8(uint8_t addr, uint8_t regAddr, uint8_t* data)
+esp_err_t I2C_writeReg8(uint8_t addr, uint8_t regAddr, uint8_t data)
 {
-    return I2C_writeReg(addr, regAddr, data, 1);
+    uint8_t sendData = data;
+    return I2C_writeReg(addr, regAddr, &sendData, 1);
 }

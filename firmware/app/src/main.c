@@ -16,6 +16,8 @@
 #include "wifi_init.h"
 
 #define BLINKY_GPIO 5
+PCA9685_t led_pca9685 = {.addr = 0x64, .osc_freq = 25000000.0};
+
 void init_peripherals(void)
 {
     gpio_config_t io_conf;
@@ -32,9 +34,13 @@ void init_peripherals(void)
     //configure GPIO with the given settings
     gpio_config(&io_conf);
 
-    // PCA9685_t led_pca9685 = {.addr = 0b00100100, .osc_freq = 25000000.0};
-    // PCA9685_init(&led_pca9685);
-    // PCA9685_setServoPos(&led_pca9685, 0, 255);
+    PCA9685_init(&led_pca9685);
+
+    for (uint8_t i = 1; i < 16; i++)
+    {
+        PCA9685_setServoPos(&led_pca9685, i, 255);
+    }
+
 }
 
 void app_main()
@@ -60,6 +66,7 @@ void app_main()
         gpio_set_level(BLINKY_GPIO, isOn);
         isOn = !isOn;
         // printf("Val: %u\n", isOn);
+
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 
