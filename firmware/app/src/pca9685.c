@@ -15,7 +15,7 @@
 #define MAX_FREQ        1526.0F
 
 #define MIN_POS         0.0F   // 0% duty
-#define MAX_POS         255.0F //100% duty
+#define MAX_POS         255.0F // 100% duty
 #define MIN_OFF_POS     203.8F // 5% duty
 #define MAX_OFF_POS     409.0F // 10% duty
 #define GAIN            ((MAX_OFF_POS - MIN_OFF_POS)/(MAX_POS - MIN_POS))
@@ -35,20 +35,18 @@ void pca9685_setPrescaler(PCA9685_t* pca9685, uint8_t prescaler)
     I2C_readReg8(ADDR, PCA9685_MODE1, &oldMode);
 
     uint8_t newMode = (oldMode & ~MODE1_RESTART) | MODE1_SLEEP; // sleep
-    I2C_writeReg8(ADDR, PCA9685_MODE1, &newMode);
-    I2C_writeReg8(ADDR, PCA9685_PRESCALE, &prescaler);
-    I2C_writeReg8(ADDR, PCA9685_MODE1, &oldMode);
+    I2C_writeReg8(ADDR, PCA9685_MODE1, newMode);
+    I2C_writeReg8(ADDR, PCA9685_PRESCALE, prescaler);
+    I2C_writeReg8(ADDR, PCA9685_MODE1, oldMode);
 }
 
 uint8_t pca9685_getPrescaler(PCA9685_t* pca9685)
 {
     uint8_t prescaler = 0;
-    I2C_writeReg8(pca9685->addr, PCA9685_PRESCALE, &prescaler);
+    I2C_writeReg8(pca9685->addr, PCA9685_PRESCALE, prescaler);
 
     return prescaler;
 }
-
-// I THINK WE WILL HAVE TO ENABLE AUTO-INCREMENT IN INIT FUNCTION
 
 esp_err_t pca9685_setPWM(PCA9685_t* pca9685, uint8_t outputPin, uint16_t onPos, uint16_t offPos)
 {
@@ -83,12 +81,12 @@ void PCA9685_init(PCA9685_t* pca9685)
     //configure the mode 1 and 2
     const uint8_t ADDR = pca9685->addr;
     uint8_t mode1 = MODE1_AI;
-    uint8_t mode2 = 0x00;
+    uint8_t mode2 = MODE2_INVRT; // may have to change between LED and Servos
+    uint8_t prescale = 0x79; // 50hz
 
-    I2C_writeReg8(ADDR, PCA9685_MODE1, &mode1);
-    I2C_writeReg8(ADDR, PCA9685_MODE2, &mode2);
-
-    PCA9685_setFreq(pca9685, DEFAULT_SERVO_FREQ);
+    I2C_writeReg8(ADDR, PCA9685_MODE1, mode1);
+    I2C_writeReg8(ADDR, PCA9685_MODE2, mode2);
+    I2C_writeReg8(ADDR, PCA9685_PRESCALE, prescale);
 }
 
 // set frequency between 24Hz and 1526Hz
