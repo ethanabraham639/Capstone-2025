@@ -96,9 +96,10 @@ struct DeveloperTestingView: View {
                                     .textFieldStyle(.roundedBorder)
                                     .frame(width: 50, height: 40)
                                     .keyboardType(.numberPad)
+                                    .id("\(row)-\(col)")
                             }
                         }
-                        .frame(maxWidth: .infinity) // Allow grid to expand
+                        .frame(maxWidth: .infinity)
                         .padding()
                     }
 
