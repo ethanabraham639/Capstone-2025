@@ -17,13 +17,13 @@
 #define MIN_POS                 0.0F   // 0% duty
 #define MAX_POS                 255.0F // 100% duty
 
-#define MIN_OFF_POS_SERVO       203.8F // 5% duty
-#define MAX_OFF_POS_SERVO       409.0F // 10% duty
-#define GAIN_SERVO              ((MIN_OFF_POS_SERVO - MAX_OFF_POS_SERVO)/(MAX_POS - MIN_POS))
+#define MIN_OFF_POS_SERVO       85.176F // 2.08% duty found experimentally
+#define MAX_OFF_POS_SERVO       542.5875F // 13.5% duty found experimentally
+#define GAIN_SERVO              ((MAX_OFF_POS_SERVO - MIN_OFF_POS_SERVO)/(MAX_POS - MIN_POS))
 
-#define MIN_OFF_POS_LED         0.0F        // 5% duty
+#define MIN_OFF_POS_LED         0.0F        // 0% duty
 #define MAX_OFF_POS_LED         4095.0F     // 100% duty
-#define GAIN_LED                ((MIN_OFF_POS_LED - MAX_OFF_POS_LED)/(MAX_POS - MIN_POS))
+#define GAIN_LED                ((MAX_OFF_POS_LED - MIN_OFF_POS_LED)/(MAX_POS - MIN_POS))
 
 #define TOTAL_NUM_SERVO 15
 
@@ -87,17 +87,16 @@ void PCA9685_init(PCA9685_t* pca9685)
     const uint8_t ADDR = pca9685->addr;
     uint8_t mode1 = MODE1_AI;
 
-    uint8_t mode2 = 0x00;
+    uint8_t mode2 = MODE2_OUTDRV;
     if (pca9685->isLed)
     {
         mode2 = MODE2_INVRT; // may have to change between LED and Servos
     }
     
-    uint8_t prescale = 0x79; // 50hz
-
+    PCA9685_setFreq(pca9685, DEFAULT_SERVO_FREQ);
+    
     I2C_writeReg8(ADDR, PCA9685_MODE1, mode1);
     I2C_writeReg8(ADDR, PCA9685_MODE2, mode2);
-    I2C_writeReg8(ADDR, PCA9685_PRESCALE, prescale);
 }
 
 // set frequency between 24Hz and 1526Hz
