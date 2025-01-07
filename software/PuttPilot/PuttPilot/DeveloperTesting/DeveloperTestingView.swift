@@ -38,17 +38,15 @@ struct DeveloperTestingView: View {
                         .background(Color.gray.opacity(0.1))
                         .cornerRadius(8)
                 }
-                
-                // Fetch Debug Message
-                // TODO: put this on its own page
+
+                // Navigate to Debug Message View
                 VStack(alignment: .leading) {
-                    Text("Fetch Debug Message")
+                    Text("Debug Messages")
                         .font(.headline)
-                    Text(viewModel.debugMessage)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(8)
+                    
+                    NavigationLink("View Debug Messages", destination: DebugMessageView(viewModel: viewModel))
+                        .buttonStyle(.borderedProminent)
+                        .padding(.top, 10)
                 }
                 
                 // Ball Dispensing Mode Toggle
