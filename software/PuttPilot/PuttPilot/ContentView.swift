@@ -9,53 +9,68 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @State private var ipAddress: String = ""
+    @State private var isConnected = true // Flip to false if you want to block users from going further without connection
+    @State private var errorMessage: String?
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
+        NavigationStack {
+            VStack(spacing: 20) {
+                Text("PuttPilot")
+                    .font(.largeTitle)
+                    .bold()
+
+                TextField("Enter IP Address", text: $ipAddress)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.URL)
+
+                Button("Test Connection") {
+                    testConnection()
                 }
-                .onDelete(perform: deleteItems)
+                .buttonStyle(.borderedProminent)
+
+                if let errorMessage = errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                }
+
+                if isConnected {
+                    NavigationLink("Open Developer Testing Mode", destination: DeveloperTestingView())
+                        .buttonStyle(.borderedProminent)
+                }
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
+            .padding()
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+    private func testConnection() {
+        guard !ipAddress.isEmpty else {
+            errorMessage = "Please enter a valid IP address."
+            isConnected = false
+            return
         }
-    }
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+        APIManager.shared.updateIPAddress(ipAddress)
+
+        APIManager.shared.ping { success, error in
+            if success {
+                isConnected = true
+                errorMessage = nil
+                APIManager.shared.sendDefaultStates()
+                print("Connection Success")
+            } else {
+                isConnected = false
+                errorMessage = error
+                print("Connection Failed: \(String(describing: error))")
             }
         }
     }
+
+
 }
+
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

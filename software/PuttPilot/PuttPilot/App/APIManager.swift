@@ -8,38 +8,47 @@
 import Foundation
 import Combine
 
-enum Mode: String {
-    case staticMode = "1"
-    case wave = "2"
-    case tsunami = "3"
-    case ballReturn = "4"
+enum Mode: Int {
+    case staticMode = 0
+    case ballReturn = 1
+    case wave = 2
+    case tsunami = 3
 
     var asciiCharacter: Character? {
-        guard let asciiValue = rawValue.first?.asciiValue else { return nil }
-        return Character(UnicodeScalar(asciiValue))
+        guard let scalar = UnicodeScalar(rawValue) else { return nil }
+        return Character(scalar)
+    }
+}
+
+enum BallDispensingMode: Int {
+    case automatic = 1
+    case manual = 0
+
+    var asciiCharacter: Character? {
+        guard let scalar = UnicodeScalar(rawValue) else { return nil }
+        return Character(scalar)
     }
 }
 
 class APIManager {
     static let shared = APIManager()
     
-    // could make this an input field so we dont have to rebuild each time
-    private let esp8266IP = "10.0.0.31"
-    private let baseURL: URL
+    private var esp8266IP: String = "172.20.10.2" // Default value
+    private var cancellables: Set<AnyCancellable> = []
+
+    private var baseURL: URL {
+        guard let url = URL(string: "http://\(esp8266IP)/") else {
+            fatalError("Invalid ESP8266 IP Address")
+        }
+        return url
+    }
     
     @Published var stats: [Int] = []
     @Published var errorCodes: [Int] = []
     @Published var debugMessage: String = ""
     @Published var apiError: String?
     
-    private var cancellables: Set<AnyCancellable> = []
-    
-    init() {
-        guard let url = URL(string: "http://\(esp8266IP)/") else {
-            fatalError("Invalid ESP8266 IP Address")
-        }
-        self.baseURL = url
-    }
+    init() {}
     
     // MARK: - Combine Publishers
     
@@ -104,8 +113,7 @@ class APIManager {
             .map(\.data)
             .tryMap { data in
                 data.compactMap { byte -> Int? in
-                    guard let intValue = Int(String(UnicodeScalar(byte))) else { return nil }
-                    return intValue
+                    return Int(byte)
                 }
             }
 //            .filter { $0.count == 2 && $0[0] >= $0[1] } // Validate balls_hit >= balls_in_hole
@@ -122,8 +130,7 @@ class APIManager {
             .map(\.data)
             .tryMap { data in
                 data.compactMap { byte -> Int? in
-                    guard let intValue = Int(String(UnicodeScalar(byte))) else { return nil }
-                    return intValue
+                    return Int(byte)
                 }
             }
             .eraseToAnyPublisher()
@@ -181,14 +188,14 @@ class APIManager {
         return sendPOSTRequestPublisher(endpoint: endpoint, body: payload)
     }
 
-    func sendSettingsPublisher(ballDispensingMode: Character) -> AnyPublisher<Bool, Error> {
+    func sendSettingsPublisher(ballDispensingMode: BallDispensingMode) -> AnyPublisher<Bool, Error> {
         let endpoint = "settings"
 
-        guard let asciiValue = ballDispensingMode.asciiValue else {
+        guard let asciiValue = ballDispensingMode.asciiCharacter else {
             return Fail(error: URLError(.cannotDecodeContentData)).eraseToAnyPublisher()
         }
 
-        let payload = String(bytes: [asciiValue], encoding: .utf8) ?? ""
+        let payload = String(asciiValue)
         return sendPOSTRequestPublisher(endpoint: endpoint, body: payload)
     }
 
@@ -224,7 +231,52 @@ class APIManager {
             .mapError { $0 }
             .eraseToAnyPublisher()
     }
+}
 
+extension APIManager {
+    func updateIPAddress(_ newIPAddress: String) {
+         guard !newIPAddress.isEmpty else {
+             print("Error: IP address cannot be empty.")
+             return
+         }
+         esp8266IP = newIPAddress
+         print("Updated ESP8266 IP to: \(esp8266IP)")
+     }
+
+     /// Sends default states to firmware
+    func sendDefaultStates() {
+        sendSettingsPublisher(ballDispensingMode: .manual)
+            .sink(receiveCompletion: { _ in }, receiveValue: { success in
+                if success {
+                    print("Default ball dispensing mode sent successfully.")
+                }
+            })
+            .store(in: &cancellables)
+        
+        sendCourseStatePublisher(mode: .staticMode, motorPositions: ["0", "0", "0", "0", "0", "0", "0", "0", "0"])
+            .sink(receiveCompletion: { _ in }, receiveValue: { success in
+                if success {
+                    print("Default course state sent successfully.")
+                }
+            })
+            .store(in: &cancellables)
+    }
+    
+    func ping(completion: @escaping (Bool, String?) -> Void) {
+        sendGETRequestPublisher(endpoint: "ping")
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completionStatus in
+                switch completionStatus {
+                case .finished:
+                    break
+                case .failure(let error):
+                    completion(false, "Connection failed: \(error.localizedDescription)")
+                }
+            }, receiveValue: { _ in
+                completion(true, nil) // Connection succeeded
+            })
+            .store(in: &cancellables)
+    }
 }
 
 
