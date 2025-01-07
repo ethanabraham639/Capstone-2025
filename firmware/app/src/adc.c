@@ -7,14 +7,14 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#define MUX_SOURCE_MASK     0x3
+#define MUX_SOURCE_MASK     0x07
 #define T_ON_WAIT           (2/portTICK_RATE_MS) //ms
 
 static const char *TAG = "ADC";
 
 typedef enum {
-    LV_SENSE = 7,
     BD_SENSE = 0,
+    LV_SENSE = 7,
 } ADCSource_e;
 
 void setMuxInput(ADCSource_e source);
@@ -25,9 +25,9 @@ void setMuxInput(ADCSource_e source)
 {
     const uint8_t muxGpioMask = ((uint8_t)source) & MUX_SOURCE_MASK;
     
-    const uint8_t muxA0GpioLevel = muxGpioMask & 0x01;
-    const uint8_t muxA1GpioLevel = muxGpioMask & 0x02;
-    const uint8_t muxA2GpioLevel = muxGpioMask & 0x04;
+    const uint8_t muxA0GpioLevel = (muxGpioMask & 0x01) >> 0;
+    const uint8_t muxA1GpioLevel = (muxGpioMask & 0x02) >> 1;
+    const uint8_t muxA2GpioLevel = (muxGpioMask & 0x04) >> 2;
 
     gpio_set_level(ADC_MUX_A0_GPIO, muxA0GpioLevel);
     gpio_set_level(ADC_MUX_A1_GPIO, muxA1GpioLevel);
