@@ -36,8 +36,8 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
     }
 
     // Update the motor positions
-    // AC_updateMode((uint8_t)buffer[0]);
-    // AC_updatePositions(&buffer[1]);
+    AC_update_mode((uint8_t)buffer[0]);
+    AC_update_desired_positions(&buffer[1]);
 
     printf("Mode: %d\n", (uint8_t)buffer[0]);
     printf("Positions: ");
