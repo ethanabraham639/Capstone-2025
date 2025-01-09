@@ -3,8 +3,9 @@
 
 #include "stdint.h"
 
-#define NUM_ACTUATORS   45
-#define MODES_SIZE      1
+#define NUM_ACTUATORS           48
+#define NUM_USABLE_ACTUATORS    (NUM_ACTUATORS - 3)
+#define MODES_SIZE              1
 
 typedef enum {
     RESET = 0,
