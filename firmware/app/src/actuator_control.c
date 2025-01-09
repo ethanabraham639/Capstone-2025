@@ -5,165 +5,129 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include <string.h>
+#include <stdlib.h>
 
 
-#define MAX_POSITION            255.0
-#define MAX_DELAY_MS            2000.0
-#define DELTA_CONVERSION_MS     (MAX_DELAY_MS/MAX_POSITION)
+#define MAX_POSITION                255.0
+#define MAX_DELAY_MS                2000.0
+#define DELTA_CONVERSION_MS         (MAX_DELAY_MS/MAX_POSITION)
 
-#define NUM_PCA9685             3
-#define NUM_ACT_PER_PCA6985     15
+#define AC_STEP_MAGNITUDE           1
+#define AC_TASK_DELAY               10
 
-typedef enum {
-    RESET = 0,
-    STATIC,
-} ActControlScheme_e;
+#define NUM_ROLLOUT_GROUPS          3
+#define NUM_MEMBERS_PER_RO_GROUP   (NUM_ACTUATORS/NUM_ROLLOUT_GROUPS)
+
+#define NUM_HW_GROUPS               3
+#define NUM_SERVOS_PER_HW_GROUP     15
 
 typedef struct {
-    PCA9685_t pca9685[NUM_PCA9685];
-    ActControlScheme_e controlScheme;
-    bool isNewPositions;
-    uint8_t actPositions[NUM_ACTUATORS];
-
-
-
-    //static
-    uint8_t staticPositions[NUM_ACTUATORS];
-
-    //for all
-    uint32_t delay; //ms
-
+    //data type describing how motors are divided by pca chip
+    uint8_t currentPos[NUM_ACTUATORS];
+    uint8_t desiredPos[NUM_ACTUATORS];
+    ACMode_e mode;
 } ActControl_t;
 
 ActControl_t actControl;
 
+const PCA9685_t hwGroups[NUM_HW_GROUPS] = {
+    { .addr = 0x64, .isLed = true,  .osc_freq = 25000000.0 },
+    { .addr = 0x61, .isLed = false, .osc_freq = 25000000.0 },
+    { .addr = 0x42, .isLed = false, .osc_freq = 25000000.0 },
+};
 
-uint32_t calculate_delay_ms(uint8_t* pos1, uint8_t* pos2)
+uint8_t rolloutGroups[NUM_ROLLOUT_GROUPS][NUM_MEMBERS_PER_RO_GROUP];
+
+void init_rollout_groups(void)
 {
-    //find the largest delta
-    uint8_t largestDelta = 0;
-
     for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
     {
-        uint8_t cur_pos1 = pos1[i];
-        uint8_t cur_pos2 = pos2[i];
+        uint8_t group = i / NUM_MEMBERS_PER_RO_GROUP;
+        uint8_t member = i % NUM_MEMBERS_PER_RO_GROUP;
+        rolloutGroups[group][member] = i;
+    }
+}
 
-        // subtract smaller number from bigger
-        uint8_t delta = (cur_pos1 > cur_pos2) ? (cur_pos1 - cur_pos2) : (cur_pos2 - cur_pos1);
-
-        if (delta > largestDelta)
+bool calculate_next_position(void)
+{
+    bool didPositionChange = false;
+    for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
+    {
+        int deltaTotal = actControl.desiredPos[i] - actControl.currentPos[i];
+        
+        if (deltaTotal != 0)
         {
-            largestDelta = delta;
+            didPositionChange = true;
+            int step = (abs(deltaTotal) < AC_STEP_MAGNITUDE) ? deltaTotal : (deltaTotal / abs(deltaTotal)) * AC_STEP_MAGNITUDE;
+            actControl.currentPos[i] += step;
         }
     }
 
-    return (uint32_t)((float)largestDelta * DELTA_CONVERSION_MS);
+    return didPositionChange;
 }
 
-
-
-
-
-
-
-
-
-
-
-void calculate_reset_positions(void)
+void rollout_actuator_positions(void)
 {
-    //set everything to 0 for now
-    actControl.delay = 0;
-    memset(actControl.actPositions, 0, NUM_ACTUATORS);
-}
-
-void calculate_static_positions(void)
-{
-    actControl.delay = calculate_delay_ms(actControl.actPositions, actControl.staticPositions);
-    memcpy(actControl.staticPositions, actControl.actPositions, NUM_ACTUATORS);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void calculate_and_set_actuator_positions(void)
-{
-    switch(actControl.controlScheme)
+    for (uint8_t group = 0; group < NUM_ROLLOUT_GROUPS; group++)
     {
-        case(RESET):
-            calculate_reset_positions();
-            break;
-    
-        case(STATIC):
-            calculate_static_positions();
-            break;
-    }
-}
-
-
-
-/**
- * - we have 45 motors
- * - each row is 5 motors
- * 
- * - each i2c pwm module supports 15 motors
- * 
- * - lets assume this is the configuration wired up
- * 
- *           
- *          35
- * 
- *          30
- * 
- *          25
- * 
- *          20
- * 
- *          15        
- *  
- *          10
- * 
- *          5   
- *           
- *          0   1   2   3   4
- * 
- */
-
-void apply_actuator_positions(void)
-{
-    for (uint8_t pca9685Index = 0; pca9685Index < NUM_PCA9685; pca9685Index++)
-    {
-        PCA9685_t* pca9685Instance = &actControl.pca9685[pca9685Index];
-
-        for (uint8_t actIndex = 0; actIndex < NUM_ACT_PER_PCA6985; actIndex++)
+        for (uint8_t member = 0; member < NUM_MEMBERS_PER_RO_GROUP; member++)
         {
-            uint8_t servoPos = actControl.actPositions[pca9685Index*actIndex];
-            PCA9685_setServoPos(pca9685Instance, actIndex, servoPos);
-        }
-    }
+            // between 0-44, actual position of the motor on the course
+            uint8_t absoluteServoId = rolloutGroups[group][member];
+            
+            uint8_t relativeServoId = absoluteServoId % NUM_SERVOS_PER_HW_GROUP;
+            uint8_t hwGroup = absoluteServoId / NUM_SERVOS_PER_HW_GROUP;
 
+            PCA9685_setServoPos(&hwGroups[hwGroup], relativeServoId, actControl.currentPos[absoluteServoId]);
+        }
+        
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
 
 }
 
-void run_actuator_control_task(void)
+void AC_init(void)
 {
-    calculate_and_set_actuator_positions();
+    init_rollout_groups();
 
-    if (actControl.isNewPositions)
-        apply_actuator_positions();
+    actControl.mode = STATIC;
+    for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
+    {
+        actControl.currentPos[i] = 0;
+        actControl.desiredPos[i] = 0;
+    }
 
-    // allow time for positions to be applied
-    vTaskDelay(actControl.delay / portTICK_RATE_MS);
+    for (uint8_t i = 0; i < NUM_HW_GROUPS; i++)
+    {
+        PCA9685_init(&hwGroups[i]);
+    }
+
+    // EXPLICITLY SET EACH MOTOR TO POSITION 0 ON STARTUP TO ENSURE WE ARE IN A DEFINED POSITION
+}
+
+void AC_run_task(void)
+{
+    //calculate next positions based on current and desired position
+    bool didPositionsChange = calculate_next_position();
+
+    //don't run anything else if the new positions are the same as the old positions
+    if (didPositionsChange)
+    {
+        //execute rollout of the new positions
+        rollout_actuator_positions();
+    }
+
+    //delay
+    vTaskDelay(20 / portTICK_PERIOD_MS);
+
+}
+
+void AC_update_desired_positions(uint8_t desiredPos[NUM_ACTUATORS])
+{
+    memcpy(&(actControl.desiredPos), desiredPos, NUM_ACTUATORS * sizeof(uint8_t));
+}
+
+void AC_update_mode(ACMode_e mode)
+{
+    actControl.mode = mode;
 }
