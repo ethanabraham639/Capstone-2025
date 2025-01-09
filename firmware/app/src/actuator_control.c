@@ -19,7 +19,7 @@
 #define NUM_MEMBERS_PER_RO_GROUP   (NUM_ACTUATORS/NUM_ROLLOUT_GROUPS)
 
 #define NUM_HW_GROUPS               3
-#define NUM_SERVOS_PER_HW_GROUP     15
+#define NUM_SERVOS_PER_HW_GROUP     16
 
 typedef struct {
     //data type describing how motors are divided by pca chip
@@ -124,7 +124,26 @@ void AC_run_task(void)
 
 void AC_update_desired_positions(uint8_t desiredPos[NUM_ACTUATORS])
 {
-    memcpy(&(actControl.desiredPos), desiredPos, NUM_ACTUATORS * sizeof(uint8_t));
+    uint8_t offset = 0;
+    for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
+    {
+        // skip indices 0, 16, and 32
+        if (i % 16 == 0)
+        {
+            offset++;
+            continue;
+        }
+
+        actControl.desiredPos[i] = desiredPos[i - offset];
+    }
+
+    // print the positions
+    printf("Positions: ");
+    for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
+    {
+        printf("%d ", actControl.desiredPos[i]);
+    }
+    printf("\n");
 }
 
 void AC_update_mode(ACMode_e mode)

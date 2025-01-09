@@ -6,7 +6,7 @@ BASE_URL = "http://192.168.4.1"
 
 def course_state_post():
     """Function to perform a POST request to /course_state."""
-    integers = [0] + list(range(45))
+    integers = [1] + [x+1 for x in range(45)]
     string = ''.join(chr(value) for value in integers)
     print(string)
     response = requests.post(f"{BASE_URL}/course_state", data=string)
@@ -65,17 +65,17 @@ def stats_get():
     print(f"Balls hit: {ord(response.text[0])}, Balls in hole: {ord(response.text[1])}")
 
 if __name__ == "__main__":
-    error_codes_get()
-    print()
-    debug_msg_get()
-    print()
-    stats_get()
-    print()
+    # error_codes_get()
+    # print()
+    # debug_msg_get()
+    # print()
+    # stats_get()
+    # print()
 
     course_state_post()
-    print()
-    reset_stats_post()
-    print()
-    settings_post()
-    print()
-    dispense_ball_post()
+    # print()
+    # reset_stats_post()
+    # print()
+    # settings_post()
+    # print()
+    # dispense_ball_post()
