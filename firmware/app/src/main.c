@@ -8,9 +8,10 @@
 #include "wifi_init.h"
 
 #define BLINKY_GPIO 5
+// PCA9685_t led_pca9685 = {.addr = 0x47, .isLed = true, .osc_freq = 25000000.0};
+// PCA9685_t servo_pca9685 = {.addr = 0x42, .isLed = false, .osc_freq = 25000000.0};
 PCA9685_t led_pca9685 = {.addr = 0x64, .isLed = true, .osc_freq = 25000000.0};
 PCA9685_t servo_pca9685 = {.addr = 0x61, .isLed = false, .osc_freq = 25000000.0};
-
 void init_peripherals(void)
 {
     gpio_config_t io_conf;
@@ -43,6 +44,8 @@ void init_peripherals(void)
 
 void app_main()
 {
+    vTaskDelay(2000 / portTICK_PERIOD_MS); // Delay for smooth motion
+
     I2C_master_init();
     init_peripherals();
     
@@ -67,7 +70,7 @@ void app_main()
         // Gradually move from 0 to 255
         for (int pos = 0; pos <= 255; pos++)
         {
-            for (uint8_t i = 6; i < 11; i++)
+            for (uint8_t i = 0; i < 16; i++)
             {
                 PCA9685_setServoPos(&servo_pca9685, i, pos); // Set servo position
                 PCA9685_setServoPos(&led_pca9685, i, pos); // Set servo position
@@ -78,7 +81,7 @@ void app_main()
         // Gradually move from 255 back to 0
         for (int pos1 = 255; pos1 > 0; pos1--)
         {
-            for (uint8_t i = 6; i < 11; i++)
+            for (uint8_t i = 0; i < 16; i++)
             {
                 PCA9685_setServoPos(&servo_pca9685, i, pos1); // Set servo position
                 PCA9685_setServoPos(&led_pca9685, i, pos1); // Set servo position
