@@ -87,9 +87,10 @@ struct DeveloperTestingView: View {
                     .font(.headline)
                 
                 VStack {
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 10) {
+                    // TODO: change to get value from a global const
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 10) {
                         ForEach(0..<3, id: \.self) { row in
-                            ForEach(0..<3, id: \.self) { col in
+                            ForEach(0..<5, id: \.self) { col in
                                 TextField("0", text: $viewModel.gridInputs[row][col])
                                     .textFieldStyle(.roundedBorder)
                                     .frame(width: 50, height: 40)
@@ -101,13 +102,61 @@ struct DeveloperTestingView: View {
                         .padding()
                     }
 
-                    Button("Send Course State") {
-                        viewModel.sendCourseState()
+                    HStack {
+                        Button("Send Course State") {
+                            viewModel.sendCourseState()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding()
+                        
+                        Button("Clear Course State") {
+                            viewModel.resetGridInputs()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding()
                     }
-                    .buttonStyle(.borderedProminent)
-                    .padding()
                 }
+                
+                // Default motor states
 
+                VStack(alignment: .leading) {
+                    Text("Default Motor Positions")
+                        .font(.headline)
+                    
+                    HStack {
+                        Button("Left Leaning") {
+                            viewModel.sendCourseState(presetMotorPositions: ["0", "25", "50", "75", "100",
+                                                                             "0", "25", "50", "75", "100",
+                                                                             "0", "25", "50", "75", "100"])
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                        
+                        Button("Right Leaning") {
+                            viewModel.sendCourseState(presetMotorPositions: ["100", "75", "50", "25", "0",
+                                                                             "100", "75", "50", "25", "0",
+                                                                             "100", "75", "50", "25", "0"])
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                        
+                        Button("Uphill") {
+                            viewModel.sendCourseState(presetMotorPositions: ["0", "0", "0", "0", "0",
+                                                                             "50", "50", "50", "50", "50",
+                                                                             "100", "100", "100", "100", "100"])
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                        
+                        Button("Flat") {
+                            viewModel.sendCourseState(presetMotorPositions: ["0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0"])
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                    }
+                }
                 
                 // Dispense Balls
                 VStack(alignment: .leading) {
