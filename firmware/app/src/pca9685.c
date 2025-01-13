@@ -15,7 +15,7 @@
 #define MAX_FREQ                1526.0F
 
 #define MIN_POS                 0.0F   // 0% duty
-#define MAX_POS                 255.0F // 100% duty
+#define MAX_POS                 127.0F // 100% duty
 
 #define MIN_OFF_POS_SERVO       85.176F // 2.08% duty found experimentally
 #define MAX_OFF_POS_SERVO       542.5875F // 13.5% duty found experimentally
