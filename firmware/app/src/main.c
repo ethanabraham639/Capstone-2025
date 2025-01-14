@@ -10,6 +10,7 @@
 
 void app_main()
 {
+    WIFI_init_and_start_server();
     I2C_master_init();
     AC_init();
     /* Print chip information */
@@ -23,7 +24,6 @@ void app_main()
     printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
             (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
-    WIFI_init_and_start_server();
 
     while(1) {
         AC_run_task();
