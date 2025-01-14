@@ -21,6 +21,8 @@
 #define NUM_HW_GROUPS               3
 #define NUM_SERVOS_PER_HW_GROUP     16
 
+#define MAX_SERVO_POSITION          90
+
 typedef struct {
     //data type describing how motors are divided by pca chip
     uint8_t currentPos[NUM_ACTUATORS];
@@ -103,6 +105,19 @@ void AC_init(void)
     }
 
     // EXPLICITLY SET EACH MOTOR TO POSITION 0 ON STARTUP TO ENSURE WE ARE IN A DEFINED POSITION
+    for (uint8_t hwGroup = 0; hwGroup < NUM_HW_GROUPS; hwGroup++)
+    {
+        for (uint8_t relativeServoId = 0; relativeServoId < NUM_SERVOS_PER_HW_GROUP; relativeServoId++)
+        {
+
+            PCA9685_setServoPos(&hwGroups[hwGroup], relativeServoId, 0);
+            if (relativeServoId % 5 == 0)
+            {
+                vTaskDelay(2000 / portTICK_PERIOD_MS);
+            }
+        }
+    }
+
 }
 
 void AC_run_task(void)
@@ -134,7 +149,14 @@ void AC_update_desired_positions(uint8_t desiredPos[NUM_ACTUATORS])
             continue;
         }
 
-        actControl.desiredPos[i] = desiredPos[i - offset];
+        if (desiredPos[i - offset] > MAX_SERVO_POSITION)
+        {
+            actControl.desiredPos[i] = MAX_SERVO_POSITION;    
+        }
+        else
+        {
+            actControl.desiredPos[i] = desiredPos[i - offset];
+        }
     }
 
     // print the positions

@@ -10,6 +10,8 @@
 
 void app_main()
 {
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+
     I2C_master_init();
     AC_init();
     /* Print chip information */
