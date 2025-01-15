@@ -1,0 +1,3 @@
+Layer Pairs Export File for PCB: C:\Users\ethan\Desktop\Capstone-2025\electrical\Capstone-2025\PuttPilot-Dev.PcbDoc
+LayersSetName=Top_Bot_Thru_Holes|DrillFile=puttpilot-dev-roundholes.txt|DrillLayers=gtl,g1,g2,gbl
+LayersSetName=Top_Bot_Slot_Holes|DrillFile=puttpilot-dev-slotholes.txt|DrillLayers=gtl,g1,g2,gbl
