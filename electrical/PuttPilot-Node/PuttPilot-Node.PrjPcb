@@ -140,23 +140,6 @@ GenerateClassCluster=0
 DocumentUniqueId=GPFXLIXT
 
 [Document6]
-DocumentPath=Project Outputs for PuttPilot-Dev\Design Rule Check - PuttPilot-Dev.html
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=0
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document7]
 DocumentPath=PWM-Power.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -173,7 +156,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=VJAVWNWS
 
-[Document8]
+[Document7]
 DocumentPath=Connectors.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -190,7 +173,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=ZIOQSUZM
 
-[Document9]
+[Document8]
 DocumentPath=PWM_CONTROL.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -207,7 +190,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=AHMCMGSR
 
-[Document10]
+[Document9]
 DocumentPath=PuttPilot-Node.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -224,7 +207,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=BECKXQJE
 
-[Document11]
+[Document10]
 DocumentPath=PuttPilot-Dev.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
