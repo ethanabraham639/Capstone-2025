@@ -11,7 +11,7 @@
 
 #define TAG "WIFI_HANDLERS.C"
 
-#define COURSE_STATE_POST_REQ_SIZE      (NUM_USABLE_ACTUATORS + MODES_SIZE)
+#define COURSE_STATE_POST_REQ_SIZE      (NUM_ACTUATORS + MODES_SIZE)
 #define RESET_STATS_POST_REQ_SIZE       1
 #define DISPENSE_BALLS_POST_REQ_SIZE    1
 
@@ -41,7 +41,7 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
 
     printf("Mode: %d\n", (uint8_t)buffer[0]);
     printf("Positions: ");
-    for (uint8_t i = 0; i < NUM_USABLE_ACTUATORS; i++)
+    for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
     {
         printf("%d ", buffer[i+1]);
     }
