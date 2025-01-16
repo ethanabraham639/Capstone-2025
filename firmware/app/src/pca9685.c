@@ -27,12 +27,12 @@
 
 #define TOTAL_NUM_SERVO 15
 
-void        pca9685_setPrescaler(PCA9685_t* pca9685, uint8_t prescaler);
-uint8_t     pca9685_getPrescaler(PCA9685_t* pca9685);
-esp_err_t   pca9685_setPWM(PCA9685_t* pca9685, uint8_t outputPin, uint16_t onPos, uint16_t offPos);
-uint16_t    pca9685_getPWM(PCA9685_t* pca9685, uint8_t outputPin, bool getOff);
+void        pca9685_setPrescaler(const PCA9685_t* pca9685, uint8_t prescaler);
+uint8_t     pca9685_getPrescaler(const PCA9685_t* pca9685);
+esp_err_t   pca9685_setPWM(const PCA9685_t* pca9685, uint8_t outputPin, uint16_t onPos, uint16_t offPos);
+uint16_t    pca9685_getPWM(const PCA9685_t* pca9685, uint8_t outputPin, bool getOff);
 
-void pca9685_setPrescaler(PCA9685_t* pca9685, uint8_t prescaler)
+void pca9685_setPrescaler(const PCA9685_t* pca9685, uint8_t prescaler)
 {
     const uint8_t ADDR = pca9685->addr;
 
@@ -45,7 +45,7 @@ void pca9685_setPrescaler(PCA9685_t* pca9685, uint8_t prescaler)
     I2C_writeReg8(ADDR, PCA9685_MODE1, oldMode);
 }
 
-uint8_t pca9685_getPrescaler(PCA9685_t* pca9685)
+uint8_t pca9685_getPrescaler(const PCA9685_t* pca9685)
 {
     uint8_t prescaler = 0;
     I2C_writeReg8(pca9685->addr, PCA9685_PRESCALE, prescaler);
@@ -53,7 +53,7 @@ uint8_t pca9685_getPrescaler(PCA9685_t* pca9685)
     return prescaler;
 }
 
-esp_err_t pca9685_setPWM(PCA9685_t* pca9685, uint8_t outputPin, uint16_t onPos, uint16_t offPos)
+esp_err_t pca9685_setPWM(const PCA9685_t* pca9685, uint8_t outputPin, uint16_t onPos, uint16_t offPos)
 {
     uint8_t regAddr = PCA9685_LED0_ON_L + PCA9685_LEDX_OFFSET * outputPin;
     
@@ -68,7 +68,7 @@ esp_err_t pca9685_setPWM(PCA9685_t* pca9685, uint8_t outputPin, uint16_t onPos, 
     return I2C_writeReg(pca9685->addr, regAddr, data, SET_PWM_SIZE);
 }
 
-uint16_t pca9685_getPWM(PCA9685_t* pca9685, uint8_t outputPin, bool getOff)
+uint16_t pca9685_getPWM(const PCA9685_t* pca9685, uint8_t outputPin, bool getOff)
 {
     uint8_t regAddr = PCA9685_LED0_ON_L + PCA9685_LEDX_OFFSET * outputPin + (getOff ? OFF_L_OFFSET : ON_L_OFFSET);
 
@@ -81,7 +81,7 @@ uint16_t pca9685_getPWM(PCA9685_t* pca9685, uint8_t outputPin, bool getOff)
 
 
 // init
-void PCA9685_init(PCA9685_t* pca9685)
+void PCA9685_init(const PCA9685_t* pca9685)
 {
     //configure the mode 1 and 2
     const uint8_t ADDR = pca9685->addr;
@@ -100,7 +100,7 @@ void PCA9685_init(PCA9685_t* pca9685)
 }
 
 // set frequency between 24Hz and 1526Hz
-void PCA9685_setFreq(PCA9685_t* pca9685, float freq)
+void PCA9685_setFreq(const PCA9685_t* pca9685, float freq)
 {
     if (freq < MIN_FREQ){freq = MIN_FREQ;}
     if (freq > MAX_FREQ){freq = MAX_FREQ;}
@@ -111,7 +111,7 @@ void PCA9685_setFreq(PCA9685_t* pca9685, float freq)
 }
 
 // set one servo position
-void PCA9685_setServoPos(PCA9685_t* pca9685, uint8_t outputPin, uint8_t servoPos)
+void PCA9685_setServoPos(const PCA9685_t* pca9685, uint8_t outputPin, uint8_t servoPos)
 {
     const uint16_t ON_POS = 0;
     uint16_t OFF_POS = (uint16_t)round(GAIN_SERVO * servoPos + MIN_OFF_POS_SERVO);
@@ -125,7 +125,7 @@ void PCA9685_setServoPos(PCA9685_t* pca9685, uint8_t outputPin, uint8_t servoPos
 }
 
 // set all servo position to the same
-void PCA9685_setAllServoPos(PCA9685_t* pca9685, uint8_t servoPos)
+void PCA9685_setAllServoPos(const PCA9685_t* pca9685, uint8_t servoPos)
 {
     const uint16_t ON_POS = 0;
     uint16_t OFF_POS = (uint16_t)round(GAIN_SERVO * servoPos + MIN_OFF_POS_SERVO);

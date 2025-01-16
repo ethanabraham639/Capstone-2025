@@ -57,14 +57,14 @@ typedef struct{
  * @brief Initializes the PCA9685 pwm driver
  * @param pca9685 PCA9685 handle
  */
-void PCA9685_init(PCA9685_t* pca9685);
+void PCA9685_init(const PCA9685_t* pca9685);
 
 /**
  * @brief Sets the frequency for the entire chip (24Hz - 1526Hz)
  * @param pca9685 PCA9685 handle
  * @param freq Frequency to set
  */
-void PCA9685_setFreq(PCA9685_t* pca9685, float freq);
+void PCA9685_setFreq(const PCA9685_t* pca9685, float freq);
 
 /**
  * @brief Sets the relative position of a servo via PWM duty cycle manipulation
@@ -72,13 +72,13 @@ void PCA9685_setFreq(PCA9685_t* pca9685, float freq);
  * @param outputPin Which servo position to set (0 - 15)
  * @param servoPos The position to set (0-255) linearized to full scale range
  */
-void PCA9685_setServoPos(PCA9685_t* pca9685, uint8_t outputPin, uint8_t servoPos);
+void PCA9685_setServoPos(const PCA9685_t* pca9685, uint8_t outputPin, uint8_t servoPos);
 
 /**
  * @brief Sets the servo position controlled by the entire chip via PWM duty cycle manipulation
  * @param pca9685 PCA9685 handle
  * @param servoPos The position to set (0-255) linearized to full scale range
  */
-void PCA9685_setAllServoPos(PCA9685_t* pca9685, uint8_t servoPos);
+void PCA9685_setAllServoPos(const PCA9685_t* pca9685, uint8_t servoPos);
 
 #endif
