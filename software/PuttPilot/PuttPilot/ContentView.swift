@@ -20,9 +20,9 @@ struct ContentView: View {
                     .font(.largeTitle)
                     .bold()
 
-                TextField("Enter IP Address", text: $ipAddress)
-                    .textFieldStyle(.roundedBorder)
-                    .keyboardType(.URL)
+//                TextField("Enter IP Address", text: $ipAddress)
+//                    .textFieldStyle(.roundedBorder)
+//                    .keyboardType(.URL)
 
                 Button("Test Connection") {
                     testConnection()
@@ -39,6 +39,9 @@ struct ContentView: View {
                     NavigationLink("Open Developer Testing Mode", destination: DeveloperTestingView())
                         .buttonStyle(.borderedProminent)
                 }
+                
+                NavigationLink("Open Client Mode", destination: HomeView())
+                    .buttonStyle(.borderedProminent)
             }
             .padding()
         }

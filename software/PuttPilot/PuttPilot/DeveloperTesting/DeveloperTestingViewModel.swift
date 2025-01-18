@@ -12,13 +12,12 @@ class DeveloperTestingViewModel: ObservableObject {
     @Published var statsDescription: String = "Fetching stats..."
     @Published var errorCodesDescription: String = "Fetching Error Codes..."
     @Published var debugMessage: String = "Fetching debug message..."
-    // Currently making a 3x3 grid, can update this
     // Consider updating the APIManager function to take an input like this, and then convert to what it needs
-    // TODO: make the 5 and 3 global constants
-    @Published var gridInputs: [[String]] = Array(repeating: Array(repeating: "0", count: 5), count: 3)
+    @Published var gridInputs: [[String]] = Array(repeating: Array(repeating: "0", count: Constants.numColsMotors), count: Constants.numRowsMotors)
     @Published var ballDispensingMode: BallDispensingMode = .automatic
     @Published var motorMode: Mode = .staticMode
     @Published var dispenseBallsInput: String = ""
+    @Published var setAll: String = ""
 
     private let apiManager = APIManager.shared
     private var cancellables: Set<AnyCancellable> = []
@@ -70,10 +69,9 @@ class DeveloperTestingViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
-
-    func sendCourseState() {
-        let motorPositions = gridInputs.flatMap { $0 }
-        apiManager.sendCourseStatePublisher(mode: motorMode, motorPositions: motorPositions)
+    
+    func apiManagerSendCourseState(mode: Mode, motorPositions: [String]) {
+        apiManager.sendCourseStatePublisher(mode: mode, motorPositions: motorPositions)
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     print("Error sending course state: \(error)")
@@ -83,19 +81,26 @@ class DeveloperTestingViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
+
+    func sendCourseState() {
+        var motorPositions = gridInputs.flatMap { $0 }
+        // Duplicate contents (testing purposes)
+        let temp = motorPositions
+        motorPositions.append(contentsOf: temp)
+        motorPositions.append(contentsOf: temp)
+        apiManagerSendCourseState(mode: motorMode, motorPositions: motorPositions)
+    }
     
     func sendCourseState(presetMotorPositions: [String]?) {
         if let presetMotorPositions = presetMotorPositions {
-            apiManager.sendCourseStatePublisher(mode: motorMode, motorPositions: presetMotorPositions)
-                .sink(receiveCompletion: { completion in
-                    if case let .failure(error) = completion {
-                        print("Error sending course state: \(error)")
-                    }
-                }, receiveValue: { success in
-                    print("Course state sent successfully: \(success)")
-                })
-                .store(in: &cancellables)
+            apiManagerSendCourseState(mode: motorMode, motorPositions: presetMotorPositions)
         }
+    }
+    
+    // Set all  motors to one position
+    func setAllToVal(motorPos: String) {
+        let repeatedMotorPositions = Array(repeating: motorPos, count: Constants.numMotors)
+        apiManagerSendCourseState(mode: motorMode, motorPositions: repeatedMotorPositions)
     }
     
     func resetStats() {
