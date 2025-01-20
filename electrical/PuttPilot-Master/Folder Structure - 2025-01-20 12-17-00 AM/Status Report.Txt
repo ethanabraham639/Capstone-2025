@@ -1,0 +1,14 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [PuttPilot-Master.PcbDoc]
+   Generated File[PuttPilot-Master-RoundHoles.TXT]
+   Generated File[PuttPilot-Master-SlotHoles.TXT]
+   Generated File[PuttPilot-Master.DRL]
+   Generated File[PuttPilot-Master.LDP]
+   Generated File[PuttPilot-Master.DRR]
+
+
+Files Generated   : 5
+Documents Printed : 0
+
+Finished Output Generation At 12:17:00 AM On 2025-01-20

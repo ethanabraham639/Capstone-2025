@@ -1,0 +1,26 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: PuttPilot-Master.PcbDoc   2025-01-20  12:41:16 AM
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : L01-SIG to L04-SIG
+ASCII RoundHoles File : PuttPilot-Master-RoundHoles.TXT
+ASCII SlotHoles File : PuttPilot-Master-SlotHoles.TXT
+EIA File   : PuttPilot-Master.DRL
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      12mil (0.3mm)                                             Round             726       PTH        108.71inch (2761.31mm)
+T2      28mil (0.701mm)                                           Slot              2         PTH        0.60inch (15.23mm)
+T3      30mil (0.749mm)                                           Slot              4         PTH        13.21inch (335.45mm)
+T4      34mil (0.851mm)                                           Round             2         PTH        0.20inch (5.00mm)
+T5      35mil (0.899mm)                                           Round             12        PTH        1.36inch (34.55mm)
+T6      39mil (1.001mm)                                           Round             6         PTH        2.14inch (54.48mm)
+T7      43mil (1.1mm)                                             Round             95        PTH        19.93inch (506.24mm)
+T8      63mil (1.6mm)                                             Round             2         PTH        0.64inch (16.25mm)
+T9      106mil (2.7mm)                                            Round             4         PTH        5.53inch (140.45mm)
+T10     134mil (3.401mm)                                          Round             4         PTH        17.19inch (436.52mm)
+T11     126mil (3.2mm)                                            Round             2         NPTH       0.50inch (12.70mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              859
+
+Total Processing Time (hh:mm:ss) : 00:00:00
