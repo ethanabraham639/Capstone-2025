@@ -15,13 +15,13 @@ LifeCycleDefinitionGUID=
 RevisionNamingSchemeGUID=
 
 [OutputGroup1]
-Name=PuttPilot-Dev.OutJob
+Name=PuttPilot-Master.OutJob
 Description=
 TargetOutputMedium=Folder Structure
 VariantName=[No Variations]
 VariantScope=1
 CurrentConfigurationName=
-TargetPrinter=Brother DCP-L2550DW series
+TargetPrinter=Brother HL-L2320D series
 PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|PrintWhat=1
 OutputMedium1=Print Job
 OutputMedium1_Type=Printer
@@ -36,7 +36,7 @@ OutputMedium4_Type=Multimedia
 OutputType1=Gerber
 OutputName1=Gerber Files
 OutputCategory1=Fabrication
-OutputDocumentPath1=PuttPilot-Dev.PcbDoc
+OutputDocumentPath1=PuttPilot-Master.PcbDoc
 OutputVariantName1=
 OutputEnabled1=1
 OutputEnabled1_OutputMedium1=0
@@ -45,11 +45,11 @@ OutputEnabled1_OutputMedium3=1
 OutputEnabled1_OutputMedium4=0
 OutputDefault1=0
 Configuration1_Name1=OutputConfigurationParameter1
-Configuration1_Item1=AddToAllLayerClasses.Set= |AddToAllPlots.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray|BoardID=BECKXQJE|CentrePlots=False|DrillDrawingSymbol=GraphicsSymbol|DrillDrawingSymbolSize=500000|EmbeddedApertures=True|FilmBorderSize=10000000|FilmXSize=200000000|FilmYSize=160000000|FlashAllFills=False|FlashPadShapes=True|G54OnApertureChange=False|GenerateDRCRulesFile=False|GenerateDRCRulesFile=False|GenerateReliefShapes=True|GenerateReports=True|GerberUnit=Metric|GerberUnit=Metric|IncludeUnconnectedMidLayerPads=True|LayerClassesMirror.Set= |LayerClassesPlot.Set= |LeadingAndTrailingZeroesMode=SuppressLeadingZeroes|MaxApertureSize=2500000|MergePadAndRegion=False|MinusApertureTolerance=50|MinusApertureTolerance=50|Mirror.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray|MirrorDrillDrawingPlots=False|MirrorDrillGuidePlots=False|NoRegularPolygons=False|NumberOfDecimals=4|NumberOfDecimals=4|OptimizeChangeLocationCommands=True|OptimizeChangeLocationCommands=True|OriginPosition=Relative|Panelize=False|Plot.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray,16777217~1,16777218~1,16777219~1,16842751~1,16973830~1,16973831~1,16973834~1,16973835~1,16973832~1,16973833~1,16973837~1,16908289~1|PlotBoardProfile=True|PlotBoardProfileFileName=PuttPilot-Dev_Profile.gbr|PlotDrillDrawingLayerPair0_Backdrill=False|PlotDrillDrawingLayerPair0_Checked=False|PlotDrillDrawingLayerPair0_DrillType=Regular|PlotDrillDrawingLayerPair0_FileName=PuttPilot-Dev_Drawing_1.gbr|PlotDrillDrawingLayerPair0_HighLayer=Bottom Layer|PlotDrillDrawingLayerPair0_LowLayer=Top Layer|PlotDrillGuideLayerPair0_Backdrill=False|PlotDrillGuideLayerPair0_Checked=False|PlotDrillGuideLayerPair0_DrillType=Regular|PlotDrillGuideLayerPair0_FileName=PuttPilot-Dev_Drillmap_1.gbr|PlotDrillGuideLayerPair0_HighLayer=Bottom Layer|PlotDrillGuideLayerPair0_LowLayer=Top Layer|PlotPositivePlaneLayers=False|PlotUsedDrillDrawingLayerPairs=False|PlotUsedDrillGuideLayerPairs=False|PlusApertureTolerance=50|PlusApertureTolerance=50|Record=GerberView|SoftwareArcs=False|Sorted=False|Sorted=False|UserLayerName.Caption0=PuttPilot-Dev_Keep-out.gbr|UserLayerName.Caption1=PuttPilot-Dev_Paste_Top.gbr|UserLayerName.Caption10=PuttPilot-Dev_Top_Value.gbr|UserLayerName.Caption11=PuttPilot-Dev_Copper_Signal_2.gbr|UserLayerName.Caption12=PuttPilot-Dev_Bottom_Designator.gbr|UserLayerName.Caption13=PuttPilot-Dev_M16_Sheet_Detail.gbr|UserLayerName.Caption14=PuttPilot-Dev_Copper_Signal_Bot.gbr|UserLayerName.Caption15=PuttPilot-Dev_Top_Designator.gbr|UserLayerName.Caption16=PuttPilot-Dev_Top_Courtyard.gbr|UserLayerName.Caption17=PuttPilot-Dev_Bottom_3D_Body.gbr|UserLayerName.Caption18=PuttPilot-Dev_Bottom_Courtyard.gbr|UserLayerName.Caption19=PuttPilot-Dev_Copper_Signal_Top.gbr|UserLayerName.Caption2=PuttPilot-Dev_Legend_Top.gbr|UserLayerName.Caption20=PuttPilot-Dev_Legend_Bot.gbr|UserLayerName.Caption21=PuttPilot-Dev_Pads_Top.gbr|UserLayerName.Caption22=PuttPilot-Dev_Top_3D_Body.gbr|UserLayerName.Caption23=PuttPilot-Dev_Top_Assembly.gbr|UserLayerName.Caption24=PuttPilot-Dev_M9_PCB_Sheet.gbr|UserLayerName.Caption25=PuttPilot-Dev_Bottom_Assembly.gbr|UserLayerName.Caption26=PuttPilot-Dev_M1_Board_Outline.gbr|UserLayerName.Caption27=PuttPilot-Dev_Bottom_Value.gbr|UserLayerName.Caption28=PuttPilot-Dev_Top_Component_Outline.gbr|UserLayerName.Caption29=PuttPilot-Dev_Mechanical_20.gbr|UserLayerName.Caption3=PuttPilot-Dev_Soldermask_Top.gbr|UserLayerName.Caption30=PuttPilot-Dev_Paste_Bot.gbr|UserLayerName.Caption4=PuttPilot-Dev_Bottom_Component_Outline.gbr|UserLayerName.Caption5=PuttPilot-Dev_M2_PCB_FAB_Notes.gbr|UserLayerName.Caption6=PuttPilot-Dev_Pads_Bot.gbr|UserLayerName.Caption7=PuttPilot-Dev_Copper_Signal_1.gbr|UserLayerName.Caption8=PuttPilot-Dev_M10_Dimensions.gbr|UserLayerName.Caption9=PuttPilot-Dev_Soldermask_Bot.gbr|UserLayerName.Count=31|UserLayerName.Layer0=16973837|UserLayerName.Layer1=16973832|UserLayerName.Layer10=16908295|UserLayerName.Layer11=16777219|UserLayerName.Layer12=16908294|UserLayerName.Layer13=16908304|UserLayerName.Layer14=16842751|UserLayerName.Layer15=16908293|UserLayerName.Layer16=16908303|UserLayerName.Layer17=16908302|UserLayerName.Layer18=16908305|UserLayerName.Layer19=16777217|UserLayerName.Layer2=16973830|UserLayerName.Layer20=16973831|UserLayerName.Layer21=16973848|UserLayerName.Layer22=16908301|UserLayerName.Layer23=16908309|UserLayerName.Layer24=16908297|UserLayerName.Layer25=16908299|UserLayerName.Layer26=16908289|UserLayerName.Layer27=16908296|UserLayerName.Layer28=16908291|UserLayerName.Layer29=16908308|UserLayerName.Layer3=16973834|UserLayerName.Layer30=16973833|UserLayerName.Layer4=16908292|UserLayerName.Layer5=16908290|UserLayerName.Layer6=16973849|UserLayerName.Layer7=16777218|UserLayerName.Layer8=16908298|UserLayerName.Layer9=16973835|DocumentPath=C:\Users\ethan\Desktop\Capstone-2025\electrical\Capstone-2025\PuttPilot-Dev.PcbDoc
+Configuration1_Item1=AddToAllLayerClasses.Set= |AddToAllPlots.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray|BoardID=BECKXQJE|CentrePlots=False|DrillDrawingSymbol=GraphicsSymbol|DrillDrawingSymbolSize=500000|EmbeddedApertures=True|FilmBorderSize=10000000|FilmXSize=200000000|FilmYSize=160000000|FlashAllFills=False|FlashPadShapes=True|G54OnApertureChange=False|GenerateDRCRulesFile=False|GenerateDRCRulesFile=False|GenerateReliefShapes=True|GenerateReports=True|GerberUnit=Metric|GerberUnit=Metric|IncludeUnconnectedMidLayerPads=True|LayerClassesMirror.Set= |LayerClassesPlot.Set= |LeadingAndTrailingZeroesMode=SuppressLeadingZeroes|MaxApertureSize=2500000|MergePadAndRegion=False|MinusApertureTolerance=50|MinusApertureTolerance=50|Mirror.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray|MirrorDrillDrawingPlots=False|MirrorDrillGuidePlots=False|NoRegularPolygons=False|NumberOfDecimals=4|NumberOfDecimals=4|OptimizeChangeLocationCommands=True|OptimizeChangeLocationCommands=True|OriginPosition=Relative|OutputFormat=Single|Panelize=False|Plot.Set=SerializeLayerHash.Version~2,ClassName~TPlotLayerStateArray,16777217~1,16777218~1,16777219~1,16842751~1,16973830~1,16973831~1,16973834~1,16973835~1,16973832~1,16973833~1,16908289~1|PlotBoardProfile=True|PlotBoardProfileFileName= |PlotPositivePlaneLayers=False|PlotUsedDrillDrawingLayerPairs=False|PlotUsedDrillGuideLayerPairs=False|PlusApertureTolerance=50|PlusApertureTolerance=50|Record=GerberView|SoftwareArcs=False|Sorted=False|Sorted=False|UncheckPlotDrillDrawingLayerPair0_Backdrill=False|UncheckPlotDrillDrawingLayerPair0_Checked=False|UncheckPlotDrillDrawingLayerPair0_DrillType=Regular|UncheckPlotDrillDrawingLayerPair0_FileName= |UncheckPlotDrillDrawingLayerPair0_HighLayer=Bottom Layer|UncheckPlotDrillDrawingLayerPair0_LowLayer=Top Layer|UncheckPlotDrillGuideLayerPair0_Backdrill=False|UncheckPlotDrillGuideLayerPair0_Checked=False|UncheckPlotDrillGuideLayerPair0_DrillType=Regular|UncheckPlotDrillGuideLayerPair0_FileName= |UncheckPlotDrillGuideLayerPair0_HighLayer=Bottom Layer|UncheckPlotDrillGuideLayerPair0_LowLayer=Top Layer|DocumentPath=C:\Users\ethan\Desktop\esp\Capstone-2025\electrical\PuttPilot-Master\PuttPilot-Master.PcbDoc
 OutputType2=NC Drill
 OutputName2=NC Drill Files
 OutputCategory2=Fabrication
-OutputDocumentPath2=PuttPilot-Dev.PcbDoc
+OutputDocumentPath2=PuttPilot-Master.PcbDoc
 OutputVariantName2=
 OutputEnabled2=1
 OutputEnabled2_OutputMedium1=0
@@ -58,18 +58,18 @@ OutputEnabled2_OutputMedium3=2
 OutputEnabled2_OutputMedium4=0
 OutputDefault2=0
 Configuration2_Name1=OutputConfigurationParameter1
-Configuration2_Item1=BoardEdgeRoutToolDia=2000000|GenerateBoardEdgeRout=False|GenerateDrilledSlotsG85=False|GenerateEIADrillFile=True|GenerateSeparatePlatedNonPlatedFiles=False|GenerateSeparateViaTypeFiles=False|NumberOfDecimals=4|NumberOfUnits=2|OptimizeChangeLocationCommands=True|OriginPosition=Relative|Record=DrillView|Units=Imperial|ZeroesMode=SuppressLeadingZeroes|DocumentPath=C:\Users\ethan\Desktop\Capstone-2025\electrical\Capstone-2025\PuttPilot-Dev.PcbDoc
+Configuration2_Item1=BoardEdgeRoutToolDia=2000000|GenerateBoardEdgeRout=False|GenerateDrilledSlotsG85=False|GenerateEIADrillFile=True|GenerateSeparatePlatedNonPlatedFiles=False|GenerateSeparateViaTypeFiles=False|GenerateToolsByDrillSymbols=False|NumberOfDecimals=4|NumberOfUnits=2|OptimizeChangeLocationCommands=True|OriginPosition=Relative|Record=DrillView|Units=Imperial|ZeroesMode=SuppressLeadingZeroes|DocumentPath=C:\Users\ethan\Desktop\esp\Capstone-2025\electrical\PuttPilot-Master\PuttPilot-Master.PcbDoc
 
 [PublishSettings]
 OutputFilePath2=
 ReleaseManaged2=1
-OutputBasePath2=Project Outputs for PuttPilot-Dev
+OutputBasePath2=
 OutputPathMedia2=
 OutputPathMediaValue2=
 OutputPathOutputer2=[Output Type]
 OutputPathOutputerPrefix2=
 OutputPathOutputerValue2=
-OutputFileName2=PuttPilot-Dev.PDF
+OutputFileName2=
 OutputFileNameMulti2=
 UseOutputNameForMulti2=1
 OutputFileNameSpecial2=
@@ -88,9 +88,9 @@ ShowComponentParameters2=1
 GlobalBookmarks2=0
 PDFACompliance2=Disabled
 PDFVersion2=Default
-OutputFilePath3=C:\Users\ethan\Desktop\Capstone-2025\electrical\Capstone-2025\Project Outputs for PuttPilot-Dev\
+OutputFilePath3=C:\Users\ethan\Desktop\esp\Capstone-2025\electrical\PuttPilot-Master\Project Outputs for PuttPilot-Master\
 ReleaseManaged3=1
-OutputBasePath3=Project Outputs for PuttPilot-Dev
+OutputBasePath3=Project Outputs for PuttPilot-Master
 OutputPathMedia3=
 OutputPathMediaValue3=
 OutputPathOutputer3=[Output Type]
@@ -103,7 +103,7 @@ OutputFileNameSpecial3=
 OpenOutput3=1
 OutputFilePath4=
 ReleaseManaged4=1
-OutputBasePath4=Project Outputs for PuttPilot-Dev
+OutputBasePath4=
 OutputPathMedia4=
 OutputPathMediaValue4=
 OutputPathOutputer4=[Output Type]
@@ -142,7 +142,7 @@ WmvQuality4=80
 [GeneratedFilesSettings]
 RelativeOutputPath2=
 OpenOutputs2=1
-RelativeOutputPath3=C:\Users\ethan\Desktop\Capstone-2025\electrical\Capstone-2025\Project Outputs for PuttPilot-Dev\
+RelativeOutputPath3=C:\Users\ethan\Desktop\esp\Capstone-2025\electrical\PuttPilot-Master\Project Outputs for PuttPilot-Master\
 OpenOutputs3=1
 AddToProject3=1
 TimestampFolder3=0

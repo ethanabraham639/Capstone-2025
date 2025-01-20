@@ -225,7 +225,7 @@ GenerateClassCluster=0
 DocumentUniqueId=BECKXQJE
 
 [Document11]
-DocumentPath=PuttPilot-Dev.OutJob
+DocumentPath=PuttPilot-Master.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -235,90 +235,154 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
 [GeneratedDocument1]
-DocumentPath=Project Outputs for PuttPilot-Master\Design Rule Check - PuttPilot-Master.html
+DocumentPath=Project Outputs for Free Documents\NC Drill\PuttPilot-Master-RoundHoles.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument2]
-DocumentPath=Project Outputs for PuttPilot-Dev\NC Drill\PuttPilot-Dev-RoundHoles.TXT
+DocumentPath=Project Outputs for PuttPilot-Master\NC Drill\PuttPilot-Master-RoundHoles.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument3]
-DocumentPath=Project Outputs for PuttPilot-Dev\NC Drill\PuttPilot-Dev-SlotHoles.TXT
+DocumentPath=Project Outputs for Free Documents\NC Drill\PuttPilot-Master-SlotHoles.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument4]
-DocumentPath=Project Outputs for PuttPilot-Dev\NC Drill\PuttPilot-Dev.DRL
+DocumentPath=Project Outputs for PuttPilot-Master\NC Drill\PuttPilot-Master-SlotHoles.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument5]
-DocumentPath=Project Outputs for PuttPilot-Dev\NC Drill\PuttPilot-Dev.DRR
+DocumentPath=Project Outputs for Free Documents\NC Drill\PuttPilot-Master.DRR
 DItemRevisionGUID=
 
 [GeneratedDocument6]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.EXTREP
+DocumentPath=Project Outputs for PuttPilot-Master\NC Drill\PuttPilot-Master.DRR
 DItemRevisionGUID=
 
 [GeneratedDocument7]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.G1
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master.EXTREP
 DItemRevisionGUID=
 
 [GeneratedDocument8]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.G2
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master.EXTREP
 DItemRevisionGUID=
 
 [GeneratedDocument9]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GBL
+DocumentPath=Project Outputs for Free Documents\NC Drill\PuttPilot-Master.LDP
 DItemRevisionGUID=
 
 [GeneratedDocument10]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GBO
+DocumentPath=Project Outputs for PuttPilot-Master\NC Drill\PuttPilot-Master.LDP
 DItemRevisionGUID=
 
 [GeneratedDocument11]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GBP
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master.REP
 DItemRevisionGUID=
 
 [GeneratedDocument12]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GBS
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master.REP
 DItemRevisionGUID=
 
 [GeneratedDocument13]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GKO
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Copper_Signal_1.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument14]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GM
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Copper_Signal_1.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument15]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GTL
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Copper_Signal_2.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument16]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GTO
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Copper_Signal_2.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument17]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GTP
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Copper_Signal_Bot.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument18]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.GTS
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Copper_Signal_Bot.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument19]
-DocumentPath=Project Outputs for PuttPilot-Dev\NC Drill\PuttPilot-Dev.LDP
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Copper_Signal_Top.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument20]
-DocumentPath=Project Outputs for PuttPilot-Dev\Gerber\PuttPilot-Dev.REP
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Copper_Signal_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument21]
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Legend_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument22]
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Legend_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument23]
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Legend_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument24]
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Legend_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument25]
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_M1_Board_Outline.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument26]
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_M1_Board_Outline.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument27]
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Paste_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument28]
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Paste_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument29]
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Paste_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument30]
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Paste_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument31]
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Profile.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument32]
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Profile.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument33]
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Soldermask_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument34]
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Soldermask_Bot.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument35]
+DocumentPath=Project Outputs for Free Documents\Gerber\PuttPilot-Master_Soldermask_Top.gbr
+DItemRevisionGUID=
+
+[GeneratedDocument36]
+DocumentPath=Project Outputs for PuttPilot-Master\Gerber\PuttPilot-Master_Soldermask_Top.gbr
 DItemRevisionGUID=
 
 [Configuration1]
