@@ -3,23 +3,21 @@
 
 #include "driver/gpio.h"
 
-#define ADC_MUX_A0_GPIO      GPIO_NUM_16
-#define ADC_MUX_A1_GPIO      GPIO_NUM_12
-#define ADC_MUX_A2_GPIO      GPIO_NUM_13
+#define UNUSED 999
 
-#define LED0_GPIO           GPIO_NUM_5
-#define LED1_GPIO           GPIO_NUM_4
-#define LED2_GPIO           GPIO_NUM_9
+#define ADC_MUX_A0_GPIO     UNUSED
+#define ADC_MUX_A1_GPIO     UNUSED
+#define ADC_MUX_A2_GPIO     UNUSED
 
-#define BIH_LS_GPIO         GPIO_NUM_8
-#define BD_LS_GPIO          GPIO_NUM_6
-#define BQ_LS_GPIO          GPIO_NUM_1
+#define BIH_GPIO_IN         GPIO_NUM_4
+#define BIG_GPIO_IN         GPIO_NUM_5
 
-#define GUTTER1_GPIO        GPIO_NUM_7
-#define GUTTER2_GPIO        GPIO_NUM_10
+#define BD_GPIO_IN          GPIO_NUM_12
+#define BQ_GPIO_IN          GPIO_NUM_13
+#define BALL_DQ_GPIO_OUT    GPIO_NUM_16
 
-#define GPIO_ON             0
-#define GPIO_OFF            1
+#define GPIO_HIGH           0
+#define GPIO_LOW            1
 
 void GPIO_init(void);
 
