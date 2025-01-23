@@ -4,8 +4,19 @@
 
 #include "delay.h"
 #include "sensors.h"
+#include "pca9685.h"
 
 #define BIH_FEEDFORWARD_DELAY_MS 5000
+
+#define CW_SPEED        65
+#define STOP_SPEED      64
+#define CCW_SPEED       63
+#define CONT_SERVO_ID   0
+
+typedef enum {
+    CW,
+    CCW
+} Dir_e;
 
 typedef enum {
     IDLE = 0,
@@ -25,9 +36,24 @@ typedef struct {
     uint8_t player_ball_count;
 } BallQueue_t;
 
-BallQueue_t BQ = {.BIH_return_state    = IDLE, .BIH_request    = false, .BIH_timer = 0, .BIH_current_delay = 0;
+BallQueue_t BQ = {.BIH_return_state    = IDLE, .BIH_request    = false, .BIH_timer = 0, .BIH_current_delay = 0,
                   .player_return_state = IDLE, .player_request = false, .player_ball_count = 0};
 
+const PCA9685_t BIH_SERVO    = { .addr = 0x61, .isLed = false, .osc_freq = 25000000.0 };
+const PCA9685_t PLAYER_SERVO = { .addr = 0x42, .isLed = false, .osc_freq = 25000000.0 };
+
+
+void start_cont_servo(const PCA9685_t* pca9685, Dir_e dir)
+{
+    uint8_t speed = (dir == CW ? CW_SPEED : CCW_SPEED);
+
+    PCA9685_setServoPos(pca9685, CONT_SERVO_ID, speed);
+}
+
+void stop_cont_servo(const PCA9685_t* pca9685)
+{
+    PCA9685_setServoPos(pca9685, CONT_SERVO_ID, STOP_SPEED);
+}
 
 /**
  * Possible issues with this as we test:
@@ -51,7 +77,7 @@ void run_ball_in_hole_return_task(void)
             {
                 BQ.BIH_request = false;
 
-                //START THE CONTINUOUS MOTOR
+                start_cont_servo(&BIH_SERVO, CW);
                 BQ.BIH_timer = TIMER_restart();
                 BQ.BIH_current_delay = BIH_FEEDFORWARD_DELAY_MS;
                 
@@ -71,7 +97,7 @@ void run_ball_in_hole_return_task(void)
             if (TIMER_get_ms(BQ.BIH_timer) > BQ.BIH_current_delay)
             {
                 // assumed we have dispensed a ball by this time
-                //STOP THE CONTINUOUS MOTOR
+                stop_cont_servo(&BIH_SERVO);
                 BQ.BIH_return_state = WAITING;
             }
 
@@ -79,7 +105,7 @@ void run_ball_in_hole_return_task(void)
     }
 }
 
-void run_ball_queue_task(void)
+void run_player_ball_queue_task(void)
 {
     switch (BQ.player_return_state)
     {
@@ -94,7 +120,7 @@ void run_ball_queue_task(void)
             {
                 BQ.player_request = false;
 
-                //START THE CONTINUOUS MOTOR
+                start_cont_servo(&PLAYER_SERVO, CW);
                 BQ.player_return_state = DISPENSING;
             }
 
@@ -111,7 +137,7 @@ void run_ball_queue_task(void)
 
             if (BQ.player_ball_count == 0)
             {
-                //STOP THE CONTINOUS MOTOR
+                stop_cont_servo(&PLAYER_SERVO);
                 BQ.player_return_state = WAITING;
             }
             
@@ -122,61 +148,14 @@ void run_ball_queue_task(void)
     }
 }
 
+void BQ_init(void)
+{
+    stop_cont_servo(&BIH_SERVO);
+    stop_cont_servo(&PLAYER_SERVO);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void run_ball_queue_task(void)
-// {
-//     switch (state)
-//     {
-//         case IDLE:
-//             //do nothing
-//             state = WAITING;
-//             break;
-        
-//         case WAITING:
-
-//             //if prox sensor activated or ready to hit and auto dispense is on
-//             //or manual dispense is activated
-//             state = DISPENSING;
-//             break;
-        
-//         case DISPENSING:
-
-//             //dispense multiple balls if it is a manual dispense
-//             state = DISPENSING;
-
-//             //dispensing sensor activated
-//             state = WAITING;
-
-//             //5 second timeout
-//             state = FAILED;
-//             break;
-        
-//         case FAILED:
-//             break;
-//     }
-// }
-
-
-
-
-
-
-
-
+void BQ_run_task(void)
+{
+    run_ball_in_hole_return_task();
+    run_player_ball_queue_task();
+}
