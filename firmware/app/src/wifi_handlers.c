@@ -56,7 +56,7 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
 
 esp_err_t POST_resetStats_handler(httpd_req_t *req)
 {
-    // BE_resetStats();
+    BE_reset_stats();
 
     const char* resp_str = "Successfully reset stats!";
     ESP_LOGI(TAG, resp_str);
@@ -85,7 +85,8 @@ esp_err_t POST_settings_handler(httpd_req_t *req)
         return ESP_FAIL;
     }
 
-    // update_auto_dispense((uint8_t) buffer[0]);
+    const bool autoDispense = (bool)buffer[0];
+    BE_set_auto_dispense(autoDispense);
 
     printf("Setting: %d\n", buffer[0]);
 
@@ -116,7 +117,7 @@ esp_err_t POST_dispenseBall_handler(httpd_req_t *req)
         return ESP_FAIL;
     }
 
-    // BQ_dispense_balls((uint8_t)buffer[0]);
+    BQ_request_player_return((uint8_t)buffer[0]);
 
     printf("Number of balls to dispense: %d\n", buffer[0]);
 
@@ -161,8 +162,8 @@ esp_err_t GET_debugMsg_handler(httpd_req_t *req)
 
 esp_err_t GET_stats_handler(httpd_req_t *req)
 {
-    uint8_t ballsHit = 0xFF; //=BE_get_balls_hit();
-    uint8_t ballsInHole = 0x1F; //=BE_get_balls_in_hole();
+    uint8_t ballsHit = BE_get_balls_hit();
+    uint8_t ballsInHole = BE_get_balls_in_hole();
 
     const char resp_str[2] = {ballsHit, ballsInHole};
     httpd_resp_send(req, resp_str, strlen(resp_str));
