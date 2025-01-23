@@ -154,6 +154,17 @@ void BQ_init(void)
     stop_cont_servo(&PLAYER_SERVO);
 }
 
+void BQ_request_ball_in_hole_return(void)
+{
+    BQ.BIH_request = true;
+}
+
+void BQ_request_player_return(uint8_t ball_count)
+{
+    BQ.player_ball_count = ball_count;
+    BQ.player_request = true;
+}
+
 void BQ_run_task(void)
 {
     run_ball_in_hole_return_task();
