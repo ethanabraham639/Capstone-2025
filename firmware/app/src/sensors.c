@@ -3,6 +3,7 @@
 #include "delay.h"
 
 #define DEBOUNCE_DELAY_MS       10
+#define SENSOR_TASK_DELAY_MS    1
 
 typedef struct{
     gpio_num_t gpio;
@@ -151,5 +152,6 @@ void SNS_run_task(void)
     check_ball_in_gutter();
     check_ball_dep();
     check_ball_queue();
-    //DELAY
+
+    vTaskDelay(SENSOR_TASK_DELAY_MS / portTICK_PERIOD_MS);
 }
