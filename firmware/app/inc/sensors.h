@@ -17,4 +17,6 @@ void SNS_clear_ball_dep(void);
 bool SNS_get_ball_queue(void);
 void SNS_clear_ball_queue(void);
 
+void SNS_run_task(void);
+
 #endif
