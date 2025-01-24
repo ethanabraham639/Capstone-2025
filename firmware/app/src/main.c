@@ -7,26 +7,56 @@
 #include "i2c.h"
 #include "wifi_init.h"
 #include "actuator_control.h"
+#include "sensors.h"
+#include "ball_estimation.h"
+#include "ball_queue.h"
+
+static void task_1ms(void* arg);
+static void task_10ms(void* arg);
+static void task_100ms(void* arg);
 
 void app_main()
 {
     WIFI_init_and_start_server();
     I2C_master_init();
+    GPIO_init();
+    
     AC_init();
-    /* Print chip information */
-    esp_chip_info_t chip_info;
-    esp_chip_info(&chip_info);
-    printf("This is ESP8266 chip with %d CPU cores, WiFi, ",
-            chip_info.cores);
+    BQ_init();
+    SNS_init();
 
-    printf("silicon revision %d, ", chip_info.revision);
+    xTaskCreate(task_1ms,   "task_1ms",   2048, NULL, 10, NULL);
+    xTaskCreate(task_10ms,  "task_10ms",  2048, NULL, 10, NULL);
+    xTaskCreate(task_100ms, "task_100ms", 2048, NULL, 10, NULL);
+}
 
-    printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
-            (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
+static void task_1ms(void* arg)
+{
+    for (;;)
+    {
+        SNS_run_task();
 
-
-    while(1) {
-        AC_run_task();
+        vTaskDelay(1 / portTICK_RATE_MS);
     }
+}
 
+static void task_10ms(void* arg)
+{
+    for (;;)
+    {
+        AC_run_task();
+        BE_run_task();
+
+        vTaskDelay(10 / portTICK_RATE_MS);
+    }
+}
+
+static void task_100ms(void* arg)
+{
+    for (;;)
+    {
+        BQ_run_task();
+
+        vTaskDelay(100 / portTICK_RATE_MS);
+    }
 }
