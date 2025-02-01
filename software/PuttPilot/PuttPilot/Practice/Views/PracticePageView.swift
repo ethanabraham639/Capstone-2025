@@ -36,20 +36,25 @@ struct PracticePageView: View {
                     
                     HStack {
                         courseSimulation
+                        Spacer()
                         controlPanel
                     }
+                    .padding(20)
                     
-                    modifyCourseTitle
-                    
-                    courseModificationItems
-                    
+                    VStack(alignment: .leading) {
+                        modifyCourseTitle
+                        
+                        courseModificationItems
+                    }
+
                     sendCourseStateButton
                     
                     // TODO: Saved Courses
                     
                     Spacer()
                 }
-                }
+            }
+            .padding(20)
 
 
         }
@@ -108,11 +113,12 @@ extension PracticePageView {
     
     private var accuracyIndicator: some View {
             Text("Accuracy: \(viewModel.accuracy)")
-                .font(.title3)
+                .frame(width: 536, height: 40)
+                .font(.system(size: 28, weight: .regular))
                 .padding()
                 .background(Color.white.opacity(0.85))
-                .cornerRadius(10)
-        
+                .cornerRadius(25)
+                .shadow(color: .black.opacity(0.3), radius: 5, x: 2, y: 2)
     }
     
     
@@ -122,33 +128,44 @@ extension PracticePageView {
                 Button("Save Preset") {
                     
                 }
+                .buttonStyle(Styles.Buttons.CustomButtonStyle(size:.small))
+                .padding(10)
                 
                 Button("Clear Balls") {
                     
                 }
+                .buttonStyle(Styles.Buttons.CustomButtonStyle(size:.small))
+                .padding(10)
             }
             
             HStack {
                 Button("Reset Course") {
                     
                 }
+                .buttonStyle(Styles.Buttons.CustomButtonStyle(size:.small))
+                .padding(10)
                 
                 Button("Dispense Ball") {
                     
                 }
+                .buttonStyle(Styles.Buttons.CustomButtonStyle(size:.small))
+                .padding(10)
             }
             
             Button("Send Course State") {
- 
+                
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(Styles.Buttons.CustomButtonStyle(size:.medium))
+            .padding(10)
         }
+        .padding(10)
     }
     
     var courseSimulation: some View {
         // TODO: update with simulation
         Image(.coursePreview)
             .imageScale(.small)
+            .padding(10)
     }
 }
 
