@@ -88,7 +88,7 @@ struct DeveloperTestingView: View {
                 
                 VStack {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: Constants.numColsMotors), spacing: 10) {
-                        ForEach(0..<Constants.numRowsMotors, id: \.self) { row in
+                        ForEach(0..<Constants.numRowMotors, id: \.self) { row in
                             ForEach(0..<Constants.numColsMotors, id: \.self) { col in
                                 TextField("0", text: $viewModel.gridInputs[row][col])
                                     .textFieldStyle(.roundedBorder)

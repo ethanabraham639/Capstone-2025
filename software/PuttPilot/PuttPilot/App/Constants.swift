@@ -13,7 +13,9 @@ public struct Constants {
     static let splashDelay: TimeInterval = 1.0
     
     
-    static let numRowsMotors = 3
+    static let numRowMotors = 9
     static let numColsMotors = 5
-    static let numMotors = 45
+    static let numMotors = numRowMotors*numColsMotors
+    
+    static let maxMotorPosition = 90
 }

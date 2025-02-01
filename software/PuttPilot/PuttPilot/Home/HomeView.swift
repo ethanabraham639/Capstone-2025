@@ -25,6 +25,7 @@ struct HomeView: View {
             
             Spacer()
         })
+        .background()
     }
 
 }
