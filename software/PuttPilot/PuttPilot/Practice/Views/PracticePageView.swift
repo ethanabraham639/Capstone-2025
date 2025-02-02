@@ -88,20 +88,20 @@ extension PracticePageView {
     private var courseModificationItems: some View {
         HStack(alignment: .top, spacing: 20) {
             CourseModificationItem(type: .leftLeaning,
-                                   steepness: $leftLeaningSteepness,
-                                   position: $leftLeaningPosition)
+                                   steepness: $viewModel.leftLeaningSteepness,
+                                   position: $viewModel.leftLeaningPosition)
             .frame(maxWidth: .infinity, alignment: .leading)
             .layoutPriority(1)
             
             CourseModificationItem(type: .rightLeaning,
-                                   steepness: $rightLeaningSteepness,
-                                   position: $rightLeaningPosition)
+                                   steepness: $viewModel.rightLeaningSteepness,
+                                   position: $viewModel.rightLeaningPosition)
             .frame(maxWidth: .infinity, alignment: .leading)
             .layoutPriority(1)
             
             CourseModificationItem(type: .upHill,
-                                   steepness: $uphillSteepness,
-                                   position: $uphillPosition)
+                                   steepness: $viewModel.uphillSteepness,
+                                   position: $viewModel.uphillPosition)
             .frame(maxWidth: .infinity, alignment: .leading)
             .layoutPriority(1)
     
@@ -125,13 +125,13 @@ extension PracticePageView {
         VStack {
             HStack {
                 Button("Save Preset") {
-                    
+                    // TODO: still needs to be done
                 }
                 .buttonStyle(Styles.Buttons.CustomButtonStyle(size:.small))
                 .padding(10)
                 
                 Button("Clear Balls") {
-                    
+                    viewModel.clearBallsPressed()
                 }
                 .buttonStyle(Styles.Buttons.CustomButtonStyle(size:.small))
                 .padding(10)
@@ -139,7 +139,7 @@ extension PracticePageView {
             
             HStack {
                 Button("Reset Course") {
-                    
+                    viewModel.resetCoursePressed()
                 }
                 .buttonStyle(Styles.Buttons.CustomButtonStyle(size:.small))
                 .padding(10)
