@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 enum CourseModificationItemType: String {
-    case leftLeaning = "Left-leaning"
+    case leftLeaning = "Left-Leaning"
     case rightLeaning = "Right-Leaning"
     case upHill = "Uphill"
 }
