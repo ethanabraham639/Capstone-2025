@@ -43,9 +43,3 @@ struct SplashScreenView: View {
         }
     }
 }
-
-struct Constants {
-    static let logoWidth: CGFloat = 274
-    static let logoHeight: CGFloat = 157
-    static let splashDelay: TimeInterval = 1.0
-}

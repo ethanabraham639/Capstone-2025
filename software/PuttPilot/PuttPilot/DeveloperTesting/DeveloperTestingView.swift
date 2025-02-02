@@ -87,9 +87,9 @@ struct DeveloperTestingView: View {
                     .font(.headline)
                 
                 VStack {
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 10) {
-                        ForEach(0..<3, id: \.self) { row in
-                            ForEach(0..<3, id: \.self) { col in
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: Constants.numColsMotors), spacing: 10) {
+                        ForEach(0..<Constants.numRowMotors, id: \.self) { row in
+                            ForEach(0..<Constants.numColsMotors, id: \.self) { col in
                                 TextField("0", text: $viewModel.gridInputs[row][col])
                                     .textFieldStyle(.roundedBorder)
                                     .frame(width: 50, height: 40)
@@ -101,13 +101,104 @@ struct DeveloperTestingView: View {
                         .padding()
                     }
 
-                    Button("Send Course State") {
-                        viewModel.sendCourseState()
+                    HStack {
+                        Button("Send Course State") {
+                            viewModel.sendCourseState()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding()
+                        
+                        Button("Clear Course State") {
+                            viewModel.resetGridInputs()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding()
                     }
-                    .buttonStyle(.borderedProminent)
-                    .padding()
                 }
+                
+                // Default motor states
 
+                VStack(alignment: .leading) {
+                    Text("Default Motor Positions")
+                        .font(.headline)
+                    
+                    HStack {
+                        Button("Left Leaning") {
+                            viewModel.sendCourseState(presetMotorPositions: ["0", "25", "50", "75", "90",
+                                                                             "0", "25", "50", "75", "90",
+                                                                             "0", "25", "50", "75", "90",
+                                                                             "0", "25", "50", "75", "90",
+                                                                             "0", "25", "50", "75", "90",
+                                                                             "0", "25", "50", "75", "90",
+                                                                             "0", "25", "50", "75", "90",
+                                                                             "0", "25", "50", "75", "90",
+                                                                             "0", "25", "50", "75", "90"])
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                        
+                        Button("Right Leaning") {
+                            viewModel.sendCourseState(presetMotorPositions: ["90", "75", "50", "25", "0",
+                                                                             "90", "75", "50", "25", "0",
+                                                                             "90", "75", "50", "25", "0",
+                                                                             "90", "75", "50", "25", "0",
+                                                                             "90", "75", "50", "25", "0",
+                                                                             "90", "75", "50", "25", "0",
+                                                                             "90", "75", "50", "25", "0",
+                                                                             "90", "75", "50", "25", "0",
+                                                                             "90", "75", "50", "25", "0"
+                                                                            ])
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                        
+                        Button("Uphill") {
+                            viewModel.sendCourseState(presetMotorPositions: ["10", "10", "10", "10", "10",
+                                                                             "20", "20", "20", "20", "20",
+                                                                             "30", "30", "30", "30", "30",
+                                                                             "40", "40", "40", "40", "40",
+                                                                             "50", "50", "50", "50", "50",
+                                                                             "60", "60", "60", "60", "60",
+                                                                             "70", "70", "70", "70", "70",
+                                                                             "80", "80", "80", "80", "80",
+                                                                             "90", "90", "90", "90", "90",
+                                                                            ])
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                        
+                        Button("Flat") {
+                            viewModel.sendCourseState(presetMotorPositions: ["0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0",
+                                                                             "0", "0", "0", "0", "0",
+                                                                            ])
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+
+                    }
+                    
+                    
+                    Text("Set All Motors")
+                        .font(.headline
+                        )
+                    HStack {
+                        TextField("0", text: $viewModel.setAll)
+                            .textFieldStyle(.roundedBorder)
+                            .keyboardType(.numberPad)
+                        
+                        Button("Send") {
+                            viewModel.setAllToVal(motorPos: viewModel.setAll)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
                 
                 // Dispense Balls
                 VStack(alignment: .leading) {
