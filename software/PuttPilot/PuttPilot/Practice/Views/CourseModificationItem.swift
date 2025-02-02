@@ -20,27 +20,31 @@ struct CourseModificationItem: View {
     @Binding var position: Double
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(type.rawValue)
-                .font(.title3)
-            ZStack {
-                Image(type.rawValue)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 216.76)
-                
-            }
+                .font(.system(size: 15, weight: .bold))
+                .padding(.vertical)
+            
+            Image(type.rawValue)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 215, height: 215)
+                .frame(maxWidth: .infinity, alignment: .center)
             
             Text("Steepness: \(Int(steepness))%")
+            
             Slider(value: $steepness, in: 0...Double(Constants.maxMotorPosition), step: 1)
+                .frame(maxWidth: .infinity)
             
             Text("Position: \(Int(position))%")
+
             Slider(value: $position, in: 0...Double(Constants.maxMotorPosition), step: 1)
+                .frame(maxWidth: .infinity)
 
         }
+        .frame(maxWidth: .infinity)
         .padding()
-//        .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.2)))
-//        .shadow(radius: isSelected ? 4 : 0)
-//        
+        .background(Color.white.opacity(0.1))
+        .cornerRadius(15)
     }
 }

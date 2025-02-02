@@ -46,8 +46,7 @@ struct PracticePageView: View {
                         
                         courseModificationItems
                     }
-
-                    sendCourseStateButton
+                    .frame(maxWidth: .infinity)
                     
                     // TODO: Saved Courses
                     
@@ -81,34 +80,34 @@ extension PracticePageView {
     
     private var modifyCourseTitle: some View {
         Text("Modify Course")
-            .font(.title3)
+            .font(.system(size: 20, weight: .bold))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 20)
     }
     
     private var courseModificationItems: some View {
-        HStack {
+        HStack(alignment: .top, spacing: 20) {
             CourseModificationItem(type: .leftLeaning,
                                    steepness: $leftLeaningSteepness,
                                    position: $leftLeaningPosition)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .layoutPriority(1)
             
             CourseModificationItem(type: .rightLeaning,
                                    steepness: $rightLeaningSteepness,
                                    position: $rightLeaningPosition)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .layoutPriority(1)
             
             CourseModificationItem(type: .upHill,
                                    steepness: $uphillSteepness,
                                    position: $uphillPosition)
-        }
-    }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .layoutPriority(1)
     
-    private var sendCourseStateButton: some View {
-        Button("Send Course State") {
-            viewModel.updateMotorPositions(
-                leftLeaning: (steepness: leftLeaningSteepness, position: leftLeaningPosition),
-                rightLeaning: (steepness: rightLeaningSteepness, position: rightLeaningPosition),
-                uphill: (steepness: uphillSteepness, position: uphillPosition)
-            )
         }
-        .buttonStyle(.borderedProminent)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 20)
     }
     
     private var accuracyIndicator: some View {
@@ -153,10 +152,15 @@ extension PracticePageView {
             }
             
             Button("Send Course State") {
-                
+                viewModel.updateMotorPositions(
+                    leftLeaning: (steepness: leftLeaningSteepness, position: leftLeaningPosition),
+                    rightLeaning: (steepness: rightLeaningSteepness, position: rightLeaningPosition),
+                    uphill: (steepness: uphillSteepness, position: uphillPosition)
+                )
             }
             .buttonStyle(Styles.Buttons.CustomButtonStyle(size:.medium))
             .padding(10)
+
         }
         .padding(10)
     }
