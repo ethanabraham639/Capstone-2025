@@ -1,6 +1,9 @@
 #ifndef BALL_ESTIMATION_H
 #define BALL_ESTIMATION_H
 
+#include <stdint.h>
+#include <stdbool.h>
+
 typedef enum {
     IDLE = 0,
     READY_TO_HIT_on_enter,

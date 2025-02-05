@@ -1,6 +1,8 @@
 #include "delay.h"
 #include "esp_timer.h"
 
+#include <math.h>
+
 #define US_TO_MS 1000
 
 int64_t TIMER_restart()
