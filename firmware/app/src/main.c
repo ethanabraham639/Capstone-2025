@@ -10,6 +10,7 @@
 #include "sensors.h"
 #include "ball_estimation.h"
 #include "ball_queue.h"
+#include "gpio.h"
 
 static void task_1ms(void* arg);
 static void task_10ms(void* arg);

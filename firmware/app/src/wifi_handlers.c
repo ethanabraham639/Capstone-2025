@@ -1,5 +1,7 @@
 #include "wifi_handlers.h"
 #include "actuator_control.h"
+#include "ball_estimation.h"
+#include "ball_queue.h"
 
 #include <sys/param.h>
 #include <string.h>

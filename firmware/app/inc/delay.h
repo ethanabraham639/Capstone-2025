@@ -2,9 +2,9 @@
 #define DELAY_H
 
 #include <stdint.h>
-#include <bool.h>
+#include <stdbool.h>
 
-typedef Timer_t int64_t;
+typedef int64_t Timer_t;
 
 int64_t TIMER_restart(void);
 int64_t TIMER_get_ms(Timer_t timer);

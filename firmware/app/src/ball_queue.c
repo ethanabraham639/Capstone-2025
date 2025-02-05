@@ -1,6 +1,6 @@
 #include "ball_queue.h"
 
-#include <bool.h>
+#include <stdbool.h>
 
 #include "delay.h"
 #include "sensors.h"
@@ -81,7 +81,7 @@ void run_ball_in_hole_return_task(void)
                 BQ.BIH_timer = TIMER_restart();
                 BQ.BIH_current_delay = BIH_FEEDFORWARD_DELAY_MS;
                 
-                BQ.BIH_return_state = DISPENSING
+                BQ.BIH_return_state = DISPENSING;
             }
             break;
         
@@ -101,6 +101,9 @@ void run_ball_in_hole_return_task(void)
                 BQ.BIH_return_state = WAITING;
             }
 
+            break;
+        
+        case FAILED:
             break;
     }
 }

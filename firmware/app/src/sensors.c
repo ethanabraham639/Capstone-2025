@@ -1,4 +1,9 @@
 #include "sensors.h"
+
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+
 #include "gpio.h"
 #include "delay.h"
 
@@ -36,22 +41,22 @@ static void sensor_gpio_isr(void* arg)
     {
         case BIH_GPIO_IN:
             sensors.BIH.detected = true;
-            TIMER_restart(&sensors.BIH.timer);
+            sensors.BIH.timer = TIMER_restart();
             break;
 
         case BIG_GPIO_IN:
             sensors.BIG.detected = true;
-            TIMER_restart(&sensors.BIG.timer);
+            sensors.BIG.timer = TIMER_restart();
             break;
 
         case BD_GPIO_IN:
             sensors.BD.detected = true;
-            TIMER_restart(&sensors.BD.timer);
+            sensors.BD.timer = TIMER_restart();
             break;
 
         case BQ_GPIO_IN:
             sensors.BQ.detected = true;
-            TIMER_restart(&sensors.BQ.timer);
+            sensors.BQ.timer = TIMER_restart();
             break;
     }
 }
@@ -104,46 +109,46 @@ void SNS_init(void)
 
 bool SNS_get_ball_in_hole(void)
 {
-    return sensors.BIH_confirmed;
+    return sensors.BIH.confirmed;
 }
 
 void SNS_clear_ball_in_hole(void)
 {
-    sensors.BIH_confirmed = false;
-    sensors.BIH_detected = false;
+    sensors.BIH.confirmed = false;
+    sensors.BIH.detected = false;
 }
 
 bool SNS_get_ball_in_gutter(void)
 {
-    return sensors.BIG_confirmed;
+    return sensors.BIG.confirmed;
 }
 
 void SNS_clear_ball_in_gutter(void)
 {
-    sensors.BIG_confirmed = false;
-    sensors.BIG_detected = false;
+    sensors.BIG.confirmed = false;
+    sensors.BIG.detected = false;
 }
 
 bool SNS_get_ball_dep(void)
 {
-    return sensors.BD_confirmed;
+    return sensors.BD.confirmed;
 }
 
 void SNS_clear_ball_dep(void)
 {
-    sensors.BD_confirmed = false;
-    sensors.BD_detected = false;
+    sensors.BD.confirmed = false;
+    sensors.BD.detected = false;
     }
 
 bool SNS_get_ball_queue(void)
 {
-    return sensors.BQ_confirmed;
+    return sensors.BQ.confirmed;
 }
 
 void SNS_clear_ball_queue(void)
 {
-    sensors.BQ_confirmed = false;
-    sensors.BQ_detected = false;
+    sensors.BQ.confirmed = false;
+    sensors.BQ.detected = false;
 }
 
 void SNS_run_task(void)
