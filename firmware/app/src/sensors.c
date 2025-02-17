@@ -83,22 +83,22 @@ void generic_gpio_debounce_read(GpioSensor_t* sensor)
 
 void check_ball_in_hole(void)
 {
-    generic_gpio_debounce_read(&sensors.BIH);
+    generic_gpio_debounce_read(&(sensors.BIH));
 }
 
 void check_ball_in_gutter(void)
 {
-    generic_gpio_debounce_read(&sensors.BIG);
+    generic_gpio_debounce_read(&(sensors.BIG));
 }
 
 void check_ball_dep(void)
 {
-    generic_gpio_debounce_read(&sensors.BD);
+    generic_gpio_debounce_read(&(sensors.BD));
 }
 
 void check_ball_queue(void)
 {
-    generic_gpio_debounce_read(&sensors.BQ);
+    generic_gpio_debounce_read(&(sensors.BQ));
 }
 
 void SNS_init(void)
@@ -157,6 +157,4 @@ void SNS_run_task(void)
     check_ball_in_gutter();
     check_ball_dep();
     check_ball_queue();
-
-    vTaskDelay(SENSOR_TASK_DELAY_MS / portTICK_PERIOD_MS);
 }
