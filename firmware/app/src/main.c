@@ -11,6 +11,7 @@
 #include "ball_estimation.h"
 #include "ball_queue.h"
 #include "gpio.h"
+#include "delay.h"
 
 static void task_1ms(void* arg);
 static void task_10ms(void* arg);
@@ -29,11 +30,6 @@ void app_main()
     xTaskCreate(task_1ms,   "task_1ms",   2048, NULL, 10, NULL);
     xTaskCreate(task_10ms,  "task_10ms",  2048, NULL, 10, NULL);
     xTaskCreate(task_100ms, "task_100ms", 2048, NULL, 10, NULL);
-
-    while (1) {
-        gpio_set_level(15, !gpio_get_level(15)); // Toggle GPIO15
-        vTaskDelay(pdMS_TO_TICKS(250)); // Wait 500ms
-    }
 }
 
 static void task_1ms(void* arg)
@@ -41,12 +37,19 @@ static void task_1ms(void* arg)
     TickType_t xLastWakeTime = xTaskGetTickCount(); // Get current tick count
     const TickType_t xFrequency = pdMS_TO_TICKS(1); // Convert 1ms to ticks
     
+    Timer_t blink_timer;
+    blink_timer = TIMER_restart();
+
     for (;;)
     {
         SNS_run_task();
 
-
-
+        if (TIMER_get_ms(blink_timer) > 500)
+        {
+            gpio_set_level(15, !gpio_get_level(15)); // Toggle GPIO15
+            blink_timer = TIMER_restart();
+        }
+        
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
 }
