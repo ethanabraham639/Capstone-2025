@@ -6,7 +6,7 @@ BASE_URL = "http://192.168.4.1"
 
 def course_state_post():
     """Function to perform a POST request to /course_state."""
-    integers = [1] + [x+1 for x in range(45)]
+    integers = [1] + [0 for x in range(15)] + [0 for x in range(15)] + [0 for x in range(15)]
     string = ''.join(chr(value) for value in integers)
     print(string)
     response = requests.post(f"{BASE_URL}/course_state", data=string)
