@@ -16,8 +16,8 @@
 #define BQ_GPIO_IN          GPIO_NUM_13
 #define BALL_DQ_GPIO_OUT    GPIO_NUM_16
 
-#define GPIO_HIGH           0
-#define GPIO_LOW            1
+#define GPIO_HIGH           1
+#define GPIO_LOW            0
 
 void GPIO_init(void);
 
