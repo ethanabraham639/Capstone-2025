@@ -33,7 +33,7 @@ volatile Sensors_t sensors = {.BIH.gpio = BIH_GPIO_IN, .BIH.confirmed_level = GP
 
 
 // Common ISR
-static void sensor_gpio_isr(void* arg)
+static void sensor_gpio_isr_handler(void* arg)
 {
     uint32_t gpio_num = (uint32_t) arg;
 
@@ -103,7 +103,15 @@ void check_ball_queue(void)
 
 void SNS_init(void)
 {
-    // initially read all gpios and make sure its accurate
+    gpio_install_isr_service(0);
+
+    gpio_isr_handler_add(BIH_GPIO_IN, sensor_gpio_isr_handler, (void *) BIH_GPIO_IN);
+    gpio_isr_handler_add(BIG_GPIO_IN, sensor_gpio_isr_handler, (void *) BIG_GPIO_IN);
+    gpio_isr_handler_add(BD_GPIO_IN, sensor_gpio_isr_handler, (void *) BD_GPIO_IN);
+    gpio_isr_handler_add(BQ_GPIO_IN, sensor_gpio_isr_handler, (void *) BQ_GPIO_IN);
+    
+    gpio_set_level(16, 1);
+
 
 }
 
