@@ -182,7 +182,7 @@ void in_gutter_state(void)
 
     if (TIMER_get_ms(BE.feedErrorTimer) > FEED_ERROR_TIMEOUT_MS)
     {
-        ESP_LOGE(TAG, "Ball feed error from in hole to gutter, continuing to READY_TO_HIT anyways"); 
+        ESP_LOGE(TAG, "Ball in hole feed error to gutter, continuing to READY_TO_HIT anyways"); 
         BE.state = READY_TO_HIT;
     }
 }
