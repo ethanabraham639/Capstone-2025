@@ -23,8 +23,8 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
     
     // Make sure the data length is what we expect
     int total_len = req->content_len;
-    if (total_len != (COURSE_STATE_POST_REQ_SIZE)) {
-        ESP_LOGE(TAG, "Invalid data length POST_courseState_handler: %d bytes (expected %d)\n", total_len, COURSE_STATE_POST_REQ_SIZE);
+    if (total_len != COURSE_STATE_POST_REQ_SIZE) {
+        ESP_LOGE(TAG, "Invalid data length POST_courseState_handler: %d bytes (expected %d)", total_len, COURSE_STATE_POST_REQ_SIZE);
         return ESP_FAIL;
     }
 
@@ -33,7 +33,7 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
 
     // Make sure the received data is the size we expect
     if (received <= 0) {
-        ESP_LOGE(TAG, "Failed to receive data in POST_courseState_handler\n");
+        ESP_LOGE(TAG, "Failed to receive data in POST_courseState_handler");
         return ESP_FAIL;
     }
 
@@ -41,16 +41,21 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
     AC_update_mode((uint8_t)buffer[0]);
     AC_update_desired_positions((uint8_t*)&buffer[1]);
 
-    printf("Mode: %d\n", (uint8_t)buffer[0]);
-    printf("Positions: ");
-    for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
-    {
-        printf("%d ", buffer[i+1]);
+    // Format the debug message
+    char log_buffer[185];
+    int pos = snprintf(log_buffer, sizeof(log_buffer), "Mode: %d, Positions: ", (uint8_t)buffer[0]);
+
+    for (uint8_t i = 0; i < NUM_ACTUATORS; i++) {
+        pos += snprintf(log_buffer + pos, sizeof(log_buffer) - pos, "%d ", buffer[i + 1]);
+        if (pos >= sizeof(log_buffer)) {
+            break; // Prevent buffer overflow
+        }
     }
-    printf("\n");
+
+    ESP_LOGD(TAG, "%s", log_buffer); // Single debug log statement
 
     const char* resp_str = "Successfully received course state!";
-    ESP_LOGI(TAG, resp_str);
+    ESP_LOGD(TAG, "%s", resp_str);
     httpd_resp_send(req, resp_str, strlen(resp_str));
 
     return ESP_OK;
@@ -61,7 +66,7 @@ esp_err_t POST_resetStats_handler(httpd_req_t *req)
     BE_reset_stats();
 
     const char* resp_str = "Successfully reset stats!";
-    ESP_LOGI(TAG, resp_str);
+    ESP_LOGD(TAG, resp_str);
     httpd_resp_send(req, resp_str, strlen(resp_str));
     
     return ESP_OK;
@@ -74,7 +79,7 @@ esp_err_t POST_settings_handler(httpd_req_t *req)
     // Make sure the data length is what we expect
     int total_len = req->content_len;
     if (total_len != (RESET_STATS_POST_REQ_SIZE)) {
-        ESP_LOGE(TAG, "Invalid data length in POST_settings_handler: %d bytes (expected %d)\n", total_len, RESET_STATS_POST_REQ_SIZE);
+        ESP_LOGE(TAG, "Invalid data length in POST_settings_handler: %d bytes (expected %d)", total_len, RESET_STATS_POST_REQ_SIZE);
         return ESP_FAIL;
     }
 
@@ -83,17 +88,17 @@ esp_err_t POST_settings_handler(httpd_req_t *req)
 
     // Make sure the received data is the size we expect
     if (received <= 0) {
-        ESP_LOGE(TAG, "Failed to receive data\n");
+        ESP_LOGE(TAG, "Failed to receive data in POST_settings_handler");
         return ESP_FAIL;
     }
 
     const bool autoDispense = (bool)buffer[0];
     BE_set_auto_dispense(autoDispense);
 
-    printf("Setting: %d\n", buffer[0]);
-
+    
     const char* resp_str = "Successfully received settings!";
-    ESP_LOGI(TAG, resp_str);
+    ESP_LOGD(TAG, resp_str);
+    ESP_LOGD(TAG, "Setting: %d\n", buffer[0]);
     httpd_resp_send(req, resp_str, strlen(resp_str));
 
     return ESP_OK;
@@ -106,7 +111,7 @@ esp_err_t POST_dispenseBall_handler(httpd_req_t *req)
     // Make sure the data length is what we expect
     int total_len = req->content_len;
     if (total_len != (DISPENSE_BALLS_POST_REQ_SIZE)) {
-        ESP_LOGE(TAG, "Invalid data length in POST_dispenseBall_handler: %d bytes (expected %d)\n", total_len, DISPENSE_BALLS_POST_REQ_SIZE);
+        ESP_LOGE(TAG, "Invalid data length in POST_dispenseBall_handler: %d bytes (expected %d)", total_len, DISPENSE_BALLS_POST_REQ_SIZE);
         return ESP_FAIL;
     }
 
@@ -115,16 +120,16 @@ esp_err_t POST_dispenseBall_handler(httpd_req_t *req)
 
     // Make sure the received data is the size we expect
     if (received <= 0) {
-        ESP_LOGE(TAG, "Failed to receive data");
+        ESP_LOGE(TAG, "Failed to receive data in POST_dispenseBall_handler");
         return ESP_FAIL;
     }
 
     BQ_request_player_return((uint8_t)buffer[0]);
 
-    printf("Number of balls to dispense: %d\n", buffer[0]);
-
+    
     const char* resp_str = "Successfully received balls to dispense!";
-    ESP_LOGI(TAG, resp_str);
+    ESP_LOGD(TAG, resp_str);
+    ESP_LOGD(TAG, "Number of balls to dispense: %d", buffer[0]);
     httpd_resp_send(req, resp_str, strlen(resp_str));
 
     return ESP_OK;
@@ -140,7 +145,7 @@ esp_err_t GET_errorCodes_handler(httpd_req_t *req)
     /* After sending the HTTP response the old HTTP request
      * headers are lost. Check if HTTP request headers can be read now. */
     if (httpd_req_get_hdr_value_len(req, "Host") == 0) {
-        ESP_LOGI(TAG, "Successfully sent error codes via GET_errorCodes_handler!\n");
+        ESP_LOGD(TAG, "Successfully sent error codes via GET_errorCodes_handler!");
     }
 
     return ESP_OK;
@@ -156,7 +161,7 @@ esp_err_t GET_debugMsg_handler(httpd_req_t *req)
     /* After sending the HTTP response the old HTTP request
      * headers are lost. Check if HTTP request headers can be read now. */
     if (httpd_req_get_hdr_value_len(req, "Host") == 0) {
-        ESP_LOGI(TAG, "Successfully sent debug message via GET_debugMsg_handler!\n");
+        ESP_LOGD(TAG, "Successfully sent debug message via GET_debugMsg_handler!");
     }
 
     return ESP_OK;
@@ -173,7 +178,7 @@ esp_err_t GET_stats_handler(httpd_req_t *req)
     /* After sending the HTTP response the old HTTP request
      * headers are lost. Check if HTTP request headers can be read now. */
     if (httpd_req_get_hdr_value_len(req, "Host") == 0) {
-        ESP_LOGI(TAG, "Successfully sent stats via GET_stats_handler!\n");
+        ESP_LOGD(TAG, "Successfully sent stats via GET_stats_handler: Balls hit %d, Balls in hole %d", ballsHit, ballsInHole);
     }
 
     return ESP_OK;
