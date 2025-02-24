@@ -173,7 +173,7 @@ esp_err_t GET_stats_handler(httpd_req_t *req)
     uint8_t ballsInHole = BE_get_balls_in_hole();
 
     const char resp_str[2] = {ballsHit, ballsInHole};
-    httpd_resp_send(req, resp_str, strlen(resp_str));
+    httpd_resp_send(req, resp_str, 2);
 
     /* After sending the HTTP response the old HTTP request
      * headers are lost. Check if HTTP request headers can be read now. */

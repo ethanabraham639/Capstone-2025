@@ -31,11 +31,17 @@ BallEst_t BE = { .ballsHit = 0, .ballsInHole = 0, .inTransitTimer = 0, .feedErro
 
 void idle_state(void);
 void no_estimation_tracking_state(void);
+
 void ready_to_hit_on_enter_state(void);
 void ready_to_hit_state(void);
+
+void in_transit_on_enter_state(void);
 void in_transit_state(void);
+
 void in_hole_state(void);
+
 void in_gutter_state(void);
+
 void stuck_state(void);
 
 
@@ -92,8 +98,7 @@ void ready_to_hit_on_enter_state(void)
 {
     //clear all sensors to ignore stray balls
     SNS_clear_ball_dep();
-    SNS_clear_ball_in_hole();
-    SNS_clear_ball_in_gutter();
+    SNS_clear_ball_queue();
     
     // check if auto dispense was turned off
     if (BE.autoDispense == false)
@@ -120,9 +125,18 @@ void ready_to_hit_state(void)
 
         ESP_LOGI(TAG, "Ball departure detected");
 
-        BE.state = IN_TRANSIT;
+        BE.state = IN_TRANSIT_on_enter;
     }
 }
+
+void in_transit_on_enter_state(void)
+{
+    SNS_clear_ball_in_hole();
+    SNS_clear_ball_in_gutter();
+
+    BE.state = IN_TRANSIT;
+}
+
 
 void in_transit_state(void)
 {
@@ -172,10 +186,10 @@ void in_gutter_state(void)
      */
     if (SNS_get_ball_in_gutter())
     {
-        SNS_clear_ball_in_gutter();
-        BE.state = READY_TO_HIT;
-        
         ESP_LOGI(TAG, "Ball in gutter detected");
+        
+        SNS_clear_ball_in_gutter();
+        BE.state = READY_TO_HIT_on_enter;
         
         return;
     }
@@ -183,14 +197,14 @@ void in_gutter_state(void)
     if (TIMER_get_ms(BE.feedErrorTimer) > FEED_ERROR_TIMEOUT_MS)
     {
         ESP_LOGE(TAG, "Ball in hole feed error to gutter, continuing to READY_TO_HIT anyways"); 
-        BE.state = READY_TO_HIT;
+        BE.state = READY_TO_HIT_on_enter;
     }
 }
 
 void stuck_state(void)
 {
     ESP_LOGI(TAG, "Ball stuck on field, continuing to READY_TO_HIT");
-    BE.state = READY_TO_HIT;
+    BE.state = READY_TO_HIT_on_enter;
 }
 
 
@@ -209,6 +223,9 @@ void BE_run_task(void)
             break;
         case READY_TO_HIT:
             ready_to_hit_state();
+            break;
+        case IN_TRANSIT_on_enter:
+            in_transit_on_enter_state();
             break;
         case IN_TRANSIT:
             in_transit_state();

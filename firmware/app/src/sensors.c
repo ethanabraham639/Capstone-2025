@@ -7,7 +7,7 @@
 #include "gpio.h"
 #include "delay.h"
 
-#define DEBOUNCE_DELAY_MS       10
+#define DEBOUNCE_DELAY_MS       15
 #define SENSOR_TASK_DELAY_MS    1
 
 typedef struct{
@@ -28,8 +28,8 @@ typedef struct {
 
 volatile Sensors_t sensors = {.BIH.gpio = BIH_GPIO_IN, .BIH.confirmed_level = GPIO_LOW, .BIH.detected = false, .BIH.confirmed = false, .BIH.timer = 0,
                               .BIG.gpio = BIG_GPIO_IN, .BIG.confirmed_level = GPIO_LOW, .BIG.detected = false, .BIG.confirmed = false, .BIG.timer = 0,
-                              .BD.gpio  = BD_GPIO_IN , .BD.confirmed_level  = GPIO_LOW, .BD.detected  = false, .BD.confirmed  = false, .BD.timer  = 0,
-                              .BQ.gpio  = BQ_GPIO_IN, .BQ.confirmed_level   = GPIO_LOW, .BQ.detected  = false, .BQ.confirmed  = false, .BQ.timer  = 0};
+                              .BD.gpio  = BD_GPIO_IN , .BD.confirmed_level  = GPIO_HIGH, .BD.detected  = false, .BD.confirmed  = false, .BD.timer  = 0,
+                              .BQ.gpio  = BQ_GPIO_IN, .BQ.confirmed_level   = GPIO_HIGH, .BQ.detected  = false, .BQ.confirmed  = false, .BQ.timer  = 0};
 
 
 // Common ISR

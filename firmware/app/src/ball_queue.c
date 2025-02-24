@@ -100,6 +100,9 @@ void run_ball_in_hole_return_task(void)
             if (BQ.BIH_request)
             {
                 BQ.BIH_current_delay += BIH_FEEDFORWARD_DELAY_MS;
+
+                ESP_LOGI(TAG, "Ball in hole ball return already started, adding more time");
+
                 BQ.BIH_request = false;
             }
 
@@ -107,6 +110,9 @@ void run_ball_in_hole_return_task(void)
             {
                 // assumed we have dispensed a ball by this time
                 stop_cont_servo(&BIH_SERVO);
+
+                ESP_LOGI(TAG, "Ball in hole ball return assumed to be completed");
+
                 BQ.BIH_return_state = WAITING;
             }
 
