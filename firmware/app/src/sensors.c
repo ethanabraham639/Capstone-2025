@@ -61,7 +61,7 @@ static void sensor_gpio_isr_handler(void* arg)
     }
 }
 
-void generic_gpio_debounce_read(GpioSensor_t* sensor)
+void generic_gpio_debounce_read(volatile GpioSensor_t* sensor)
 {
     if (sensor->detected && !sensor->confirmed)
     {
