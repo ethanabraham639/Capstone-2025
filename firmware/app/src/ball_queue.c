@@ -5,13 +5,18 @@
 #include "delay.h"
 #include "sensors.h"
 #include "pca9685.h"
+#include "esp_log.h"
+
+#define TAG "BALL_QUEUE.C"
 
 #define BIH_FEEDFORWARD_DELAY_MS 5000
+#define PBR_TIMEOUT_MS           5000
 
-#define CW_SPEED        65
-#define STOP_SPEED      64
-#define CCW_SPEED       63
-#define CONT_SERVO_ID   0
+
+#define CW_SPEED                 65
+#define STOP_SPEED               64
+#define CCW_SPEED                63
+#define CONT_SERVO_ID            0
 
 typedef enum {
     CW,
@@ -34,13 +39,15 @@ typedef struct {
     BallQueueState_e player_return_state;
     bool player_request;
     uint8_t player_ball_count;
+    Timer_t PBR_timer; // player ball return timer
+
 } BallQueue_t;
 
 BallQueue_t BQ = {.BIH_return_state    = IDLE, .BIH_request    = false, .BIH_timer = 0, .BIH_current_delay = 0,
-                  .player_return_state = IDLE, .player_request = false, .player_ball_count = 0};
+                  .player_return_state = IDLE, .player_request = false, .player_ball_count = 0, .PBR_timer = 0};
 
-const PCA9685_t BIH_SERVO    = { .addr = 0x61, .isLed = false, .osc_freq = 25000000.0 };
-const PCA9685_t PLAYER_SERVO = { .addr = 0x42, .isLed = false, .osc_freq = 25000000.0 };
+const PCA9685_t BIH_SERVO    = { .addr = 0x60, .isLed = false, .osc_freq = 26984448.0 };
+const PCA9685_t PLAYER_SERVO = { .addr = 0x62, .isLed = false, .osc_freq = 26484736.0 };
 
 
 void start_cont_servo(const PCA9685_t* pca9685, Dir_e dir)
@@ -81,6 +88,8 @@ void run_ball_in_hole_return_task(void)
                 BQ.BIH_timer = TIMER_restart();
                 BQ.BIH_current_delay = BIH_FEEDFORWARD_DELAY_MS;
                 
+                ESP_LOGI(TAG, "Ball in hole ball return started");
+
                 BQ.BIH_return_state = DISPENSING;
             }
             break;
@@ -124,8 +133,13 @@ void run_player_ball_queue_task(void)
                 BQ.player_request = false;
 
                 start_cont_servo(&PLAYER_SERVO, CW);
+                
+                BQ.PBR_timer = TIMER_restart();
+                
+                ESP_LOGI(TAG, "Player ball return dispensing started");
                 BQ.player_return_state = DISPENSING;
             }
+
 
             break;
         
@@ -136,17 +150,32 @@ void run_player_ball_queue_task(void)
                 // confirms that we have read the signal and are ready for the next
                 SNS_clear_ball_queue();
                 BQ.player_ball_count--;
+
+                BQ.PBR_timer = TIMER_restart();
+            }
+
+            if (TIMER_get_ms(BQ.PBR_timer) > PBR_TIMEOUT_MS)
+            {
+                BQ.player_return_state = FAILED;
             }
 
             if (BQ.player_ball_count == 0)
             {
                 stop_cont_servo(&PLAYER_SERVO);
+                
+                ESP_LOGI(TAG, "Player ball return dispensing complete");
+
                 BQ.player_return_state = WAITING;
             }
-            
+
             break;
         
         case FAILED:
+
+            ESP_LOGE(TAG, "Player ball return timed out! Going back to WAITING. Balls remaining before clearing count: %d", BQ.player_ball_count);
+            BQ.player_ball_count = 0;
+            BQ.player_return_state = WAITING;
+            
             break;
     }
 }
