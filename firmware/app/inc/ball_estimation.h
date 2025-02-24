@@ -8,6 +8,7 @@ typedef enum {
     IDLE = 0,
     READY_TO_HIT_on_enter,
     READY_TO_HIT,
+    IN_TRANSIT_on_enter,
     IN_TRANSIT,
     IN_HOLE,
     STUCK,
