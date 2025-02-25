@@ -43,7 +43,7 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
     AC_update_desired_positions((uint8_t*)&buffer[1]);
 
     // Format the debug message
-    char log_buffer[185];
+    char log_buffer[205];
     int pos = snprintf(log_buffer, sizeof(log_buffer), "Mode: %d, Positions: ", (uint8_t)buffer[0]);
 
     for (uint8_t i = 0; i < NUM_ACTUATORS; i++) {
@@ -56,7 +56,7 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
     ESP_LOGI(TAG, "%s", log_buffer); // Single debug log statement
 
     const char* resp_str = "Successfully received course state!";
-    ESP_LOGD(TAG, "%s", resp_str);
+    ESP_LOGI(TAG, "%s", resp_str);
     httpd_resp_send(req, resp_str, strlen(resp_str));
 
     return ESP_OK;
