@@ -8,7 +8,7 @@
 
 // Enum of actuator control modes
 typedef enum {
-    RESET = 0,
+    CLEAR_SEQUENCE = 0,
     STATIC,
 } ACMode_e;
 

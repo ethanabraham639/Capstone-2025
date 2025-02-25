@@ -6,6 +6,7 @@
 
 #include "actuator_control.h"
 #include "pca9685.h"
+#include "delay.h"
 
 #define STEP_MAGNITUDE              1   // the step increase of the current servo position towards its desired position
 #define AC_TASK_DELAY               20
@@ -43,14 +44,52 @@
 
 #define INIT_SERVOS_DELAY_MS        1500
 
+typedef enum {
+    IDLE = 0,
+    MODE_SELECT,
+    CLEAR_SEQUENCE_MODE_on_enter,
+    CLEAR_SEQUENCE_MODE,
+    STATIC_CONTROL_MODE,
+    MOVE_ACTUATORS
+} ACState_e;
+
+
+
+
+
+
+
+#define NUM_COLUMNS 5 
+typedef struct {
+    bool isActive;
+    uint8_t currentColumn;
+    Timer_t timer;
+
+    uint8_t columnPositions[NUM_COLUMNS];
+} ClearSequence_t;
+
+ClearSequence_t CS = {
+    .isActive = false,
+    .currentColumn = 0,
+    .timer = 0,
+    .columnPositions = {0, 10, 30, 60, 90}
+};
+
+
+
+
 
 // struct describing the actuator control task
 typedef struct {
     uint8_t currentPos[NUM_ACTUATORS];
     uint8_t desiredPos[NUM_ACTUATORS];
+    uint8_t reqDesiredPos[NUM_ACTUATORS];
+    bool newDesiredPosReq;
     ACMode_e mode;
+    ACMode_e prevMode;
+    ACState_e state;
 } ActControl_t;
-ActControl_t actControl;
+ActControl_t AC;
 
 /**
  * HW group array holding the PCA9685 instances.
@@ -92,14 +131,14 @@ bool calculate_next_position(void)
 
     for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
     {
-        int deltaTotal = actControl.desiredPos[i] - actControl.currentPos[i];
+        int deltaTotal = AC.desiredPos[i] - AC.currentPos[i];
         
         if (deltaTotal != 0)
         {
             didPositionChange = true;
             int step = (abs(deltaTotal) < STEP_MAGNITUDE) ? deltaTotal : (deltaTotal / abs(deltaTotal)) * STEP_MAGNITUDE;
             
-            actControl.currentPos[i] += step;
+            AC.currentPos[i] += step;
         }
     }
 
@@ -124,7 +163,7 @@ void rollout_actuator_positions(void)
             uint8_t hwGroup = absoluteServoId / NUM_SERVOS_PER_HW_GROUP;
 
             // rollout!
-            PCA9685_setServoPos(&hwGroups[hwGroup], relativeServoId, actControl.currentPos[absoluteServoId]);
+            PCA9685_setServoPos(&hwGroups[hwGroup], relativeServoId, AC.currentPos[absoluteServoId]);
         }
 
         vTaskDelay(ROLLOUT_GROUP_DELAY_MS / portTICK_PERIOD_MS);
@@ -137,13 +176,15 @@ void AC_init(void)
 {
     init_rollout_groups();
 
-    actControl.mode = STATIC;
+    AC.mode = STATIC;
+    AC.prevMode = STATIC;
+    AC.state = IDLE;
     
     // set desired and current positions to known state
     for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
     {
-        actControl.currentPos[i] = 0;
-        actControl.desiredPos[i] = 0;
+        AC.currentPos[i] = 0;
+        AC.desiredPos[i] = 0;
     }
 
     // init the PCA9685 chips for each hw group
@@ -170,20 +211,100 @@ void AC_init(void)
     }
 }
 
+
+#define TOTAL_COLUMNS 5
+#define CS_COLUMN_DELAY_MS 2000
+
 void AC_run_task(void)
 {
-    // calculate next positions based on current and desired position
-    bool didPositionsChange = calculate_next_position();
-
-    // don't run anything else if the new positions are the same as the old positions
-    if (didPositionsChange)
+    switch (AC.state)
     {
-        //execute rollout of the new positions
-        rollout_actuator_positions();
+        case IDLE:
+            // Do nothing in IDLE state
+            break;
+
+        case MODE_SELECT:
+            switch (AC.mode)
+            {
+                case CLEAR_SEQUENCE:
+                    AC.state = CLEAR_SEQUENCE_MODE_on_enter;
+                    break;
+
+                case STATIC:
+                    AC.state = STATIC_CONTROL_MODE;
+                    break;
+            }
+            
+
+        case CLEAR_SEQUENCE_MODE_on_enter:
+
+            CS.timer = INT64_MAX;
+            CS.isActive = true;
+            CS.currentColumn = 0;
+
+            //MAYBE: MOVE EVERYTHING TO 0 POSITION FIRST
+
+            AC.state = CLEAR_SEQUENCE_MODE;
+            break;
+
+        case CLEAR_SEQUENCE_MODE:
+
+            const uint8_t currentColumn = CS.currentColumn;
+
+            if (TIMER_get_ms( CS.timer) > CS_COLUMN_DELAY_MS)
+            {
+                if (currentColumn >= TOTAL_COLUMNS)
+                {
+                    CS.isActive = false;
+                    AC.mode = AC.prevMode;  // reinstate the previous mode
+                    AC.state = MODE_SELECT;
+                }
+                else
+                {
+                    const uint8_t columnPos = CS.columnPositions[currentColumn];
+        
+                    for (uint8_t row = 0; row < 9; row++)
+                    {
+                        AC.desiredPos[row * 5 + currentColumn] = columnPos;
+                    }
+        
+                    CS.currentColumn++;
+                    CS.timer = TIMER_restart();
+                }
+            }
+
+            AC.state = MOVE_ACTUATORS;
+
+            break;
+
+        case STATIC_CONTROL_MODE:
+
+            if (AC.newDesiredPosReq)
+            {
+                memcpy(AC.desiredPos, AC.reqDesiredPos, NUM_ACTUATORS);
+                AC.newDesiredPosReq = false;
+            }
+
+            AC.state = MOVE_ACTUATORS;
+            break;
+
+        case MOVE_ACTUATORS:
+            // calculate next positions based on current and desired position
+            bool didPositionsChange = calculate_next_position();
+
+            // don't run anything else if the new positions are the same as the old positions
+            if (didPositionsChange)
+            {
+                //execute rollout of the new positions
+                rollout_actuator_positions();
+            }
+
+            // delay
+            vTaskDelay(AC_TASK_DELAY / portTICK_PERIOD_MS);
+            break;
     }
 
-    // delay
-    vTaskDelay(AC_TASK_DELAY / portTICK_PERIOD_MS);
+
 }
 
 void AC_update_desired_positions(uint8_t desiredPos[NUM_ACTUATORS])
@@ -192,16 +313,29 @@ void AC_update_desired_positions(uint8_t desiredPos[NUM_ACTUATORS])
     {
         if (desiredPos[i] > MAX_SERVO_POSITION)
         {
-            actControl.desiredPos[i] = MAX_SERVO_POSITION;    
+            AC.reqDesiredPos[i] = MAX_SERVO_POSITION;    
         }
         else
         {
-            actControl.desiredPos[i] = desiredPos[i];
+            AC.reqDesiredPos[i] = desiredPos[i];
         }
     }
+
+    AC.newDesiredPosReq = true;
 }
 
 void AC_update_mode(ACMode_e mode)
 {
-    actControl.mode = mode;
+    if (CS.isActive == false)
+    {
+        if (mode == CLEAR_SEQUENCE)
+        {
+            AC.prevMode = AC.mode; //storing the old mode to switch back too if its a clearing sequence
+        }
+
+        AC.mode = mode;
+
+    }
+    //else ignore the mode update
+     
 }

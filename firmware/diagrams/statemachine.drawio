@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="24.8.3">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" version="26.0.16">
   <diagram name="Page-1" id="zExhag9UgMzSdzWPCm1d">
-    <mxGraphModel dx="844" dy="462" grid="1" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="2000" math="0" shadow="0">
+    <mxGraphModel dx="755" dy="372" grid="1" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="2000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -153,7 +153,7 @@
         <mxCell id="xGdZIKILuJkKEd5dnqQw-127" value="POLL LIMIT SWITCHES" style="rounded=1;whiteSpace=wrap;html=1;container=0;" parent="xGdZIKILuJkKEd5dnqQw-136" vertex="1">
           <mxGeometry x="80" y="110" width="70" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="7dqLWdMg0Vn3IMF8A-mX-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="xGdZIKILuJkKEd5dnqQw-136" source="xGdZIKILuJkKEd5dnqQw-128" target="xGdZIKILuJkKEd5dnqQw-130">
+        <mxCell id="7dqLWdMg0Vn3IMF8A-mX-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="xGdZIKILuJkKEd5dnqQw-136" source="xGdZIKILuJkKEd5dnqQw-128" target="xGdZIKILuJkKEd5dnqQw-130" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="xGdZIKILuJkKEd5dnqQw-128" value="POLL IR SENSORS" style="rounded=1;whiteSpace=wrap;html=1;container=0;" parent="xGdZIKILuJkKEd5dnqQw-136" vertex="1">
@@ -408,6 +408,60 @@
           <mxGeometry x="0.5933" y="4" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="3Nav6jpynPFCI5SZmetZ-31" target="3Nav6jpynPFCI5SZmetZ-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-31" value="IDLE" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1640" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="3Nav6jpynPFCI5SZmetZ-32" target="3Nav6jpynPFCI5SZmetZ-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-32" value="Program start" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="670" y="1570" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="3Nav6jpynPFCI5SZmetZ-33" target="3Nav6jpynPFCI5SZmetZ-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="3Nav6jpynPFCI5SZmetZ-33" target="3Nav6jpynPFCI5SZmetZ-35">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-33" value="MODE SELECT" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1740" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="3Nav6jpynPFCI5SZmetZ-34" target="3Nav6jpynPFCI5SZmetZ-37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-34" value="STATIC CONTROL" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1840" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="3Nav6jpynPFCI5SZmetZ-35" target="3Nav6jpynPFCI5SZmetZ-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-35" value="CLEAR SEQUENCE on enter" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="830" y="1740" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="3Nav6jpynPFCI5SZmetZ-36" target="3Nav6jpynPFCI5SZmetZ-37">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="890" y="1970" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-36" value="CLEAR SEQUENCE" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="830" y="1840" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="3Nav6jpynPFCI5SZmetZ-37" target="3Nav6jpynPFCI5SZmetZ-33">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="1970" />
+              <mxPoint x="600" y="1770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3Nav6jpynPFCI5SZmetZ-37" value="MOVE ACTUATORS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1940" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
