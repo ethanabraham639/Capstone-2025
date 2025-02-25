@@ -6,6 +6,7 @@
 
 #include "actuator_control.h"
 #include "pca9685.h"
+#include "user_nvs.h"
 
 #define STEP_MAGNITUDE              1   // the step increase of the current servo position towards its desired position
 #define AC_TASK_DELAY               20
@@ -49,6 +50,8 @@ typedef struct {
     uint8_t currentPos[NUM_ACTUATORS];
     uint8_t desiredPos[NUM_ACTUATORS];
     ACMode_e mode;
+
+    bool saveCourseState;
 } ActControl_t;
 ActControl_t actControl;
 
@@ -138,13 +141,28 @@ void AC_init(void)
     init_rollout_groups();
 
     actControl.mode = STATIC;
+    actControl.saveCourseState = false;
     
-    // set desired and current positions to known state
-    for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
+    esp_err_t nvs_err = NVS_read_course_state(actControl.currentPos);
+
+    if (nvs_err == ESP_OK)
     {
-        actControl.currentPos[i] = 0;
-        actControl.desiredPos[i] = 0;
+        for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
+        {
+            actControl.desiredPos[i] = actControl.currentPos[i];
+        }       
     }
+    else
+    {
+        //set the defaults
+        for (uint8_t i = 0; i < NUM_ACTUATORS; i++)
+        {
+            actControl.currentPos[i] = 0;
+            actControl.desiredPos[i] = 0;
+        }
+    }
+
+    // set desired and current positions to known state
 
     // init the PCA9685 chips for each hw group
     for (uint8_t i = 0; i < NUM_HW_GROUPS; i++)
@@ -163,7 +181,7 @@ void AC_init(void)
             uint8_t relativeServoId = (absoluteServoId % NUM_SERVOS_PER_HW_GROUP) + REL_SERVO_ID_OFFSET;
             uint8_t hwGroup = absoluteServoId / NUM_SERVOS_PER_HW_GROUP;
 
-            PCA9685_setServoPos(&hwGroups[hwGroup], relativeServoId, STARTING_SERVO_POSITION);
+            PCA9685_setServoPos(&hwGroups[hwGroup], relativeServoId, actControl.currentPos[absoluteServoId]);
         }
         
         vTaskDelay(INIT_SERVOS_DELAY_MS / portTICK_PERIOD_MS);
@@ -172,6 +190,19 @@ void AC_init(void)
 
 void AC_run_task(void)
 {
+    if (actControl.saveCourseState)
+    {
+        /**
+         * Saving the desired state with the assumption that the current state will eventually reach the
+         * desired state in this power cycle.
+         * 
+         * We need to do this bec there is currently no logic to figure out when we are "done" moving the 
+         * motors to the most recently changed desired state.
+         */
+        NVS_write_course_state(actControl.desiredPos);
+        actControl.saveCourseState = false;
+    }
+
     // calculate next positions based on current and desired position
     bool didPositionsChange = calculate_next_position();
 
@@ -199,6 +230,8 @@ void AC_update_desired_positions(uint8_t desiredPos[NUM_ACTUATORS])
             actControl.desiredPos[i] = desiredPos[i];
         }
     }
+    
+    actControl.saveCourseState = true;
 }
 
 void AC_update_mode(ACMode_e mode)
