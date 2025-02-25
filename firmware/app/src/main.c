@@ -12,6 +12,7 @@
 #include "ball_queue.h"
 #include "gpio.h"
 #include "delay.h"
+#include "user_nvs.h"
 
 #define LED_BLINK_TIMER_MS      500
 
@@ -22,6 +23,7 @@ static void task_100ms(void* arg);
 void app_main()
 {
     WIFI_init_and_start_server();
+    NVS_init(); // NVS_init must come before any other init that uses it
 
     I2C_master_init();
     GPIO_init();
