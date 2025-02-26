@@ -4,6 +4,8 @@
 #include "stdint.h"
 
 #define NUM_ACTUATORS           45
+#define TOTAL_COLUMNS           5
+#define TOTAL_ROWS              9
 #define MODES_SIZE              1
 
 // Enum of actuator control modes

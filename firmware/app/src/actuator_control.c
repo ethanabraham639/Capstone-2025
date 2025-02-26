@@ -11,6 +11,8 @@
 #define STEP_MAGNITUDE              1   // the step increase of the current servo position towards its desired position
 #define AC_TASK_DELAY               20
 
+#define CS_COLUMN_DELAY_MS          2000
+
 /**
  * We are using "roll-out" groups to roll out servo motor changes incrementally to reduce
  * current draw at a given time.
@@ -53,12 +55,6 @@ typedef enum {
     MOVE_ACTUATORS
 } ACState_e;
 
-
-
-
-
-
-
 #define NUM_COLUMNS 5 
 typedef struct {
     bool isActive;
@@ -74,10 +70,6 @@ ClearSequence_t CS = {
     .timer = 0,
     .columnPositions = {0, 10, 30, 60, 90}
 };
-
-
-
-
 
 // struct describing the actuator control task
 typedef struct {
@@ -211,10 +203,6 @@ void AC_init(void)
     }
 }
 
-
-#define TOTAL_COLUMNS 5
-#define CS_COLUMN_DELAY_MS 2000
-
 void AC_run_task(void)
 {
     switch (AC.state)
@@ -234,7 +222,7 @@ void AC_run_task(void)
                     AC.state = STATIC_CONTROL_MODE;
                     break;
             }
-            
+            break;
 
         case CLEAR_SEQUENCE_MODE_on_enter:
 
@@ -263,9 +251,9 @@ void AC_run_task(void)
                 {
                     const uint8_t columnPos = CS.columnPositions[currentColumn];
         
-                    for (uint8_t row = 0; row < 9; row++)
+                    for (uint8_t row = 0; row < TOTAL_ROWS; row++)
                     {
-                        AC.desiredPos[row * 5 + currentColumn] = columnPos;
+                        AC.desiredPos[row * TOTAL_COLUMNS + currentColumn] = columnPos;
                     }
         
                     CS.currentColumn++;
@@ -303,8 +291,6 @@ void AC_run_task(void)
             vTaskDelay(AC_TASK_DELAY / portTICK_PERIOD_MS);
             break;
     }
-
-
 }
 
 void AC_update_desired_positions(uint8_t desiredPos[NUM_ACTUATORS])
