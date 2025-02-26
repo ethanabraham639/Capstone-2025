@@ -13,6 +13,8 @@
 #include "gpio.h"
 #include "delay.h"
 
+#define LED_BLINK_TIMER_MS      500
+
 static void task_1ms(void* arg);
 static void task_10ms(void* arg);
 static void task_100ms(void* arg);
@@ -44,9 +46,9 @@ static void task_1ms(void* arg)
     {
         SNS_run_task();
 
-        if (TIMER_get_ms(blink_timer) > 500)
+        if (TIMER_get_ms(blink_timer) > LED_BLINK_TIMER_MS)
         {
-            gpio_set_level(15, !gpio_get_level(15)); // Toggle GPIO15
+            gpio_set_level(LED_GPIO_OUT, !gpio_get_level(LED_GPIO_OUT)); // Toggle GPIO15
             blink_timer = TIMER_restart();
         }
         
@@ -57,7 +59,7 @@ static void task_1ms(void* arg)
 static void task_10ms(void* arg)
 {
     TickType_t xLastWakeTime = xTaskGetTickCount(); // Get current tick count
-    const TickType_t xFrequency = pdMS_TO_TICKS(10); // Convert 1ms to ticks
+    const TickType_t xFrequency = pdMS_TO_TICKS(10); // Convert 10ms to ticks
 
     for (;;)
     {
@@ -71,7 +73,7 @@ static void task_10ms(void* arg)
 static void task_100ms(void* arg)
 {
     TickType_t xLastWakeTime = xTaskGetTickCount(); // Get current tick count
-    const TickType_t xFrequency = pdMS_TO_TICKS(100); // Convert 1ms to ticks
+    const TickType_t xFrequency = pdMS_TO_TICKS(100); // Convert 100ms to ticks
 
     for (;;)
     {

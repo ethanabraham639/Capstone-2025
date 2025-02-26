@@ -14,6 +14,7 @@
 
 #define BD_GPIO_IN          GPIO_NUM_12
 #define BQ_GPIO_IN          GPIO_NUM_13
+#define LED_GPIO_OUT        GPIO_NUM_15
 #define BALL_DQ_GPIO_OUT    GPIO_NUM_16
 
 #define GPIO_HIGH           1
