@@ -10,6 +10,7 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "esp_http_server.h"
+#include "error_codes.h"
 
 #define TAG "WIFI_HANDLERS.C"
 
@@ -138,9 +139,10 @@ esp_err_t POST_dispenseBall_handler(httpd_req_t *req)
 
 esp_err_t GET_errorCodes_handler(httpd_req_t *req)
 {
-    uint8_t errorCode = 18;
-    const char resp_str[1] = {errorCode};
-    httpd_resp_send(req, resp_str, strlen(resp_str));
+    bool errors[NUM_ERROR_CODES] = {0};
+    ERRORCODE_get_all(errors);
+
+    httpd_resp_send(req, (const char*)errors, NUM_ERROR_CODES);
 
     /* After sending the HTTP response the old HTTP request
      * headers are lost. Check if HTTP request headers can be read now. */

@@ -6,6 +6,7 @@
 #include "sensors.h"
 #include "delay.h"
 #include "ball_queue.h"
+#include "error_codes.h"
 #include "esp_log.h"
 
 #define TAG "BALL_ESTIMATION.C"
@@ -88,6 +89,7 @@ void no_estimation_tracking_state(void)
             {
                 BE.ballsInHole = BE.ballsHit;
                 ESP_LOGE(TAG, "Balls in hole greater than balls hit, impossible! Equating to balls hit");
+                ERRORCODE_set(BALL_MATH_ERROR);
             }
         }
     }
@@ -197,6 +199,8 @@ void in_gutter_state(void)
     if (TIMER_get_ms(BE.feedErrorTimer) > FEED_ERROR_TIMEOUT_MS)
     {
         ESP_LOGE(TAG, "Ball in hole feed error to gutter, continuing to READY_TO_HIT anyways"); 
+        ERRORCODE_set(BALL_IN_HOLE_FEED_ERROR);
+        
         BE.state = READY_TO_HIT_on_enter;
     }
 }
