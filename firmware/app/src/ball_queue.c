@@ -6,6 +6,7 @@
 #include "sensors.h"
 #include "pca9685.h"
 #include "esp_log.h"
+#include "error_codes.h"
 
 #define TAG "BALL_QUEUE.C"
 
@@ -179,6 +180,8 @@ void run_player_ball_queue_task(void)
         case FAILED:
 
             ESP_LOGE(TAG, "Player ball return timed out! Going back to WAITING. Balls remaining before clearing count: %d", BQ.player_ball_count);
+            ERRORCODE_set(PLAYER_BALL_RETURN_ERROR);
+
             BQ.player_ball_count = 0;
             BQ.player_return_state = WAITING;
             

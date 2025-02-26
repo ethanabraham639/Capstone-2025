@@ -8,7 +8,7 @@ def course_state_post():
     """Function to perform a POST request to /course_state."""
     integers = [1] + [0 for x in range(15)] + [0 for x in range(15)] + [0 for x in range(15)]
     string = ''.join(chr(value) for value in integers)
-    print(string)
+    print(integers)
     response = requests.post(f"{BASE_URL}/course_state", data=string)
     print("POST /course_state response:")
     print("Status Code:", response.status_code)
@@ -39,16 +39,24 @@ def dispense_ball_post():
     response = requests.post(f"{BASE_URL}/dispense_ball", data=string)
     print("POST /dispense_ball response:")
     print("Status Code:", response.status_code)
-    print("Response Body:", response.text)
+    print("Response Body:", response.text)  
 
 
 
 def error_codes_get():
-    """Function to perform a GET request to /error_codes."""
+    """Function to perform a GET request to /error_codes and print all elements."""
     response = requests.get(f"{BASE_URL}/error_codes")
+
     print("GET /error_codes response:")
     print("Status Code:", response.status_code)
-    print("Response Body:", response.text)
+
+    # Ensure response is not empty before accessing
+    if response.text:
+        # Convert each character in the response to its ASCII value
+        ascii_values = [ord(char) for char in response.text]
+        print("Error Codes: ", ascii_values)
+    else:
+        print("Error: Empty response body")
 
 def debug_msg_get():
     """Function to perform a GET request to /debug_msg."""
