@@ -1,5 +1,6 @@
 #include "user_nvs.h"
 #include "actuator_control.h"
+#include "error_codes.h"
 
 #include "nvs_flash.h"
 #include "nvs.h"
@@ -23,6 +24,7 @@ void NVS_init(void)
         if (err != ESP_OK)
         {
             ESP_LOGE(TAG, "NVS init failed, cannot save anything");
+            ERRORCODE_set(NVS_ERROR);
         }
     }
 }
@@ -35,6 +37,8 @@ esp_err_t NVS_write_course_state(uint8_t courseState[NUM_ACTUATORS])
     esp_err_t err = nvs_open(NVS_APP_NAMESPACE, NVS_READWRITE, &nvs_handle);
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "Error (%d) opening NVS handle to write course state", err);
+        ERRORCODE_set(NVS_ERROR);
+
         return err;
     }
 
@@ -46,6 +50,8 @@ esp_err_t NVS_write_course_state(uint8_t courseState[NUM_ACTUATORS])
     }
     else {
         ESP_LOGE(TAG, "Failed to save course state to NVS w/ error code (%d)", err);
+        ERRORCODE_set(NVS_ERROR);
+
         return err; 
     }
 
@@ -64,6 +70,8 @@ esp_err_t NVS_read_course_state(uint8_t output[NUM_ACTUATORS])
     if (err != ESP_OK)
     {
         ESP_LOGE(TAG, "Error (%d) opening NVS handle to read course state", err);
+        ERRORCODE_set(NVS_ERROR);
+
         return err;
     }
     
@@ -72,12 +80,16 @@ esp_err_t NVS_read_course_state(uint8_t output[NUM_ACTUATORS])
     err = nvs_get_blob(nvs_handle, NVS_COURSE_STATE_KEY, NULL, &required_size);
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "Failed to read course from NVS");
+        ERRORCODE_set(NVS_ERROR);
+
         return ESP_FAIL;
     }
 
     if (required_size != NUM_ACTUATORS)
     {
         ESP_LOGE(TAG, "Failed to read course from NVS, mismatched data length, expected (%d), got (%d)", NUM_ACTUATORS, required_size);
+        ERRORCODE_set(NVS_ERROR);
+        
         return ESP_FAIL;
     }
 
