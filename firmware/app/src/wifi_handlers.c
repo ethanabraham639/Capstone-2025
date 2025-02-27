@@ -53,7 +53,7 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
         }
     }
 
-    ESP_LOGD(TAG, "%s", log_buffer); // Single debug log statement
+    ESP_LOGI(TAG, "%s", log_buffer); // Single debug log statement
 
     const char* resp_str = "Successfully received course state!";
     ESP_LOGD(TAG, "%s", resp_str);
