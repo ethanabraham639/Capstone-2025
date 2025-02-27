@@ -22,12 +22,17 @@ static void task_100ms(void* arg);
 
 void app_main()
 {
-    WIFI_init_and_start_server();
-    NVS_init(); // NVS_init must come before any other init that uses it
-
+    /**
+     * We are initializing these 3 first becuase we want to init the servo PWMs as fast as possible
+     * to avoid stalling the servos and drawing too much current.
+     */
     I2C_master_init();
-    GPIO_init();
+    NVS_init(); // NVS_init must come before any other init that uses it
     AC_init();
+
+    WIFI_init_and_start_server();
+
+    GPIO_init();
     BQ_init();
     SNS_init();
 
