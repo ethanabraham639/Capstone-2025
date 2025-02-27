@@ -183,8 +183,6 @@ void AC_init(void)
 
             PCA9685_setServoPos(&hwGroups[hwGroup], relativeServoId, actControl.currentPos[absoluteServoId]);
         }
-        
-        vTaskDelay(INIT_SERVOS_DELAY_MS / portTICK_PERIOD_MS);
     }
 }
 
