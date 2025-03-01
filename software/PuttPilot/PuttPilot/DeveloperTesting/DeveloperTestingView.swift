@@ -55,8 +55,8 @@ struct DeveloperTestingView: View {
                         .font(.headline)
                     
                     Picker("Ball Dispensing Mode", selection: $viewModel.ballDispensingMode) {
-                        Text("Automatic").tag(BallDispensingMode.automatic)
                         Text("Manual").tag(BallDispensingMode.manual)
+                        Text("Automatic").tag(BallDispensingMode.automatic)
                     }
                     .pickerStyle(.segmented)
                     .onChange(of: viewModel.ballDispensingMode) { newValue in

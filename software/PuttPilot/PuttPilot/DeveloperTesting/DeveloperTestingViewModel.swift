@@ -14,7 +14,7 @@ class DeveloperTestingViewModel: ObservableObject {
     @Published var debugMessage: String = "Fetching debug message..."
     // Consider updating the APIManager function to take an input like this, and then convert to what it needs
     @Published var gridInputs: [[String]] = Array(repeating: Array(repeating: "0", count: Constants.numColsMotors), count: Constants.numRowMotors)
-    @Published var ballDispensingMode: BallDispensingMode = .automatic
+    @Published var ballDispensingMode: BallDispensingMode = .manual
     @Published var motorMode: Mode = .staticMode
     @Published var dispenseBallsInput: String = ""
     @Published var setAll: String = ""

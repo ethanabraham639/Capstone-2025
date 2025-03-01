@@ -92,19 +92,36 @@ extension PracticePageView {
                                    position: $viewModel.leftLeaningPosition)
             .frame(maxWidth: .infinity, alignment: .leading)
             .layoutPriority(1)
+            .onChange(of: viewModel.leftLeaningSteepness) { _ in
+                viewModel.updatePreview()
+            }
+            .onChange(of: viewModel.leftLeaningPosition) { _ in
+                viewModel.updatePreview()
+            }
             
             CourseModificationItem(type: .rightLeaning,
                                    steepness: $viewModel.rightLeaningSteepness,
                                    position: $viewModel.rightLeaningPosition)
             .frame(maxWidth: .infinity, alignment: .leading)
             .layoutPriority(1)
+            .onChange(of: viewModel.rightLeaningSteepness) { _ in
+                viewModel.updatePreview()
+            }
+            .onChange(of: viewModel.rightLeaningPosition) { _ in
+                viewModel.updatePreview()
+            }
             
             CourseModificationItem(type: .upHill,
                                    steepness: $viewModel.uphillSteepness,
                                    position: $viewModel.uphillPosition)
             .frame(maxWidth: .infinity, alignment: .leading)
             .layoutPriority(1)
-    
+            .onChange(of: viewModel.uphillSteepness) { _ in
+                viewModel.updatePreview()
+            }
+            .onChange(of: viewModel.uphillPosition) { _ in
+                viewModel.updatePreview()
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 20)
@@ -165,11 +182,21 @@ extension PracticePageView {
         .padding(10)
     }
     
+//    var courseSimulation: some View {
+//        // TODO: update with simulation
+//        Image(.coursePreview)
+//            .imageScale(.small)
+//            .padding(10)
+//    }
+}
+
+
+extension PracticePageView {
     var courseSimulation: some View {
-        // TODO: update with simulation
-        Image(.coursePreview)
-            .imageScale(.small)
+        SceneKitView(gridInputs: $viewModel.gridInputs,
+                     numRows: Constants.numRowMotors,
+                     numCols: Constants.numColsMotors)
+            .frame(width: 550, height: 400) // Adjust the frame as needed
             .padding(10)
     }
 }
-
