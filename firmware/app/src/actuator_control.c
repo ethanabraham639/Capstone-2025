@@ -22,7 +22,7 @@
  */
 #define NUM_ROLLOUT_GROUPS          3
 #define NUM_MEMBERS_PER_RO_GROUP   (NUM_ACTUATORS/NUM_ROLLOUT_GROUPS)
-#define ROLLOUT_GROUP_DELAY_MS      10
+#define ROLLOUT_GROUP_DELAY_MS      30
 
 /**
  * Every 15 servos are being controlled by a different board, we are calling each board a HW group.
