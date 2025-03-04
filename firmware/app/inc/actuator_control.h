@@ -4,12 +4,13 @@
 #include "stdint.h"
 
 #define NUM_ACTUATORS           45
+#define NUM_COLUMNS           5
+#define NUM_ROWS              9
 #define MODES_SIZE              1
 
 // Enum of actuator control modes
 typedef enum {
-    RESET = 0,
-    STATIC,
+    STATIC = 0,
 } ACMode_e;
 
 /**
@@ -33,5 +34,10 @@ void AC_update_desired_positions(uint8_t desiredPos[NUM_ACTUATORS]);
  * @param mode Actuator control mode
  */
 void AC_update_mode(ACMode_e mode);
+
+/**
+ * @brief Sets clear sequence flag
+ */
+void AC_req_clear_sequence(void);
 
 #endif
