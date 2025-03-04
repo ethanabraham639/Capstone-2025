@@ -181,19 +181,13 @@ extension PracticePageView {
         }
         .padding(10)
     }
-    
-//    var courseSimulation: some View {
-//        // TODO: update with simulation
-//        Image(.coursePreview)
-//            .imageScale(.small)
-//            .padding(10)
-//    }
+
 }
 
 
 extension PracticePageView {
     var courseSimulation: some View {
-        SceneKitView(gridInputs: $viewModel.gridInputs,
+        SceneKitView(animationState: $viewModel.animationState,
                      numRows: Constants.numRowMotors,
                      numCols: Constants.numColsMotors)
             .frame(width: 550, height: 400) // Adjust the frame as needed

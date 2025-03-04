@@ -9,7 +9,7 @@ import SwiftUI
 import SceneKit
 
 struct SceneKitView: UIViewRepresentable {
-    @Binding var gridInputs: [[Double]]
+    @Binding var animationState: [[Double]]
     var numRows: Int
     var numCols: Int
 
@@ -22,11 +22,20 @@ struct SceneKitView: UIViewRepresentable {
     }
     
     func updateUIView(_ scnView: SCNView, context: Context) {
-        // Update the green surface geometry with new actuator heights
-        if let surfaceNode = scnView.scene?.rootNode.childNode(withName: "greenSurface", recursively: false) {
-            surfaceNode.geometry = createSurfaceGeometry()
+        guard let rootNode = scnView.scene?.rootNode else { return }
+        
+        // Remove existing surface node
+        if let existingNode = rootNode.childNode(withName: "greenSurface", recursively: false) {
+            existingNode.removeFromParentNode()
         }
+
+        // Create new surface node
+        let surfaceNode = SCNNode(geometry: createSurfaceGeometry())
+        surfaceNode.name = "greenSurface"
+        rootNode.addChildNode(surfaceNode)
     }
+
+
     
     // Build the SceneKit scene with a camera, lighting, and the green surface node
     func createScene() -> SCNScene {
@@ -61,44 +70,45 @@ struct SceneKitView: UIViewRepresentable {
         return scene
     }
     
-    // Build the surface geometry using gridInputs
     func createSurfaceGeometry() -> SCNGeometry {
-        // Define the overall width and length of the putting green.
-        let width: CGFloat = 20  // adjust to your course dimensions
-        let length: CGFloat = 60 // adjust to your course dimensions
+        let width: CGFloat = 20
+        let length: CGFloat = 60
+
+        // Use a resolution factor (e.g., 5) to increase mesh detail.
+        let resolutionFactor = 10
+
+        // First, get the fine grid using bilinear interpolation.
+        let fineGrid = smoothGrid(from: animationState, resolutionFactor: resolutionFactor)
+        let fineRows = fineGrid.count
+        let fineCols = fineGrid[0].count
         
-        // Compute the spacing between grid points.
-        let dx = width / CGFloat(numCols - 1)
-        let dz = length / CGFloat(numRows - 1)
-        
+        let dx = width / CGFloat(fineCols - 1)
+        let dz = length / CGFloat(fineRows - 1)
+
         var vertices: [SCNVector3] = []
-        for row in 0..<numRows {
-            for col in 0..<numCols {
-                // Calculate the x and z positions so that the green is centered.
+        for row in 0..<fineRows {
+            for col in 0..<fineCols {
                 let x = -width / 2 + CGFloat(col) * dx
                 let z = -length / 2 + CGFloat(row) * dz
-                // Map the actuator value (0-90) to a height (y). Here we assume a maximum height of 5 units.
-                let y = CGFloat(gridInputs[row][col]) / 90.0 * 5.0
+                // Scale the fine grid value to your desired height.
+                let y = CGFloat(fineGrid[row][col]) / 90.0 * 5.0
                 vertices.append(SCNVector3(x, y, z))
             }
         }
-        
-        // Create indices to form triangles for the grid mesh.
+
         var indices: [Int32] = []
-        for row in 0..<(numRows - 1) {
-            for col in 0..<(numCols - 1) {
-                let topLeft = Int32(row * numCols + col)
+        for row in 0..<(fineRows - 1) {
+            for col in 0..<(fineCols - 1) {
+                let topLeft = Int32(row * fineCols + col)
                 let topRight = topLeft + 1
-                let bottomLeft = topLeft + Int32(numCols)
+                let bottomLeft = topLeft + Int32(fineCols)
                 let bottomRight = bottomLeft + 1
                 
-                // Triangle 1
                 indices.append(contentsOf: [topLeft, bottomLeft, topRight])
-                // Triangle 2
                 indices.append(contentsOf: [topRight, bottomLeft, bottomRight])
             }
         }
-        
+
         let vertexSource = SCNGeometrySource(vertices: vertices)
         let indexData = Data(bytes: indices, count: indices.count * MemoryLayout<Int32>.size)
         let element = SCNGeometryElement(data: indexData,
@@ -107,13 +117,59 @@ struct SceneKitView: UIViewRepresentable {
                                          bytesPerIndex: MemoryLayout<Int32>.size)
         let geometry = SCNGeometry(sources: [vertexSource], elements: [element])
         
-        // Set a green material with an optional texture.
         let material = SCNMaterial()
-        // Use a grass texture if you have one, otherwise default to green.
         material.diffuse.contents = UIImage(named: "GrassTexture") ?? UIColor.green
-        material.emission.contents = [UIColor.black]
         geometry.materials = [material]
-        
+
         return geometry
     }
+    
+    /// Generates a fine grid from a coarse grid by bilinear interpolation.
+    /// - Parameters:
+    ///   - coarse: The original grid of values (e.g. motor positions).
+    ///   - resolutionFactor: How many subdivisions per coarse cell.
+    /// - Returns: A fine grid with smoothed values.
+    func smoothGrid(from coarse: [[Double]], resolutionFactor: Int) -> [[Double]] {
+        let nRows = coarse.count
+        let nCols = coarse[0].count
+        let fineRows = (nRows - 1) * resolutionFactor + 1
+        let fineCols = (nCols - 1) * resolutionFactor + 1
+        
+        var fineGrid = Array(
+            repeating: Array(repeating: 0.0, count: fineCols),
+            count: fineRows
+        )
+        
+        for i in 0..<fineRows {
+            // Compute a normalized coordinate (0...1) in the coarse grid vertically.
+            let t = Double(i) / Double(fineRows - 1)
+            let coarseRowFloat = t * Double(nRows - 1)
+            let rowIndex = Int(coarseRowFloat)
+            let rowFrac = coarseRowFloat - Double(rowIndex)
+            
+            for j in 0..<fineCols {
+                // Compute a normalized coordinate (0...1) in the coarse grid horizontally.
+                let u = Double(j) / Double(fineCols - 1)
+                let coarseColFloat = u * Double(nCols - 1)
+                let colIndex = Int(coarseColFloat)
+                let colFrac = coarseColFloat - Double(colIndex)
+                
+                // Get the four neighboring coarse values.
+                let v00 = coarse[rowIndex][colIndex]
+                let v10 = (rowIndex + 1 < nRows) ? coarse[rowIndex + 1][colIndex] : v00
+                let v01 = (colIndex + 1 < nCols) ? coarse[rowIndex][colIndex + 1] : v00
+                let v11 = (rowIndex + 1 < nRows && colIndex + 1 < nCols) ? coarse[rowIndex + 1][colIndex + 1] : v00
+                
+                // Perform bilinear interpolation.
+                let v0 = v00 * (1 - colFrac) + v01 * colFrac
+                let v1 = v10 * (1 - colFrac) + v11 * colFrac
+                let v = v0 * (1 - rowFrac) + v1 * rowFrac
+                
+                fineGrid[i][j] = v
+            }
+        }
+        
+        return fineGrid
+    }
+
 }

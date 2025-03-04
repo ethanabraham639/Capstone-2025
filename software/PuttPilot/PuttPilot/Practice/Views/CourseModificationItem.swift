@@ -33,12 +33,12 @@ struct CourseModificationItem: View {
             
             Text("Steepness: \(Int(steepness))%")
             
-            Slider(value: $steepness, in: 0...Double(Constants.maxMotorPosition), step: 1)
+            Slider(value: $steepness, in: 0...100, step: 1)
                 .frame(maxWidth: .infinity)
             
             Text("Position: \(Int(position))%")
 
-            Slider(value: $position, in: 0...Double(Constants.maxMotorPosition), step: 1)
+            Slider(value: $position, in: 0...100, step: 1)
                 .frame(maxWidth: .infinity)
 
         }
