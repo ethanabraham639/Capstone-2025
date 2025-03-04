@@ -62,12 +62,24 @@ esp_err_t POST_courseState_handler(httpd_req_t *req)
     return ESP_OK;
 }
 
+
 esp_err_t POST_resetStats_handler(httpd_req_t *req)
 {
     BE_reset_stats();
 
     const char* resp_str = "Successfully reset stats!";
     ESP_LOGD(TAG, resp_str);
+    httpd_resp_send(req, resp_str, strlen(resp_str));
+    
+    return ESP_OK;
+}
+
+esp_err_t POST_clearSequence_handler(httpd_req_t *req)
+{
+    AC_req_clear_sequence();
+
+    const char* resp_str = "Successfully requested clear sequence!";
+    ESP_LOGI(TAG, resp_str);
     httpd_resp_send(req, resp_str, strlen(resp_str));
     
     return ESP_OK;

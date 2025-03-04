@@ -7,6 +7,7 @@
 // POST handlers
 esp_err_t POST_courseState_handler(httpd_req_t *req);
 esp_err_t POST_resetStats_handler(httpd_req_t *req);
+esp_err_t POST_clearSequence_handler(httpd_req_t *req);
 esp_err_t POST_settings_handler(httpd_req_t *req);
 esp_err_t POST_dispenseBall_handler(httpd_req_t *req);
 

@@ -39,6 +39,13 @@ httpd_uri_t reset_stats = {
     .user_ctx  = NULL
 };
 
+httpd_uri_t clear_sequence = {
+    .uri       = "/clear_sequence",
+    .method    = HTTP_POST,
+    .handler   = POST_clearSequence_handler,
+    .user_ctx  = NULL
+};
+
 httpd_uri_t settings = {
     .uri       = "/settings",
     .method    = HTTP_POST,
@@ -108,6 +115,7 @@ httpd_handle_t start_webserver(void)
         ESP_LOGI(TAG, "Registering URI handlers");
         httpd_register_uri_handler(server, &course_state);
         httpd_register_uri_handler(server, &reset_stats);
+        httpd_register_uri_handler(server, &clear_sequence);
         httpd_register_uri_handler(server, &settings);
         httpd_register_uri_handler(server, &dispense_ball);
         httpd_register_uri_handler(server, &error_codes);
