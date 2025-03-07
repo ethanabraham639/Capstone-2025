@@ -54,12 +54,12 @@ typedef enum {
     MOVE_ACTUATORS
 } ACState_e;
 
-void AC_handle_idle(void);
-void AC_handle_mode_select(void);
-void AC_handle_clear_sequence_mode_on_enter(void);
-void AC_handle_clear_sequence_mode(void);
-void AC_handle_static_control_mode(void);
-void AC_handle_move_actuators(void);
+void AC_idle_state(void);
+void AC_mode_select_state(void);
+void AC_clear_sequence_mode_on_enter_state(void);
+void AC_clear_sequence_mode_state(void);
+void AC_static_control_mode_state(void);
+void AC_move_actuators_state(void);
 
 typedef struct {
     bool isActive;
@@ -228,12 +228,12 @@ void AC_init(void)
     }
 }
 
-void AC_handle_idle(void)
+void AC_idle_state(void)
 {
     // Do nothing in IDLE state
 }
 
-void AC_handle_mode_select(void)
+void AC_mode_select_state(void)
 {
     switch (AC.mode)
     {
@@ -249,7 +249,7 @@ void AC_handle_mode_select(void)
     }
 }
 
-void AC_handle_clear_sequence_mode_on_enter(void)
+void AC_clear_sequence_mode_on_enter_state(void)
 {
     if (!CS.isActive)
     {
@@ -264,7 +264,7 @@ void AC_handle_clear_sequence_mode_on_enter(void)
     AC.state = CLEAR_SEQUENCE_MODE;
 }
 
-void AC_handle_clear_sequence_mode(void)
+void AC_clear_sequence_mode_state(void)
 {
     const uint8_t currentColumn = CS.currentColumn;
 
@@ -293,7 +293,7 @@ void AC_handle_clear_sequence_mode(void)
     AC.state = MOVE_ACTUATORS;
 }
 
-void AC_handle_static_control_mode(void)
+void AC_static_control_mode_state(void)
 {
     if (AC.newCourseStateReq)
     {
@@ -304,7 +304,7 @@ void AC_handle_static_control_mode(void)
     AC.state = MOVE_ACTUATORS;
 }
 
-void AC_handle_move_actuators(void)
+void AC_move_actuators_state(void)
 {
     bool didPositionsChange = calculate_next_position();
 
@@ -321,22 +321,22 @@ void AC_run_task(void)
     switch (AC.state)
     {
         case IDLE:
-            AC_handle_idle();
+            AC_idle_state();
             break;
         case MODE_SELECT:
-            AC_handle_mode_select();
+            AC_mode_select_state();
             break;
         case CLEAR_SEQUENCE_MODE_on_enter:
-            AC_handle_clear_sequence_mode_on_enter();
+            AC_clear_sequence_mode_on_enter_state();
             break;
         case CLEAR_SEQUENCE_MODE:
-            AC_handle_clear_sequence_mode();
+            AC_clear_sequence_mode_state();
             break;
         case STATIC_CONTROL_MODE:
-            AC_handle_static_control_mode();
+            AC_static_control_mode_state();
             break;
         case MOVE_ACTUATORS:
-            AC_handle_move_actuators();
+            AC_move_actuators_state();
             break;
     }
 }
