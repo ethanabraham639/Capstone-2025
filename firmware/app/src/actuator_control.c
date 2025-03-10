@@ -64,7 +64,7 @@ ActControl_t actControl;
  * 
  */ 
 const PCA9685_t hwGroups[NUM_HW_GROUPS] = {
-    { .addr = 0x60, .isLed = false, .osc_freq = 26984448.0 },
+    { .addr = 0x43, .isLed = false, .osc_freq = 26434765.0 },
     { .addr = 0x61, .isLed = false, .osc_freq = 26484736.0 },
     { .addr = 0x62, .isLed = false, .osc_freq = 26484736.0 },
 };
