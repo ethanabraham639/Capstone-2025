@@ -85,9 +85,7 @@ class DeveloperTestingViewModel: ObservableObject {
     func sendCourseState() {
         var motorPositions = gridInputs.flatMap { $0 }
         // Duplicate contents (testing purposes)
-        let temp = motorPositions
-        motorPositions.append(contentsOf: temp)
-        motorPositions.append(contentsOf: temp)
+
         apiManagerSendCourseState(mode: motorMode, motorPositions: motorPositions)
     }
     

@@ -153,8 +153,8 @@ struct DeveloperTestingView: View {
                         .padding()
                         
                         Button("Uphill") {
-                            viewModel.sendCourseState(presetMotorPositions: ["10", "10", "10", "10", "10",
-                                                                             "20", "20", "20", "20", "20",
+                            viewModel.sendCourseState(presetMotorPositions: ["0", "0", "0", "0", "0",
+                                                                             "15", "15", "15", "15", "15",
                                                                              "30", "30", "30", "30", "30",
                                                                              "40", "40", "40", "40", "40",
                                                                              "50", "50", "50", "50", "50",

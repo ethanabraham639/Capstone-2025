@@ -118,7 +118,12 @@ struct SceneKitView: UIViewRepresentable {
         let geometry = SCNGeometry(sources: [vertexSource], elements: [element])
         
         let material = SCNMaterial()
-        material.diffuse.contents = UIImage(named: "GrassTexture") ?? UIColor.green
+        if let grassImage = UIImage(named: "GrassTexture") {
+            material.diffuse.contents = grassImage
+        } else {
+            print("GrassTexture not found!")
+            material.diffuse.contents = UIColor.green
+        }
         geometry.materials = [material]
 
         return geometry

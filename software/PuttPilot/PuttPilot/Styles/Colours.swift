@@ -12,6 +12,8 @@ struct Colours {
     static let lightGreen = Color(hex: 0x93C781)
     static let mediumGreen = Color(hex: 0x7AC64F)
     static let brown = Color(hex: 0x795757)
+    static let darkGreen = Color(hex: 0x013220)
+    static let accentNeon = Color(hex: 0x00FF80)
 
 }
 
