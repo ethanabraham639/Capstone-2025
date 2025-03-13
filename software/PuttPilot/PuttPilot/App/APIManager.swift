@@ -144,7 +144,7 @@ class APIManager {
         }
 
         let motorAsciiArray = motorPositions.compactMap { position -> Character? in
-            guard let ascii = UnicodeScalar(Int(position) ?? -1), ascii.isASCII else { return nil }
+            guard let ascii = UnicodeScalar(90-(Int(position) ?? 0)), ascii.isASCII else { return nil }
             return Character(ascii)
         }
 

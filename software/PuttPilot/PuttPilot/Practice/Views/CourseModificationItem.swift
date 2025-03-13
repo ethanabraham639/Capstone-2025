@@ -5,7 +5,6 @@
 //  Created by Ria Narang on 2025-01-18.
 //
 
-import Foundation
 import SwiftUI
 
 enum CourseModificationItemType: String {
@@ -21,30 +20,36 @@ struct CourseModificationItem: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
+            // Title with better contrast.
             Text(type.rawValue)
                 .font(.system(size: 15, weight: .bold))
-                .padding(.vertical)
+                .foregroundColor(.white)
+                .padding(.vertical, 4)
             
+            // Image area with a subtle background to help it pop.
             Image(type.rawValue)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 215, height: 215)
                 .frame(maxWidth: .infinity, alignment: .center)
+                .background(Color.white.opacity(0.2))
+                .cornerRadius(10)
             
+            // Steepness label and slider.
             Text("Steepness: \(Int(steepness))%")
+                .foregroundColor(.white)
+            Slider(value: $steepness, in: 0...100, step: 1)
+                .accentColor(Colours.accentNeon)
             
-            Slider(value: $steepness, in: 0...Double(Constants.maxMotorPosition), step: 1)
-                .frame(maxWidth: .infinity)
-            
+            // Position label and slider.
             Text("Position: \(Int(position))%")
-
-            Slider(value: $position, in: 0...Double(Constants.maxMotorPosition), step: 1)
-                .frame(maxWidth: .infinity)
-
+                .foregroundColor(.white)
+            Slider(value: $position, in: 0...100, step: 1)
+                .accentColor(Colours.accentNeon)
         }
-        .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.white.opacity(0.1))
+        .background(Color.black.opacity(0.6))
         .cornerRadius(15)
+        .shadow(color: Color.black.opacity(0.5), radius: 5, x: 2, y: 2)
     }
 }

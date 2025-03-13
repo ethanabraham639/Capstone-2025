@@ -1,10 +1,3 @@
-//
-//  PracticePageViewModel.swift
-//  PuttPilot
-//
-//  Created by Ria Narang on 2025-01-18.
-//
-
 import Foundation
 import Combine
 
@@ -13,8 +6,19 @@ class PracticePageViewModel: ObservableObject {
     @Published var ballsInHole: Int = 0
     @Published var accuracy: String = "0%"
     
-    @Published var gridInputs: [[Double]] = Array(repeating: Array(repeating: 0.0, count: Constants.numColsMotors), count: Constants.numRowMotors)
+    // 2D array representing actuator positions (0 to 90 degrees)
+    @Published var gridInputs: [[Double]] = Array(
+        repeating: Array(repeating: 0.0, count: Constants.numColsMotors),
+        count: Constants.numRowMotors
+    )
     
+    // 2D array used to calculate animation sate in SceneKitView
+    @Published var animationState: [[Double]] = Array(
+        repeating: Array(repeating: 0.0, count: Constants.numColsMotors),
+        count: Constants.numRowMotors
+    )
+    
+    // Slider values for each modification
     @Published var leftLeaningSteepness = 0.0
     @Published var leftLeaningPosition = 0.0
     
@@ -22,10 +26,12 @@ class PracticePageViewModel: ObservableObject {
     @Published var rightLeaningPosition = 0.0
     
     @Published var uphillSteepness = 0.0
-    @Published var uphillPosition = 0.0
+    @Published var uphillPosition = 0.0 
     
     private let apiManager = APIManager.shared
     private var cancellables: Set<AnyCancellable> = []
+    
+    // MARK: - Polling & Accuracy Updates
     
     func startPolling() {
         apiManager.startPollingStats(interval: 1)
@@ -48,25 +54,151 @@ class PracticePageViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    // MARK: - Grid Calculation Helper
+    
+    private func calculateAnimationState(
+        leftSteep: Double, leftPos: Double,
+        rightSteep: Double, rightPos: Double,
+        uphillSteep: Double, uphillPos: Double
+    ) -> [[Double]] {
+        let nRows = Constants.numRowMotors  // 9
+        let nCols = Constants.numColsMotors // 5
+        
+        // Convert 0–100 user inputs into 0.0–1.0 scale for easier math
+        let lSteep = leftSteep / 100.0
+        let lPos   = leftPos   / 100.0
+        
+        let rSteep = rightSteep / 100.0
+        let rPos   = rightPos   / 100.0
+        
+        let uSteep = uphillSteep / 100.0
+        let uPos   = uphillPos   / 100.0
+        
+        // Initialize a 2D array (rows × cols) to store results
+        var output = Array(
+            repeating: Array(repeating: 0.0, count: nCols),
+            count: nRows
+        )
+        
+        // For each row & column, compute the final displacement based on
+        // left leaning + right leaning + uphill
+        for row in 0..<nRows {
+            // fraction [0..1] for how "far down" we are in the rows
+            let rowFraction = Double(row) / Double(nRows - 1)
+            
+            for col in 0..<nCols {
+                // fraction [0..1] for how "far right" we are in the columns
+                let colFraction = Double(col) / Double(nCols - 1)
+                
+                //---- LEFT-LEANING EFFECT ----
+                // a) "position" defines the fraction at which slope starts
+                // b) from that point to the far right, it ramps from 0 up to lSteep
+                var leftEffect: Double = 0.0
+                if colFraction > lPos {
+                    // from lPos..1, we linearly go from 0..lSteep
+                    let slopeFrac = (colFraction - lPos) / (1.0 - lPos)
+                    leftEffect = slopeFrac * lSteep
+                }
+                
+                //---- RIGHT-LEANING EFFECT ----
+                // This is basically the opposite direction.
+                // We can invert colFraction → colRev = 1 - colFraction
+                let colRev = 1.0 - colFraction
+                var rightEffect: Double = 0.0
+                if colRev > rPos {
+                    // from rPos..1, we linearly go from 0..rSteep
+                    let slopeFrac = (colRev - rPos) / (1.0 - rPos)
+                    rightEffect = slopeFrac * rSteep
+                }
+                
+                //---- UPHILL EFFECT ----
+                // This goes from row 0..(nRows-1).
+                // If rowFraction < uPos => 0. else it ramps from 0..uSteep
+                let revRowFraction = 1 - rowFraction   // Reversed: row 0 → 1, last row → 0
+                var uphillEffect: Double = 0.0
+                if revRowFraction > uPos {
+                    let slopeFrac = (revRowFraction - uPos) / (1.0 - uPos)
+                    uphillEffect = slopeFrac * uSteep
+                }
+                //---- COMBINE ALL SLOPES ----
+                let combined = leftEffect + rightEffect + uphillEffect
+                
+                // Scale the 0..1 slope to 0..90 motor range
+                let motorPos = combined * 90.0
+                
+                // Optionally clamp to [0..90]
+                output[row][col] = max(0.0, min(90.0, motorPos))
+            }
+        }
+        
+        return output
+    }
+    
+    
+    /// Calculates a new grid of motor positions based on the provided slider values.
+    private func calculateGridInputs(
+        leftSteep: Double, leftPos: Double,
+        rightSteep: Double, rightPos: Double,
+        uphillSteep: Double, uphillPos: Double
+    ) -> [[Double]] {
+        // Could literally be the *same* as calculateAnimationState,
+        // or just call `calculateAnimationState` from here
+        return calculateAnimationState(
+            leftSteep: leftSteep,
+            leftPos:   leftPos,
+            rightSteep: rightSteep,
+            rightPos:   rightPos,
+            uphillSteep: uphillSteep,
+            uphillPos:   uphillPos
+        )
+    }
+
+
+
+
+    // MARK: - Updating Preview & Sending Motor Positions
+    
+    /// Updates the gridInputs for real-time preview without sending a command.
+    func updatePreview() {
+        DispatchQueue.main.async {
+            self.animationState = self.calculateAnimationState(
+                leftSteep:       self.leftLeaningSteepness,
+                leftPos:         self.leftLeaningPosition,
+                rightSteep:      self.rightLeaningSteepness,
+                rightPos:        self.rightLeaningPosition,
+                uphillSteep:     self.uphillSteepness,
+                uphillPos:       self.uphillPosition
+            )
+        }
+    }
+
+    /// Updates gridInputs and sends the new state to the firmware.
     func updateMotorPositions(
          leftLeaning: (steepness: Double, position: Double),
          rightLeaning: (steepness: Double, position: Double),
          uphill: (steepness: Double, position: Double)
-     ) {
-         // Reset gridInputs
-         gridInputs = Array(repeating: Array(repeating: 0.0, count: Constants.numColsMotors), count: Constants.numRowMotors)
+    ) {
+        // 1) Recompute final grid
+        gridInputs = calculateGridInputs(
+            leftSteep:    leftLeaning.steepness,
+            leftPos:      leftLeaning.position,
+            rightSteep:   rightLeaning.steepness,
+            rightPos:     rightLeaning.position,
+            uphillSteep:  uphill.steepness,
+            uphillPos:    uphill.position
+        )
+        
+        // 2) Then push to firmware
+        sendCourseState()
+    }
 
-         applyModification(type: .leftLeaning, steepness: leftLeaning.steepness, position: leftLeaning.position)
-
-         applyModification(type: .rightLeaning, steepness: rightLeaning.steepness, position: rightLeaning.position)
-
-         applyModification(type: .upHill, steepness: uphill.steepness, position: uphill.position)
-         
-         sendCourseState()
-     }
     
+    /// Sends the current gridInputs to the firmware.
     func sendCourseState() {
-        let flattenedPositions = gridInputs.flatMap { $0.map { String(format: "%.0f", $0.rounded()) } }
+        let flattenedPositions = gridInputs.flatMap { row in
+            row.map { String(format: "%.0f", $0.rounded()) }
+        }
+        print("GRID INPUTS: ", flattenedPositions)
         APIManager.shared.sendCourseStatePublisher(mode: .staticMode, motorPositions: flattenedPositions)
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
@@ -78,23 +210,29 @@ class PracticePageViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    // MARK: - Other Actions
+    
     func resetCoursePressed() {
-        resetGridInputs()
+        // Reset gridInputs to all zeros.
+        gridInputs = Array(
+            repeating: Array(repeating: 0.0, count: Constants.numColsMotors),
+            count: Constants.numRowMotors
+        )
         sendCourseState()
         
+        // Reset slider values.
         leftLeaningSteepness = 0.0
         leftLeaningPosition = 0.0
-        
         rightLeaningSteepness = 0.0
         rightLeaningPosition = 0.0
-        
         uphillSteepness = 0.0
         uphillPosition = 0.0
-        
     }
     
     func clearBallsPressed() {
-        let flattenedPositions = gridInputs.flatMap { $0.map { String(format: "%.0f", $0.rounded()) } }
+        let flattenedPositions = gridInputs.flatMap { row in
+            row.map { String(format: "%.0f", $0.rounded()) }
+        }
         APIManager.shared.sendCourseStatePublisher(mode: .ballReturn, motorPositions: flattenedPositions)
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
@@ -115,32 +253,7 @@ class PracticePageViewModel: ObservableObject {
                 }
             }, receiveValue: { success in
                 print("Balls dispensed successfully: \(success)")
-                
             })
             .store(in: &cancellables)
-        
     }
-    
-    
-    private func applyModification(type: CourseModificationItemType, steepness: Double, position: Double) {
-        let startCol = Int((position / 100) * Double(Constants.numColsMotors))
-        let steepnessValue = steepness / 100
-
-        for row in 0..<Constants.numRowMotors {
-            for col in 0..<Constants.numColsMotors {
-                let distance = abs(col - startCol)
-                let adjustment = max(0.0, steepnessValue - (Double(distance) * 0.1)) // Gradual fade effect
-                gridInputs[row][col] += adjustment * 90 // Scale to 0-90 range
-            }
-        }
-    }
-    
-    private func resetGridInputs() {
-        for row in 0..<gridInputs.count {
-            for col in 0..<gridInputs[row].count {
-                gridInputs[row][col] = 0
-            }
-        }
-    }
-
 }

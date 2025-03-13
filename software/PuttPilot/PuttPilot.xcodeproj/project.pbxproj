@@ -29,6 +29,7 @@
 		DA258F892D3C3FF300529154 /* StartGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA258F882D3C3FF300529154 /* StartGameView.swift */; };
 		DA258F8E2D3C4E6B00529154 /* CourseModificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA258F8D2D3C4E6B00529154 /* CourseModificationItem.swift */; };
 		DA258F912D40637C00529154 /* Colours.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA258F902D40637C00529154 /* Colours.swift */; };
+		DA7A52EB2D669F0400737BD2 /* SceneKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A52EA2D669F0400737BD2 /* SceneKitView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		DA258F882D3C3FF300529154 /* StartGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameView.swift; sourceTree = "<group>"; };
 		DA258F8D2D3C4E6B00529154 /* CourseModificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseModificationItem.swift; sourceTree = "<group>"; };
 		DA258F902D40637C00529154 /* Colours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colours.swift; sourceTree = "<group>"; };
+		DA7A52EA2D669F0400737BD2 /* SceneKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneKitView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +235,7 @@
 			children = (
 				DA258F842D3C3F6300529154 /* PracticePageView.swift */,
 				DA258F8D2D3C4E6B00529154 /* CourseModificationItem.swift */,
+				DA7A52EA2D669F0400737BD2 /* SceneKitView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 				DA258F7F2D3C3CC600529154 /* HomeView.swift in Sources */,
 				DA0C231D2D1F6269009D0E4E /* ContentView.swift in Sources */,
 				DA258F872D3C3F6F00529154 /* PracticePageViewModel.swift in Sources */,
+				DA7A52EB2D669F0400737BD2 /* SceneKitView.swift in Sources */,
 				DA0C23592D26709C009D0E4E /* DeveloperTestingView.swift in Sources */,
 				DA0C23552D266CF6009D0E4E /* SplashScreenView.swift in Sources */,
 				DA0C231F2D1F6269009D0E4E /* Item.swift in Sources */,
