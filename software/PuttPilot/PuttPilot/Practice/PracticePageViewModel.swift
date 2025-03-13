@@ -210,6 +210,20 @@ class PracticePageViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func sendCourseState(presetMotorPositions: [String]?) {
+        if let presetMotorPositions = presetMotorPositions {
+            APIManager.shared.sendCourseStatePublisher(mode: .staticMode, motorPositions: presetMotorPositions)
+                .sink(receiveCompletion: { completion in
+                    if case let .failure(error) = completion {
+                        print("Error sending course state: \(error)")
+                    }
+                }, receiveValue: { success in
+                    print("Course state sent successfully: \(success)")
+                })
+                .store(in: &cancellables)
+        }
+    }
+    
     // MARK: - Other Actions
     
     func resetCoursePressed() {

@@ -16,47 +16,133 @@ struct PracticePageView: View {
     
     var body: some View {
         ZStack {
+            // Background gradient now applies to the whole screen
             backgroundGradient
                 .ignoresSafeArea()
-            
-            VStack(spacing: 20) {
-                // Stats Card at the top
-                statsCard
-                
-                // Simulation view in the center
-                courseSimulation
-                    .background(Color.black.opacity(0.3))
-                    .cornerRadius(20)
-                    .shadow(radius: 5)
-                
-                // Button to present the controls as a bottom sheet
-                Button(action: {
-                    showControlsSheet.toggle()
-                }) {
-                    Text("Show Controls")
-                        .font(.headline)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.black.opacity(0.7))
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+
+            ScrollView {
+                VStack(spacing: 20) {
+                    statsCard
+                    
+                    // SceneKit Simulation View (Make sure it has a fixed height)
+                    courseSimulation
+                        .frame(height: 400)
+                        .background(Color.black.opacity(0.3))
+                        .cornerRadius(20)
+                        .shadow(radius: 5)
+                    
+                    controlPanelButtons
+                    courseModificationItems
+                    
+                    presetCourseItems
+                    
+                    Spacer()
                 }
-                
-                courseModificationItems
-                
-                Spacer(minLength: 20)
+                .padding(.vertical)
             }
-            .padding(.vertical)
         }
         .navigationTitle("PuttPilot")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { viewModel.startPolling() }
-        .sheet(isPresented: $showControlsSheet) {
-            BottomSheetControlPanel(viewModel: viewModel)
-        }
     }
-    
+
+    private var presetCourseItems: some View {
+        VStack(alignment: .leading){
+            Text("Presets")
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding(.leading, 10)
+                
+            
+            HStack(spacing: 15) {
+                Button(action: {
+                    viewModel.gridInputs
+                    viewModel.sendCourseState(presetMotorPositions: ["0", "25", "50", "75", "90",
+                                                                     "0", "25", "50", "75", "90",
+                                                                     "0", "25", "50", "75", "90",
+                                                                     "0", "25", "50", "75", "90",
+                                                                     "0", "25", "50", "75", "90",
+                                                                     "0", "25", "50", "75", "90",
+                                                                     "0", "25", "50", "75", "90",
+                                                                     "0", "25", "50", "75", "90",
+                                                                     "0", "25", "50", "75", "90"])
+                }) {
+                    Text("Left Leaning")
+                }
+                .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .medium))
+                
+                Button(action: {
+                    viewModel.sendCourseState(presetMotorPositions: ["90", "75", "50", "25", "0",
+                                                                     "90", "75", "50", "25", "0",
+                                                                     "90", "75", "50", "25", "0",
+                                                                     "90", "75", "50", "25", "0",
+                                                                     "90", "75", "50", "25", "0",
+                                                                     "90", "75", "50", "25", "0",
+                                                                     "90", "75", "50", "25", "0",
+                                                                     "90", "75", "50", "25", "0",
+                                                                     "90", "75", "50", "25", "0"
+                                                                    ])
+                }) {
+                    Text("Right Leaning")
+                }
+                .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .medium))
+                
+                Button(action: {
+                    viewModel.sendCourseState(presetMotorPositions: ["0", "0", "0", "0", "0",
+                                                                     "15", "15", "15", "15", "15",
+                                                                     "30", "30", "30", "30", "30",
+                                                                     "40", "40", "40", "40", "40",
+                                                                     "50", "50", "50", "50", "50",
+                                                                     "60", "60", "60", "60", "60",
+                                                                     "70", "70", "70", "70", "70",
+                                                                     "80", "80", "80", "80", "80",
+                                                                     "90", "90", "90", "90", "90",
+                                                                    ])
+                }) {
+                    Text("Uphill")
+                }
+                .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .medium))
+                
+                Button(action: {
+                    viewModel.sendCourseState(presetMotorPositions: ["0", "0", "0", "0", "0",
+                                                                     "0", "0", "0", "0", "0",
+                                                                     "0", "0", "0", "0", "0",
+                                                                     "0", "0", "0", "0", "0",
+                                                                     "0", "0", "0", "0", "0",
+                                                                     "0", "0", "0", "0", "0",
+                                                                     "0", "0", "0", "0", "0",
+                                                                     "0", "0", "0", "0", "0",
+                                                                     "0", "0", "0", "0", "0",
+                                                                    ])
+                }) {
+                    Text("Flat")
+                }
+                .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .medium))
+                
+                
+                Button(action: {
+                    viewModel.sendCourseState(presetMotorPositions: ["90", "90", "90", "90", "90",
+                                                                     "90", "90", "90", "90", "90",
+                                                                     "90", "90", "90", "90", "90",
+                                                                     "90", "90", "90", "90", "90",
+                                                                     "90", "90", "90", "90", "90",
+                                                                     "90", "90", "90", "90", "90",
+                                                                     "90", "90", "90", "90", "90",
+                                                                     "90", "90", "90", "90", "90",
+                                                                     "90", "90", "90", "90", "90",
+                                                                    ])
+                }) {
+                    Text("Max")
+                }
+                .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .medium))
+                
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+    }
+
     private var courseModificationItems: some View {
         HStack(alignment: .top, spacing: 20) {
             CourseModificationItem(type: .leftLeaning,
@@ -144,49 +230,7 @@ extension PracticePageView {
             .frame(width: 550, height: 400)
             .padding(10)
     }
-}
-
-
-import SwiftUI
-
-struct BottomSheetControlPanel: View {
-    @ObservedObject var viewModel: PracticePageViewModel
-    @Environment(\.presentationMode) var presentationMode
     
-    var body: some View {
-        VStack(spacing: 20) {
-            // Handle
-            RoundedRectangle(cornerRadius: 3)
-                .frame(width: 40, height: 6)
-                .foregroundColor(.gray)
-                .padding(.top, 10)
-            
-            ScrollView {
-                VStack(spacing: 20) {
-                    
-                    // Control Panel Buttons
-                    controlPanelButtons
-                }
-                .padding()
-            }
-            
-            Button("Dismiss") {
-                presentationMode.wrappedValue.dismiss()
-            }
-            .font(.headline)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.black.opacity(0.7))
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            .padding([.horizontal, .bottom])
-        }
-        .background(Color.black.opacity(0.8))
-        .cornerRadius(20)
-        .padding()
-    }
-    
-
     private var controlPanelButtons: some View {
         VStack(spacing: 20) {
             HStack(spacing: 20) {
@@ -203,9 +247,20 @@ struct BottomSheetControlPanel: View {
                     Label("Clear Balls", systemImage: "trash.fill")
                 }
                 .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .small))
-            }
-            
-            HStack(spacing: 20) {
+                
+                Button(action: {
+                    viewModel.updateMotorPositions(
+                        leftLeaning: (steepness: viewModel.leftLeaningSteepness, position: viewModel.leftLeaningPosition),
+                        rightLeaning: (steepness: viewModel.rightLeaningSteepness, position: viewModel.rightLeaningPosition),
+                        uphill: (steepness: viewModel.uphillSteepness, position: viewModel.uphillPosition)
+                    )
+                }) {
+                    Text("Send Course State")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .large))
+                
+                
                 Button(action: {
                     viewModel.resetCoursePressed()
                 }) {
@@ -221,18 +276,9 @@ struct BottomSheetControlPanel: View {
                 .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .small))
             }
             
-            Button(action: {
-                viewModel.updateMotorPositions(
-                    leftLeaning: (steepness: viewModel.leftLeaningSteepness, position: viewModel.leftLeaningPosition),
-                    rightLeaning: (steepness: viewModel.rightLeaningSteepness, position: viewModel.rightLeaningPosition),
-                    uphill: (steepness: viewModel.uphillSteepness, position: viewModel.uphillPosition)
-                )
-            }) {
-                Text("Send Course State")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .large))
+
         }
         .padding()
     }
+
 }

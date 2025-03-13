@@ -86,6 +86,8 @@ struct SceneKitView: UIViewRepresentable {
         let dz = length / CGFloat(fineRows - 1)
 
         var vertices: [SCNVector3] = []
+        var texcoords = [CGPoint]()
+
         for row in 0..<fineRows {
             for col in 0..<fineCols {
                 let x = -width / 2 + CGFloat(col) * dx
@@ -93,6 +95,10 @@ struct SceneKitView: UIViewRepresentable {
                 // Scale the fine grid value to your desired height.
                 let y = CGFloat(fineGrid[row][col]) / 90.0 * 5.0
                 vertices.append(SCNVector3(x, y, z))
+                
+                let u = CGFloat(col) / CGFloat(fineCols - 1)
+                let v = CGFloat(row) / CGFloat(fineRows - 1)
+                texcoords.append(CGPoint(x: u, y: v))
             }
         }
 
@@ -110,13 +116,15 @@ struct SceneKitView: UIViewRepresentable {
         }
 
         let vertexSource = SCNGeometrySource(vertices: vertices)
+        let texcoordSource = SCNGeometrySource(textureCoordinates: texcoords)
+
         let indexData = Data(bytes: indices, count: indices.count * MemoryLayout<Int32>.size)
         let element = SCNGeometryElement(data: indexData,
                                          primitiveType: .triangles,
                                          primitiveCount: indices.count / 3,
                                          bytesPerIndex: MemoryLayout<Int32>.size)
-        let geometry = SCNGeometry(sources: [vertexSource], elements: [element])
-        
+        let geometry = SCNGeometry(sources: [vertexSource, texcoordSource], elements: [element])
+
         let material = SCNMaterial()
         if let grassImage = UIImage(named: "GrassTexture") {
             material.diffuse.contents = grassImage
