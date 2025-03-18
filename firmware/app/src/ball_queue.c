@@ -47,8 +47,8 @@ typedef struct {
 BallQueue_t BQ = {.BIH_return_state    = IDLE, .BIH_request    = false, .BIH_timer = 0, .BIH_current_delay = 0,
                   .player_return_state = IDLE, .player_request = false, .player_ball_count = 0, .PBR_timer = 0};
 
-const PCA9685_t BIH_SERVO    = { .addr = 0x60, .isLed = false, .osc_freq = 26984448.0 };
-const PCA9685_t PLAYER_SERVO = { .addr = 0x62, .isLed = false, .osc_freq = 26484736.0 };
+const PCA9685_t BIH_SERVO    = { .addr = 0x62, .isLed = false, .osc_freq = 26484736.0 };
+const PCA9685_t PLAYER_SERVO = { .addr = 0x43, .isLed = false, .osc_freq = 26434765.0 };
 
 
 void start_cont_servo(const PCA9685_t* pca9685, Dir_e dir)
