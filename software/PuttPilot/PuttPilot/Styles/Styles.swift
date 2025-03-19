@@ -19,9 +19,9 @@ struct Styles {
                     case .small:
                         return CGSize(width: 140, height: 60)
                     case .medium:
-                        return CGSize(width: 200, height: 70)
+                        return CGSize(width: 180, height: 60)
                     case .large:
-                        return CGSize(width: 300, height: 80)
+                        return CGSize(width: 300, height: 60)
                     }
                 }
             }
