@@ -143,12 +143,24 @@ class APIManager {
             return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
 
-        let motorAsciiArray = motorPositions.compactMap { position -> Character? in
-            guard let ascii = UnicodeScalar(90-(Int(position) ?? 0)), ascii.isASCII else { return nil }
+        let numRows = Constants.numRowMotors
+        let numCols = Constants.numColsMotors
+        
+        guard motorPositions.count == Constants.numMotors else {
+            return Fail(error: URLError(.badServerResponse)).eraseToAnyPublisher()
+        }
+
+        // Reverse the order of rows while keeping columns intact
+        let mirroredMotorPositions = (0..<numRows).reversed().flatMap { rowIndex in
+            Array(motorPositions[(rowIndex * numCols)..<((rowIndex + 1) * numCols)])
+        }
+
+        let motorAsciiArray = mirroredMotorPositions.compactMap { position -> Character? in
+            guard let ascii = UnicodeScalar(90 - (Int(position) ?? 0)), ascii.isASCII else { return nil }
             return Character(ascii)
         }
 
-        guard motorAsciiArray.count == motorPositions.count else {
+        guard motorAsciiArray.count == mirroredMotorPositions.count else {
             return Fail(error: URLError(.dataLengthExceedsMaximum)).eraseToAnyPublisher()
         }
 
@@ -156,7 +168,6 @@ class APIManager {
 
         return sendPOSTRequestPublisher(endpoint: endpoint, body: payload)
     }
-
     
     func fetchDebugMessagePublisher() -> AnyPublisher<String, Error> {
         let endpoint = "debug_msg"
@@ -176,6 +187,11 @@ class APIManager {
         return sendPOSTRequestPublisher(endpoint: endpoint, body: "")
     }
 
+    func ballReturnPublisher() -> AnyPublisher<Bool, Error> {
+        let endpoint = "clear_sequence"
+        return sendPOSTRequestPublisher(endpoint: endpoint, body: "")
+
+    }
     func dispenseBallsPublisher(numberBalls: Int) -> AnyPublisher<Bool, Error> {
         let endpoint = "dispense_ball"
 

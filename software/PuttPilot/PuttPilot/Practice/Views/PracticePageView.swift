@@ -237,7 +237,7 @@ extension PracticePageView {
                 Button(action: {
                     // TODO: implement save preset
                 }) {
-                    Label("Save Preset", systemImage: "star.fill")
+                    Label("Clear Stats", systemImage: "star.fill")
                 }
                 .buttonStyle(Styles.Buttons.SportsButtonStyle(size: .small))
                 

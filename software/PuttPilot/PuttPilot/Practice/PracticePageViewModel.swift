@@ -243,17 +243,30 @@ class PracticePageViewModel: ObservableObject {
         uphillPosition = 0.0
     }
     
+    func resetStatsPressed() {
+        // TODO: may have to manually set values to 0 if they don't sync
+        apiManager.resetStatsPublisher()
+            .sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    print("Error resseting stats \(error)")
+                }
+            }, receiveValue: { success in
+                print("Stats reset successfully: \(success)")
+            })
+            .store(in: &cancellables)
+    }
+    
     func clearBallsPressed() {
         let flattenedPositions = gridInputs.flatMap { row in
             row.map { String(format: "%.0f", $0.rounded()) }
         }
-        APIManager.shared.sendCourseStatePublisher(mode: .ballReturn, motorPositions: flattenedPositions)
+        APIManager.shared.ballReturnPublisher()
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
-                    print("Error sending course state: \(error)")
+                    print("Error clearing balls: \(error)")
                 }
             }, receiveValue: { success in
-                print("Course state sent successfully: \(success)")
+                print("Balls cleared successfully: \(success)")
             })
             .store(in: &cancellables)
     }
