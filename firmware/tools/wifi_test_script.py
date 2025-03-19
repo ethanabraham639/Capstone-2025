@@ -21,6 +21,13 @@ def reset_stats_post():
     print("Status Code:", response.status_code)
     print("Response Body:", response.text)
 
+def clear_sequence_post():
+    """Function to perform a POST request to /clear_sequence."""
+    response = requests.post(f"{BASE_URL}/clear_sequence")
+    print("POST /clear_sequence response:")
+    print("Status Code:", response.status_code)
+    print("Response Body:", response.text)
+
 def settings_post():
     """Function to perform a POST request to /settings."""
     integers = [0]
