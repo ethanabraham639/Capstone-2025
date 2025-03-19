@@ -73,7 +73,7 @@ ClearSequence_t CS = {
     .isActive = false,
     .currentColumn = 0,
     .timer = 0,
-    .columnPositions = {0, 10, 30, 60, 90}
+    .columnPositions = {90, 70, 0, 70, 90}
 };
 
 // struct describing the actuator control task
@@ -182,6 +182,7 @@ void AC_init(void)
     AC.mode = STATIC;
     AC.reqClearSequence = false;
     AC.saveCourseState = false;
+    AC.state = IDLE;
     
     esp_err_t nvs_err = NVS_read_course_state(AC.currentPos);
 
@@ -231,6 +232,7 @@ void AC_init(void)
 void AC_idle_state(void)
 {
     // Do nothing in IDLE state
+    AC.state = MODE_SELECT;
 }
 
 void AC_mode_select_state(void)
@@ -253,6 +255,7 @@ void AC_clear_sequence_mode_on_enter_state(void)
 {
     if (!CS.isActive)
     {
+        printf("Entering clear sequence for the first time\n'");
         CS.isActive = true;
         CS.timer = INT64_MAX;
         CS.currentColumn = 0;
@@ -262,16 +265,18 @@ void AC_clear_sequence_mode_on_enter_state(void)
     }
     
     AC.state = CLEAR_SEQUENCE_MODE;
+    // printf("Clear Sequence On Enter\n");
 }
 
 void AC_clear_sequence_mode_state(void)
 {
     const uint8_t currentColumn = CS.currentColumn;
 
-    if (TIMER_get_ms(CS.timer) > CS_COLUMN_DELAY_MS)
+    if ((TIMER_get_ms(CS.timer) > CS_COLUMN_DELAY_MS) || (currentColumn == 0))
     {
         if (currentColumn >= NUM_COLUMNS)
         {
+            printf("Clear sequence done\n");
             CS.isActive = false;
             AC.state = MODE_SELECT;
             return;
@@ -287,21 +292,27 @@ void AC_clear_sequence_mode_state(void)
 
             CS.currentColumn++;
             CS.timer = TIMER_restart();
+            printf("Moving next column\n");
         }
     }
 
     AC.state = MOVE_ACTUATORS;
+
+    // printf("Clear Sequence\n");
 }
 
 void AC_static_control_mode_state(void)
 {
     if (AC.newCourseStateReq)
     {
+        printf("new course state detected\n");
         memcpy(AC.desiredPos, AC.reqDesiredPos, NUM_ACTUATORS);
         AC.newCourseStateReq = false;
     }
 
     AC.state = MOVE_ACTUATORS;
+
+    // printf("Static Control Mode\n");
 }
 
 void AC_move_actuators_state(void)
@@ -314,6 +325,9 @@ void AC_move_actuators_state(void)
     }
 
     vTaskDelay(AC_TASK_DELAY / portTICK_PERIOD_MS);
+
+    AC.state = MODE_SELECT;
+    // printf("Move Actuators\n");
 }
 
 void AC_run_task(void)
@@ -347,16 +361,18 @@ void AC_update_desired_positions(uint8_t desiredPos[NUM_ACTUATORS])
     {
         if (desiredPos[i] > MAX_SERVO_POSITION)
         {
-            AC.desiredPos[i] = MAX_SERVO_POSITION;    
+            AC.reqDesiredPos[i] = MAX_SERVO_POSITION;    
         }
         else
         {
-            AC.desiredPos[i] = desiredPos[i];
+            AC.reqDesiredPos[i] = desiredPos[i];
         }
     }
     
     AC.newCourseStateReq = true;
     AC.saveCourseState = true;
+
+    printf("Desired positions updated\n");
 }
 
 void AC_update_mode(ACMode_e mode)
@@ -367,4 +383,5 @@ void AC_update_mode(ACMode_e mode)
 void AC_req_clear_sequence(void)
 {
     AC.reqClearSequence = true;
+    printf("Clear sequence flag set!!\n");
 }

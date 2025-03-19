@@ -6,7 +6,7 @@ BASE_URL = "http://192.168.4.1"
 
 def course_state_post():
     """Function to perform a POST request to /course_state."""
-    integers = [1] + [90 for x in range(15)] + [90 for x in range(15)] + [90 for x in range(15)]
+    integers = [0] + [90 for x in range(15)] + [90 for x in range(15)] + [90 for x in range(15)]
     string = ''.join(chr(value) for value in integers)
     print(integers)
     response = requests.post(f"{BASE_URL}/course_state", data=string)
@@ -94,3 +94,5 @@ if __name__ == "__main__":
     # settings_post()
     # print()
     # dispense_ball_post()
+    # print()
+    # clear_sequence_post()
