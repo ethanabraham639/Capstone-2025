@@ -14,9 +14,9 @@
 #define PBR_TIMEOUT_MS           5000
 
 
-#define CW_SPEED                 65
+#define CW_SPEED                 68
 #define STOP_SPEED               64
-#define CCW_SPEED                63
+#define CCW_SPEED                60
 #define CONT_SERVO_ID            0
 
 typedef enum {
@@ -139,7 +139,7 @@ void run_player_ball_queue_task(void)
             {
                 BQ.player_request = false;
 
-                start_cont_servo(&PLAYER_SERVO, CW);
+                start_cont_servo(&PLAYER_SERVO, CCW);
                 
                 BQ.PBR_timer = TIMER_restart();
                 
@@ -181,6 +181,7 @@ void run_player_ball_queue_task(void)
 
             ESP_LOGE(TAG, "Player ball return timed out! Going back to WAITING. Balls remaining before clearing count: %d", BQ.player_ball_count);
             ERRORCODE_set(PLAYER_BALL_RETURN_ERROR);
+            stop_cont_servo(&PLAYER_SERVO);
 
             BQ.player_ball_count = 0;
             BQ.player_return_state = WAITING;
