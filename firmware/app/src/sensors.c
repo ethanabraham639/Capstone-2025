@@ -61,7 +61,7 @@ static void sensor_gpio_isr_handler(void* arg)
     }
 }
 
-void generic_gpio_debounce_read(volatile GpioSensor_t* sensor)
+void generic_gpio_debounce_read(volatile GpioSensor_t* sensor, uint32_t debounceTime)
 {
     if (sensor->detected && !sensor->confirmed)
     {
@@ -69,7 +69,7 @@ void generic_gpio_debounce_read(volatile GpioSensor_t* sensor)
 
         if (gpio_level == sensor->confirmed_level)
         {
-            if (TIMER_get_ms(sensor->timer) > DEBOUNCE_DELAY_MS)
+            if (TIMER_get_ms(sensor->timer) > debounceTime)
             {
                 sensor->confirmed = true;
             }
@@ -83,22 +83,22 @@ void generic_gpio_debounce_read(volatile GpioSensor_t* sensor)
 
 void check_ball_in_hole(void)
 {
-    generic_gpio_debounce_read(&(sensors.BIH));
+    generic_gpio_debounce_read(&(sensors.BIH), DEBOUNCE_DELAY_MS);
 }
 
 void check_ball_in_gutter(void)
 {
-    generic_gpio_debounce_read(&(sensors.BIG));
+    generic_gpio_debounce_read(&(sensors.BIG), DEBOUNCE_DELAY_MS);
 }
 
 void check_ball_dep(void)
 {
-    generic_gpio_debounce_read(&(sensors.BD));
+    generic_gpio_debounce_read(&(sensors.BD), DEBOUNCE_DELAY_MS);
 }
 
 void check_ball_queue(void)
 {
-    generic_gpio_debounce_read(&(sensors.BQ));
+    generic_gpio_debounce_read(&(sensors.BQ), 10);
 }
 
 void SNS_init(void)
