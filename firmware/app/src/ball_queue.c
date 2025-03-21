@@ -10,14 +10,18 @@
 
 #define TAG "BALL_QUEUE.C"
 
-#define BIH_FEEDFORWARD_DELAY_MS 5000
-#define PBR_TIMEOUT_MS           5000
+#define BIH_FEEDFORWARD_DELAY_MS 4000
+#define PBR_TIMEOUT_MS           1000
 
-
-#define CW_SPEED                 68
+#define CW_SPEED_PLAYER          68
+#define CW_SPEED_BIH             68
 #define STOP_SPEED               64
-#define CCW_SPEED                60
+
+#define CCW_SPEED_PLAYER         57
+#define CCW_SPEED_BIH            60
 #define CONT_SERVO_ID            0
+
+#define BIH_DELAY_TIME_MS        3000
 
 typedef enum {
     CW,
@@ -25,8 +29,14 @@ typedef enum {
 } Dir_e;
 
 typedef enum {
+    PLAYER,
+    BIH
+} ServoPurpose_e;
+
+typedef enum {
     IDLE = 0,
     WAITING,
+    DELAY,
     DISPENSING,
     FAILED
 } BallQueueState_e;
@@ -34,7 +44,8 @@ typedef enum {
 typedef struct {
     BallQueueState_e BIH_return_state;
     bool BIH_request;
-    Timer_t BIH_timer;
+    Timer_t BIH_timeout_timer;
+    Timer_t BIH_delay_timer;
     int64_t BIH_current_delay;
 
     BallQueueState_e player_return_state;
@@ -44,16 +55,25 @@ typedef struct {
 
 } BallQueue_t;
 
-BallQueue_t BQ = {.BIH_return_state    = IDLE, .BIH_request    = false, .BIH_timer = 0, .BIH_current_delay = 0,
+BallQueue_t BQ = {.BIH_return_state    = IDLE, .BIH_request    = false, .BIH_timeout_timer = 0, .BIH_delay_timer = 0, .BIH_current_delay = 0,
                   .player_return_state = IDLE, .player_request = false, .player_ball_count = 0, .PBR_timer = 0};
 
 const PCA9685_t BIH_SERVO    = { .addr = 0x62, .isLed = false, .osc_freq = 26484736.0 };
 const PCA9685_t PLAYER_SERVO = { .addr = 0x43, .isLed = false, .osc_freq = 26434765.0 };
 
 
-void start_cont_servo(const PCA9685_t* pca9685, Dir_e dir)
+void start_cont_servo(const PCA9685_t* pca9685, Dir_e dir, ServoPurpose_e purpose)
 {
-    uint8_t speed = (dir == CW ? CW_SPEED : CCW_SPEED);
+    uint8_t ccw_speed = CCW_SPEED_PLAYER;
+    uint8_t cw_speed = CW_SPEED_PLAYER;
+
+    if (purpose == BIH)
+    {
+        ccw_speed = CCW_SPEED_BIH;
+        cw_speed = CW_SPEED_BIH;
+    }
+
+    uint8_t speed = (dir == CW ? cw_speed : ccw_speed);
 
     PCA9685_setServoPos(pca9685, CONT_SERVO_ID, speed);
 }
@@ -85,11 +105,20 @@ void run_ball_in_hole_return_task(void)
             {
                 BQ.BIH_request = false;
 
-                start_cont_servo(&BIH_SERVO, CW);
-                BQ.BIH_timer = TIMER_restart();
-                BQ.BIH_current_delay = BIH_FEEDFORWARD_DELAY_MS;
+                BQ.BIH_delay_timer = TIMER_restart();
                 
                 ESP_LOGI(TAG, "Ball in hole ball return started");
+
+                BQ.BIH_return_state = DELAY;
+            }
+            break;
+
+        case DELAY:
+            if (TIMER_get_ms(BQ.BIH_delay_timer) > BIH_DELAY_TIME_MS)
+            {
+                start_cont_servo(&BIH_SERVO, CCW, BIH);
+                BQ.BIH_timeout_timer = TIMER_restart();
+                BQ.BIH_current_delay = BIH_FEEDFORWARD_DELAY_MS;
 
                 BQ.BIH_return_state = DISPENSING;
             }
@@ -107,7 +136,7 @@ void run_ball_in_hole_return_task(void)
                 BQ.BIH_request = false;
             }
 
-            if (TIMER_get_ms(BQ.BIH_timer) > BQ.BIH_current_delay)
+            if (TIMER_get_ms(BQ.BIH_timeout_timer) > BQ.BIH_current_delay)
             {
                 // assumed we have dispensed a ball by this time
                 stop_cont_servo(&BIH_SERVO);
@@ -139,7 +168,7 @@ void run_player_ball_queue_task(void)
             {
                 BQ.player_request = false;
 
-                start_cont_servo(&PLAYER_SERVO, CCW);
+                start_cont_servo(&PLAYER_SERVO, CCW, PLAYER);
                 
                 BQ.PBR_timer = TIMER_restart();
                 
@@ -186,6 +215,9 @@ void run_player_ball_queue_task(void)
             BQ.player_ball_count = 0;
             BQ.player_return_state = WAITING;
             
+            break;
+        
+        case DELAY:
             break;
     }
 }
