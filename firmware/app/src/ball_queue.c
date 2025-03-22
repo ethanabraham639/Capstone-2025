@@ -11,13 +11,13 @@
 #define TAG "BALL_QUEUE.C"
 
 #define BIH_FEEDFORWARD_DELAY_MS 4000
-#define PBR_TIMEOUT_MS           1000
+#define PBR_TIMEOUT_MS           1500
 
 #define CW_SPEED_PLAYER          68
 #define CW_SPEED_BIH             68
 #define STOP_SPEED               64
-
-#define CCW_SPEED_PLAYER         57
+            
+#define CCW_SPEED_PLAYER         58
 #define CCW_SPEED_BIH            60
 #define CONT_SERVO_ID            0
 
