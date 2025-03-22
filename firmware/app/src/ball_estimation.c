@@ -14,12 +14,15 @@
 #define IN_TRANSIT_TIMEOUT_MS 5000 // how long we allow the ball to be in transit before we consider it stuck on the field
 #define FEED_ERROR_TIMEOUT_MS 7000 // how long we give the ball to travel from the hole to the gutter via the ball in hole return mechanism
 
+#define BALL_IN_HOLE_REPEAT_TIMEOUT_MS 1500
+
 #define RETURN_ONE_BALL 1
 
 typedef struct{
     uint8_t ballsHit;
     uint8_t ballsInHole;
 
+    Timer_t ballInHoleTimer;
     Timer_t inTransitTimer;
     Timer_t feedErrorTimer;
 
@@ -28,7 +31,7 @@ typedef struct{
     BallEstState_e state;
 } BallEst_t;
 
-BallEst_t BE = { .ballsHit = 0, .ballsInHole = 0, .inTransitTimer = 0, .feedErrorTimer = 0, .autoDispense = false, .state = IDLE };
+BallEst_t BE = { .ballsHit = 0, .ballsInHole = 0, .ballInHoleTimer = 0, .inTransitTimer = 0, .feedErrorTimer = 0, .autoDispense = false, .state = IDLE };
 
 void idle_state(void);
 void no_estimation_tracking_state(void);
@@ -56,6 +59,8 @@ void idle_state(void)
     {
         BE.state = NO_ESTIMATION_TRACKING;
     }
+
+    BE.ballInHoleTimer = TIMER_restart();
 }
 
 void no_estimation_tracking_state(void)
@@ -78,18 +83,25 @@ void no_estimation_tracking_state(void)
     
         if (SNS_get_ball_in_hole())
         {
-            BE.ballsInHole++;
             SNS_clear_ball_in_hole();
-    
-            ESP_LOGI(TAG, "Ball in hole detected");
-    
-            BQ_request_ball_in_hole_return();
-    
-            if (BE.ballsInHole > BE.ballsHit)
+
+            if (TIMER_get_ms(BE.ballInHoleTimer) > BALL_IN_HOLE_REPEAT_TIMEOUT_MS)
             {
-                BE.ballsInHole = BE.ballsHit;
-                ESP_LOGE(TAG, "Balls in hole greater than balls hit, impossible! Equating to balls hit");
-                ERRORCODE_set(BALL_MATH_ERROR);
+
+                BE.ballInHoleTimer = TIMER_restart();
+
+                BE.ballsInHole++;
+        
+                ESP_LOGI(TAG, "Ball in hole detected");
+        
+                BQ_request_ball_in_hole_return();
+        
+                if (BE.ballsInHole > BE.ballsHit)
+                {
+                    BE.ballsInHole = BE.ballsHit;
+                    ESP_LOGE(TAG, "Balls in hole greater than balls hit, impossible! Equating to balls hit");
+                    ERRORCODE_set(BALL_MATH_ERROR);
+                }
             }
         }
     }
