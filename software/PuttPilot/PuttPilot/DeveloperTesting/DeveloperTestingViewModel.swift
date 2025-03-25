@@ -70,8 +70,8 @@ class DeveloperTestingViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func apiManagerSendCourseState(mode: Mode, motorPositions: [String]) {
-        apiManager.sendCourseStatePublisher(mode: mode, motorPositions: motorPositions)
+    func apiManagerSendCourseState(mode: Mode, motorPositions: [String], max: Bool = false) {
+        apiManager.sendCourseStatePublisher(mode: mode, motorPositions: motorPositions, max: max)
             .sink(receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     print("Error sending course state: \(error)")
@@ -89,9 +89,9 @@ class DeveloperTestingViewModel: ObservableObject {
         apiManagerSendCourseState(mode: motorMode, motorPositions: motorPositions)
     }
     
-    func sendCourseState(presetMotorPositions: [String]?) {
+    func sendCourseState(presetMotorPositions: [String]?, max: Bool = false) {
         if let presetMotorPositions = presetMotorPositions {
-            apiManagerSendCourseState(mode: motorMode, motorPositions: presetMotorPositions)
+            apiManagerSendCourseState(mode: motorMode, motorPositions: presetMotorPositions, max: max)
         }
     }
     

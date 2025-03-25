@@ -182,6 +182,11 @@ struct DeveloperTestingView: View {
                         .buttonStyle(.bordered)
                         .padding()
 
+                        Button("Max") {
+                            viewModel.sendCourseState(presetMotorPositions: Presets.max, max: true)
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
                     }
                     
                     
