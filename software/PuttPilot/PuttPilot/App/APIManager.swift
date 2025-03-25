@@ -136,19 +136,57 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func sendCourseStatePublisher(mode: Mode, motorPositions: [String]) -> AnyPublisher<Bool, Error> {
+    func sendCourseStatePublisher(mode: Mode, motorPositions: [String], max: Bool = false) -> AnyPublisher<Bool, Error> {
         let endpoint = "course_state"
 
         guard let modeAscii = mode.asciiCharacter else {
             return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
 
-        let motorAsciiArray = motorPositions.compactMap { position -> Character? in
-            guard let ascii = UnicodeScalar(90-(Int(position) ?? 0)), ascii.isASCII else { return nil }
+        let numRows = Constants.numRowMotors
+        let numCols = Constants.numColsMotors
+        
+        guard motorPositions.count == Constants.numMotors else {
+            return Fail(error: URLError(.badServerResponse)).eraseToAnyPublisher()
+        }
+
+        // Reverse the order of rows while keeping columns intact
+        var mirroredMotorPositions = (0..<numRows).reversed().flatMap { rowIndex in
+            Array(motorPositions[(rowIndex * numCols)..<((rowIndex + 1) * numCols)])
+        }
+
+        // normalize the first and second row to ease into transition
+        if !max {
+            for rowIndex in 0..<numRows {
+                let rowStart = rowIndex * numCols
+                let rowEnd = rowStart + numCols
+                
+                let divisor: Int
+                switch rowIndex {
+                case 0:  // first row
+                    divisor = 3
+                case 1:  // second row
+                    divisor = 2
+                default: // third row onward – no division change
+                    divisor = 1
+                }
+                
+                // Apply division to this row
+                for i in rowStart..<rowEnd {
+                    if let originalVal = Int(mirroredMotorPositions[i]) {
+                        let newVal = originalVal / divisor
+                        mirroredMotorPositions[i] = String(newVal)
+                    }
+                }
+            }
+        }
+        
+        let motorAsciiArray = mirroredMotorPositions.compactMap { position -> Character? in
+            guard let ascii = UnicodeScalar(90 - (Int(position) ?? 0)), ascii.isASCII else { return nil }
             return Character(ascii)
         }
 
-        guard motorAsciiArray.count == motorPositions.count else {
+        guard motorAsciiArray.count == mirroredMotorPositions.count else {
             return Fail(error: URLError(.dataLengthExceedsMaximum)).eraseToAnyPublisher()
         }
 
@@ -156,7 +194,6 @@ class APIManager {
 
         return sendPOSTRequestPublisher(endpoint: endpoint, body: payload)
     }
-
     
     func fetchDebugMessagePublisher() -> AnyPublisher<String, Error> {
         let endpoint = "debug_msg"
@@ -176,6 +213,11 @@ class APIManager {
         return sendPOSTRequestPublisher(endpoint: endpoint, body: "")
     }
 
+    func ballReturnPublisher() -> AnyPublisher<Bool, Error> {
+        let endpoint = "clear_sequence"
+        return sendPOSTRequestPublisher(endpoint: endpoint, body: "")
+
+    }
     func dispenseBallsPublisher(numberBalls: Int) -> AnyPublisher<Bool, Error> {
         let endpoint = "dispense_ball"
 

@@ -30,6 +30,7 @@
 		DA258F8E2D3C4E6B00529154 /* CourseModificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA258F8D2D3C4E6B00529154 /* CourseModificationItem.swift */; };
 		DA258F912D40637C00529154 /* Colours.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA258F902D40637C00529154 /* Colours.swift */; };
 		DA7A52EB2D669F0400737BD2 /* SceneKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A52EA2D669F0400737BD2 /* SceneKitView.swift */; };
+		DA7A52ED2D8D0ABC00737BD2 /* Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A52EC2D8D0ABC00737BD2 /* Presets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		DA258F8D2D3C4E6B00529154 /* CourseModificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseModificationItem.swift; sourceTree = "<group>"; };
 		DA258F902D40637C00529154 /* Colours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colours.swift; sourceTree = "<group>"; };
 		DA7A52EA2D669F0400737BD2 /* SceneKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneKitView.swift; sourceTree = "<group>"; };
+		DA7A52EC2D8D0ABC00737BD2 /* Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +204,7 @@
 			children = (
 				DA258F8C2D3C4E5400529154 /* Views */,
 				DA258F862D3C3F6F00529154 /* PracticePageViewModel.swift */,
+				DA7A52EC2D8D0ABC00737BD2 /* Presets.swift */,
 			);
 			path = Practice;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				DA258F792D2DBBAC00529154 /* DebugMessageView.swift in Sources */,
 				DA0C235B2D267221009D0E4E /* DeveloperTestingViewModel.swift in Sources */,
 				DA258F892D3C3FF300529154 /* StartGameView.swift in Sources */,
+				DA7A52ED2D8D0ABC00737BD2 /* Presets.swift in Sources */,
 				DA0C23472D1F6710009D0E4E /* APIManager.swift in Sources */,
 				DA258F852D3C3F6300529154 /* PracticePageView.swift in Sources */,
 				DA258F7F2D3C3CC600529154 /* HomeView.swift in Sources */,
